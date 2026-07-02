@@ -1,7 +1,7 @@
 <?php
 $_Localhost="localhost";
-$_Database="u131576917_oiti";
-$_User="u131576917_oiti";
+$_Database="u131576917_jgk";
+$_User="u131576917_jgk";
 $_Password="Akusika.Tom???@@1";
 mysqli_report(MYSQLI_REPORT_OFF);
 $con=mysqli_connect($_Localhost,$_User,$_Password,$_Database);
