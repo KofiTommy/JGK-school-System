@@ -1,0 +1,441 @@
+body.itr-page {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(28, 126, 214, 0.12), transparent 24%),
+        radial-gradient(circle at 84% 18%, rgba(14, 163, 140, 0.14), transparent 20%),
+        linear-gradient(145deg, #f4f7fb 0%, #edf4f8 48%, #e8eef5 100%);
+    color: #17324d;
+}
+
+.itr-shell {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 28px 24px 42px;
+}
+
+.itr-flash {
+    margin-bottom: 18px;
+}
+
+.itr-hero,
+.itr-panel,
+.itr-summary-card,
+.itr-guide-card {
+    box-shadow: 0 24px 48px rgba(9, 27, 44, 0.08);
+}
+
+.itr-hero {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 360px);
+    gap: 24px;
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: 32px;
+    background:
+        linear-gradient(145deg, rgba(8, 27, 48, 0.96), rgba(18, 58, 89, 0.92)),
+        linear-gradient(130deg, rgba(245, 188, 75, 0.2), transparent 56%);
+    color: #ffffff;
+}
+
+.itr-hero::before,
+.itr-hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.itr-hero::before {
+    width: 240px;
+    height: 240px;
+    top: -92px;
+    right: -42px;
+}
+
+.itr-hero::after {
+    width: 170px;
+    height: 170px;
+    left: 34%;
+    bottom: -74px;
+}
+
+.itr-hero__copy,
+.itr-hero-card {
+    position: relative;
+    z-index: 1;
+}
+
+.itr-kicker,
+.itr-hero-card__label,
+.itr-summary-card span {
+    text-transform: uppercase;
+}
+
+.itr-kicker {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(159, 231, 220, 0.14);
+    border: 1px solid rgba(159, 231, 220, 0.2);
+    color: #9fe7dc;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.itr-hero h1,
+.itr-panel__heading h2,
+.itr-summary-card strong,
+.itr-guide-card h3 {
+    font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif;
+}
+
+.itr-hero h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(2.2rem, 4.3vw, 4rem);
+    line-height: 1.04;
+}
+
+.itr-hero p {
+    margin: 0;
+    max-width: 64ch;
+    color: rgba(237, 244, 247, 0.82);
+    line-height: 1.75;
+}
+
+.itr-hero-card {
+    padding: 22px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+    display: grid;
+    align-content: start;
+    gap: 10px;
+}
+
+.itr-hero-card__label {
+    color: #ffd79d;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.itr-hero-card strong {
+    font-size: 1.28rem;
+    line-height: 1.4;
+}
+
+.itr-hero-card small {
+    color: rgba(237, 244, 247, 0.76);
+    line-height: 1.6;
+}
+
+.itr-layout {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.itr-panel {
+    border-radius: 28px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.itr-panel--form {
+    padding: 22px;
+    position: sticky;
+    top: 14px;
+}
+
+.itr-panel--info {
+    padding: 22px;
+}
+
+.itr-panel__heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.itr-panel__icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: #e5f0ff;
+    color: #12599c;
+    font-size: 1.1rem;
+}
+
+.itr-panel__icon--alt {
+    background: rgba(14, 163, 140, 0.12);
+    color: #0e7d6d;
+}
+
+.itr-panel__heading h2 {
+    margin: 0;
+    color: #12365d;
+    font-size: clamp(1.35rem, 2.3vw, 1.9rem);
+}
+
+.itr-panel__heading p {
+    margin: 8px 0 0;
+    color: #5a6f87;
+    line-height: 1.65;
+}
+
+.itr-form {
+    display: grid;
+    gap: 16px;
+}
+
+.itr-fieldset {
+    display: grid;
+    gap: 14px;
+}
+
+.itr-field {
+    display: grid;
+    gap: 8px;
+}
+
+.itr-field label {
+    color: #2a405b;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.itr-field select {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 14px;
+    border: 1px solid #d7e1ed;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #1b2b41;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.itr-field select:focus {
+    border-color: #1c6fb5;
+    box-shadow: 0 0 0 4px rgba(28, 111, 181, 0.12);
+}
+
+.itr-status-card,
+.itr-selected-scope {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    font-weight: 700;
+}
+
+.itr-status-card i,
+.itr-selected-scope i {
+    margin-top: 2px;
+}
+
+.itr-status-card--approved {
+    background: #ecfdf3;
+    border: 1px solid rgba(22, 101, 52, 0.14);
+    color: #166534;
+}
+
+.itr-status-card--pending {
+    background: #fff7ed;
+    border: 1px solid rgba(194, 65, 12, 0.14);
+    color: #c2410c;
+}
+
+.itr-status-card--info {
+    background: #eff6ff;
+    border: 1px solid rgba(29, 78, 216, 0.12);
+    color: #1d4ed8;
+}
+
+.itr-status-card--neutral {
+    background: #f8fafc;
+    border: 1px solid rgba(100, 116, 139, 0.14);
+    color: #475569;
+}
+
+.itr-selected-scope {
+    background: #eef6ff;
+    border: 1px solid #c9def5;
+    color: #0b4f8c;
+}
+
+.itr-approval-note > div {
+    margin: 0;
+}
+
+.itr-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.itr-btn {
+    border: 0;
+    min-height: 50px;
+    padding: 0 18px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.itr-btn--primary {
+    width: 100%;
+    background: linear-gradient(135deg, #0f4e8f 0%, #176fb8 100%);
+    color: #ffffff;
+    box-shadow: 0 16px 28px rgba(23, 111, 184, 0.22);
+}
+
+.itr-btn:hover {
+    transform: translateY(-2px);
+}
+
+.itr-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.itr-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.itr-summary-card {
+    padding: 18px 16px;
+    border-radius: 22px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.98), rgba(241, 247, 250, 0.96));
+}
+
+.itr-summary-card span {
+    display: block;
+    margin-bottom: 8px;
+    color: #617991;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.itr-summary-card strong {
+    display: block;
+    color: #112b45;
+    font-size: 1.04rem;
+    line-height: 1.5;
+}
+
+.itr-guide-card {
+    margin-top: 16px;
+    padding: 18px;
+    border-radius: 22px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: rgba(248, 251, 254, 0.96);
+}
+
+.itr-guide-card h3 {
+    margin: 0 0 10px;
+    color: #12365d;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+}
+
+.itr-guide-card p {
+    margin: 0;
+    color: #5d748d;
+    line-height: 1.68;
+}
+
+.itr-checklist {
+    margin: 0;
+    padding-left: 18px;
+    color: #5d748d;
+    line-height: 1.8;
+}
+
+.itr-checklist li + li {
+    margin-top: 6px;
+}
+
+@media (max-width: 1040px) {
+    .itr-layout,
+    .itr-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .itr-panel--form {
+        position: static;
+    }
+}
+
+@media (max-width: 700px) {
+    .itr-shell {
+        padding: 18px 16px 30px;
+    }
+
+    .itr-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .itr-shell {
+        padding: 14px 12px 24px;
+    }
+
+    .itr-hero,
+    .itr-panel,
+    .itr-summary-card,
+    .itr-guide-card {
+        border-radius: 22px;
+    }
+
+    .itr-hero,
+    .itr-panel--form,
+    .itr-panel--info {
+        padding: 18px;
+    }
+
+    .itr-hero h1 {
+        font-size: clamp(1.95rem, 11vw, 3rem);
+    }
+
+    .itr-panel__heading,
+    .itr-status-card,
+    .itr-selected-scope {
+        align-items: flex-start;
+    }
+
+    .itr-actions,
+    .itr-btn {
+        width: 100%;
+    }
+}

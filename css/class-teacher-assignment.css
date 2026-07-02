@@ -1,0 +1,347 @@
+.cta-page {
+    min-height: 100vh;
+    padding: 22px;
+    background:
+        radial-gradient(circle at top left, rgba(16, 76, 142, 0.12), transparent 34%),
+        linear-gradient(135deg, #f5f8fc 0%, #eaf0f8 100%);
+    color: #1b2b41;
+}
+
+.cta-hero {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 0 auto 18px;
+    padding: 24px;
+    border: 1px solid rgba(19, 65, 116, 0.12);
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+    box-shadow: 0 18px 45px rgba(21, 54, 91, 0.12);
+}
+
+.cta-kicker {
+    display: inline-flex;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #dcecff;
+    color: #0f4e8f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cta-hero h1,
+.cta-panel-heading h2 {
+    margin: 0;
+    color: #12365d;
+    line-height: 1.15;
+}
+
+.cta-hero h1 {
+    font-size: clamp(26px, 4vw, 42px);
+}
+
+.cta-hero p,
+.cta-panel-heading p {
+    margin: 8px 0 0;
+    color: #5a6f87;
+}
+
+.cta-hero-card {
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 20px;
+    background: #123f70;
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.cta-hero-card i {
+    font-size: 30px;
+    color: #cfe4ff;
+}
+
+.cta-hero-card span {
+    font-weight: 800;
+}
+
+.cta-layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.cta-panel {
+    border: 1px solid rgba(19, 65, 116, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 16px 40px rgba(21, 54, 91, 0.1);
+}
+
+.cta-form-panel {
+    position: sticky;
+    top: 12px;
+    padding: 18px;
+}
+
+.cta-list-panel {
+    padding: 18px;
+    overflow: hidden;
+}
+
+.cta-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.cta-panel-heading h2 {
+    font-size: 20px;
+}
+
+.cta-icon {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    background: #e5f0ff;
+    color: #12599c;
+}
+
+.cta-form-panel form {
+    display: grid;
+    gap: 12px;
+}
+
+.cta-form-panel label {
+    color: #2a405b;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.cta-form-panel select {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #d7e1ed;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #1b2b41;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-form-panel select:focus {
+    border-color: #1c6fb5;
+    box-shadow: 0 0 0 4px rgba(28, 111, 181, 0.12);
+}
+
+.cta-actions,
+.cta-print-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cta-print-row {
+    margin-bottom: 14px;
+}
+
+.cta-btn,
+.cta-page .button-save {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cta-btn-primary,
+.cta-page .button-save.cta-btn-primary {
+    background: linear-gradient(135deg, #0f4e8f 0%, #176fb8 100%);
+    color: #ffffff !important;
+    box-shadow: 0 10px 22px rgba(23, 111, 184, 0.22);
+}
+
+.cta-btn-print,
+.cta-page .button-save.cta-btn-print {
+    background: linear-gradient(135deg, #17643b 0%, #218c55 100%);
+    color: #ffffff !important;
+    box-shadow: 0 10px 22px rgba(33, 140, 85, 0.22);
+}
+
+.cta-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e1eaf4;
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+.cta-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+}
+
+.cta-table caption {
+    padding: 16px;
+    color: #12365d;
+    font-size: 18px;
+    font-weight: 900;
+    text-align: left;
+    background: #f5f9fe;
+}
+
+.cta-table thead th {
+    padding: 12px 10px;
+    background: #123f70;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.cta-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #edf2f7;
+    color: #253b56;
+    vertical-align: middle;
+}
+
+.cta-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.cta-row-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    text-decoration: none;
+}
+
+.cta-action-warning {
+    background: #fff7ed;
+    color: #b45309;
+}
+
+.cta-action-danger {
+    background: #fff1f2;
+    color: #b91c1c;
+}
+
+@media (max-width: 1040px) {
+    .cta-page {
+        padding: 14px;
+    }
+
+    .cta-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-form-panel {
+        position: static;
+    }
+
+    .cta-hero {
+        flex-direction: column;
+    }
+
+    .cta-hero-card {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .cta-page {
+        padding: 10px;
+    }
+
+    .cta-hero,
+    .cta-panel {
+        border-radius: 18px;
+    }
+
+    .cta-hero,
+    .cta-form-panel,
+    .cta-list-panel {
+        padding: 14px;
+    }
+
+    .cta-actions,
+    .cta-print-row,
+    .cta-btn,
+    .cta-page .button-save {
+        width: 100%;
+    }
+
+    .cta-panel-heading {
+        align-items: flex-start;
+    }
+
+    .cta-table {
+        min-width: 720px;
+    }
+}
+
+@media print {
+    .header,
+    .print-hide,
+    .cta-hero,
+    .cta-form-panel {
+        display: none !important;
+    }
+
+    .main-platform,
+    .cta-page {
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+    }
+
+    .cta-layout {
+        display: block;
+    }
+
+    .cta-panel,
+    .cta-list-panel {
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .cta-table-wrap {
+        overflow: visible;
+        border: 0;
+    }
+
+    .cta-table {
+        width: 100% !important;
+        min-width: 0;
+        border-collapse: collapse;
+    }
+}

@@ -1,0 +1,1 @@
+create table tblsmsalert(smsenabled boolean not null,mobile varchar(15)not null,companyid varchar(60)not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(80)not null,foreign key(companyid)references tblcompany(companyid))

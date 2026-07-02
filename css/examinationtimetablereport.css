@@ -1,0 +1,287 @@
+.exam-timetable-report-page {
+    min-height: 100vh;
+    padding: 22px;
+    background:
+        radial-gradient(circle at top left, rgba(16, 76, 142, 0.12), transparent 34%),
+        linear-gradient(135deg, #f5f8fc 0%, #eaf0f8 100%);
+    color: #1b2b41;
+}
+
+.exam-timetable-report-hero {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 0 auto 18px;
+    padding: 24px;
+    border: 1px solid rgba(19, 65, 116, 0.12);
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+    box-shadow: 0 18px 45px rgba(21, 54, 91, 0.12);
+}
+
+.exam-timetable-report-kicker {
+    display: inline-flex;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #dcecff;
+    color: #0f4e8f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.exam-timetable-report-hero h1,
+.exam-timetable-report-panel-heading h2 {
+    margin: 0;
+    color: #12365d;
+    line-height: 1.15;
+}
+
+.exam-timetable-report-hero h1 {
+    font-size: clamp(26px, 4vw, 42px);
+}
+
+.exam-timetable-report-hero p,
+.exam-timetable-report-panel-heading p {
+    margin: 8px 0 0;
+    color: #5a6f87;
+}
+
+.exam-timetable-report-hero-card {
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 20px;
+    background: #123f70;
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.exam-timetable-report-hero-card i {
+    font-size: 30px;
+    color: #cfe4ff;
+}
+
+.exam-timetable-report-hero-card span {
+    font-weight: 800;
+}
+
+.exam-timetable-report-layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.exam-timetable-report-panel {
+    border: 1px solid rgba(19, 65, 116, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 16px 40px rgba(21, 54, 91, 0.1);
+}
+
+.exam-timetable-report-filter-panel {
+    position: sticky;
+    top: 12px;
+    padding: 18px;
+}
+
+.exam-timetable-report-list-panel {
+    padding: 18px;
+    overflow: hidden;
+}
+
+.exam-timetable-report-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.exam-timetable-report-panel-heading h2 {
+    font-size: 20px;
+}
+
+.exam-timetable-report-icon {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    background: #e5f0ff;
+    color: #12599c;
+}
+
+.exam-timetable-report-filter-panel form {
+    display: grid;
+    gap: 14px;
+}
+
+.exam-timetable-report-field label {
+    display: inline-flex;
+    margin-bottom: 7px;
+    color: #12365d;
+    font-weight: 900;
+}
+
+.exam-timetable-report-field select {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #d7e1ed;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #1b2b41;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exam-timetable-report-field select:focus {
+    border-color: #176fb8;
+    box-shadow: 0 0 0 4px rgba(23, 111, 184, 0.12);
+}
+
+.exam-timetable-report-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.exam-timetable-report-btn,
+.exam-timetable-report-page .button-pay {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.exam-timetable-report-btn-primary,
+.exam-timetable-report-page .button-pay.exam-timetable-report-btn-primary {
+    background: linear-gradient(135deg, #0f4e8f 0%, #176fb8 100%);
+    color: #ffffff !important;
+    box-shadow: 0 10px 22px rgba(23, 111, 184, 0.22);
+}
+
+.exam-timetable-report-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e1eaf4;
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+.exam-timetable-report-table {
+    width: 100%;
+    min-width: 920px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+}
+
+.exam-timetable-report-table caption {
+    padding: 16px;
+    color: #12365d;
+    font-size: 18px;
+    font-weight: 900;
+    text-align: left;
+    background: #f5f9fe;
+}
+
+.exam-timetable-report-table thead th {
+    padding: 12px 10px;
+    background: #123f70;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.exam-timetable-report-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #edf2f7;
+    color: #253b56;
+    vertical-align: middle;
+}
+
+.exam-timetable-report-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.exam-timetable-report-table tbody tr:hover td {
+    background: #f8fbff;
+}
+
+.exam-timetable-report-empty-row {
+    padding: 26px !important;
+    color: #5a6f87 !important;
+    text-align: center;
+}
+
+@media (max-width: 1040px) {
+    .exam-timetable-report-page {
+        padding: 14px;
+    }
+
+    .exam-timetable-report-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .exam-timetable-report-filter-panel {
+        position: static;
+    }
+
+    .exam-timetable-report-hero {
+        flex-direction: column;
+    }
+
+    .exam-timetable-report-hero-card {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .exam-timetable-report-page {
+        padding: 10px;
+    }
+
+    .exam-timetable-report-hero,
+    .exam-timetable-report-panel {
+        border-radius: 18px;
+    }
+
+    .exam-timetable-report-hero,
+    .exam-timetable-report-filter-panel,
+    .exam-timetable-report-list-panel {
+        padding: 14px;
+    }
+
+    .exam-timetable-report-actions,
+    .exam-timetable-report-btn,
+    .exam-timetable-report-page .button-pay {
+        width: 100%;
+    }
+
+    .exam-timetable-report-panel-heading {
+        align-items: flex-start;
+    }
+
+    .exam-timetable-report-table {
+        min-width: 760px;
+    }
+}

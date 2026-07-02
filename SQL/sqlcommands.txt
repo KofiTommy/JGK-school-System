@@ -1,0 +1,247 @@
+//Database
+create database schoolmanager_db
+
+//Users table
+create table tblsystemuser(userid varchar(30)not null  PRIMARY KEY,firstname varchar(40)not null,surname varchar(40)not null,othernames varchar(40),gender varchar(8)not null,birthday date not null,age int not null,postaladdress varchar(100),homeaddress varchar(100),hometown varchar(100),religion varchar(30),relationship varchar(30)not null,nextofkin_fullname varchar(80)not null,nextofkin_contact varchar(60),registereddatetime datetime not null,status varchar(20)not null,username varchar(100)not null,password varchar(255)not null,accesslevel varchar(30),systemtype varchar(30)not null)
+
+create table tblaccounttype(accountid varchar(30)not null PRIMARY KEY,accountname varchar(60)not null,datetimeentry datetime not null, status varchar(20))
+
+
+create table AccountingBookEntries(id bigint not null primary key,accountId varchar(30) not null,cr double not null,created datetime not null,createdBy varchar(32) not null,dr double not null,modified datetime not null,modifiedBy varchar(32) not null,narration varchar(128) null,particulars varchar(128) not null,refAccountId varchar(30) not null,transactionId varchar(30) not null,foreign key(accountId)references accountingbooks(id),foreign key(refAccountId)references accountingbooks(id),foreign key(transactionId)references accountingtransaction(id));
+
+
+create table AccountingBookEntries(id bigint not null primary key,accountId varchar(30) not null,cr double not null,created datetime not null,createdBy varchar(32) not null,dr double not null,modified datetime not null,modifiedBy varchar(32) not null,narration varchar(128) null,particulars varchar(128) not null,refAccountId varchar(30) not null,transactionId varchar(30) not null);
+
+
+//Birthday Wishes
+create table tblbirthday(birthdayid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,message varchar(255)not null,messagedatetime datetime not null,status varchar(10)not null,action varchar(10),foreign key(userid)references tblsystemuser(userid))
+
+//View vw_birthday
+create view vw_birthday AS SELECT * FROM tblsystemuser su WHERE su.action='birthday'
+
+//Procecdure
+
+DELIMITER //
+create procedure sp_birthday(userid varchar(30),msgid varchar(30),birthday date)
+BEGIN
+	insert into tblbirthday(birthdayid,userid,message,messagedatetime,status,action)values(msgid,userid,'Happy Birthday! May God Bless You',NOW(),'inactive','pending');
+END //
+DELIMITER;
+
+DELIMITER //
+create procedure sp_birthday(birthday date)
+BEGIN
+update tblsystemuser s SET s.action='birthday' WHERE date_format(s.birthday,'%d-%m')=date_format(birthday,'%d-%m');
+END //
+DELIMITER;
+
+
+//Event
+create event ev_birthday
+ON SCHEDULE EVERY 2 MINUTE
+DO
+  CALL sp_birthday(NOW())
+
+
+//table for trigger :tblsystemuser update
+create table tr_systemuser_update(userid varchar(30)not null ,firstname varchar(40)not null,surname varchar(40)not null,othernames varchar(40),gender varchar(8)not null,birthday date not null,age int not null,postaladdress varchar(100),homeaddress varchar(100),hometown varchar(100),religion varchar(30),relationship varchar(30)not null,nextofkin_fullname varchar(80)not null,nextofkin_contact varchar(60),registereddatetime datetime not null,status varchar(20)not null,username varchar(100)not null,password varchar(255)not null,accesslevel varchar(30),systemtype varchar(30)not null,action varchar(10)not null,changedatetime datetime not null)
+
+//Trigger tr_systemuser_update
+DELIMITER $$
+create trigger tr_systemuser_update
+BEFORE UPDATE ON tblsystemuser
+FOR EACH ROW
+BEGIN
+	insert into tr_systemuser_update
+	SET action='update',
+	userid=OLD.userid,
+	firstname=OLD.firstname,
+	surname=OLD.surname,
+	othernames=OLD.othernames,
+	gender=OLD.gender,
+	birthday=OLD.birthday,
+	age=OLD.age,
+	postaladdress=OLD.postaladdress,
+	homeaddress=OLD.homeaddress,
+	hometown=OLD.hometown,
+	religion=OLD.religion,
+	relationship=OLD.relationship,
+	nextofkin_fullname=OLD.nextofkin_fullname,
+	nextofkin_contact=OLD.nextofkin_contact,
+	registereddatetime=OLD.registereddatetime,
+	status=OLD.status,
+	username=OLD.username,
+	password=OLD.password,
+	accesslevel=OLD.accesslevel,
+	systemtype=OLD.systemtype,
+	changedatetime=NOW();
+END $$
+DELIMITER;
+
+//Trigger for system user delete
+DELIMITER $$
+create trigger tr_systemuser_delete
+AFTER DELETE ON tblsystemuser
+FOR EACH ROW
+BEGIN
+	insert into tr_systemuser_update
+	SET action='delete',
+	userid=OLD.userid,
+	firstname=OLD.firstname,
+	surname=OLD.surname,
+	othernames=OLD.othernames,
+	gender=OLD.gender,
+	birthday=OLD.birthday,
+	age=OLD.age,
+	postaladdress=OLD.postaladdress,
+	homeaddress=OLD.homeaddress,
+	hometown=OLD.hometown,
+	religion=OLD.religion,
+	relationship=OLD.relationship,
+	nextofkin_fullname=OLD.nextofkin_fullname,
+	nextofkin_contact=OLD.nextofkin_contact,
+	registereddatetime=OLD.registereddatetime,
+	status=OLD.status,
+	username=OLD.username,
+	password=OLD.password,
+	accesslevel=OLD.accesslevel,
+	systemtype=OLD.systemtype,
+	changedatetime=NOW();
+END $$
+DELIMITER;
+
+//Class Billing
+create table tblclass(classid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,class_entryid varchar(40)not null,datetimeentry datetime not null,recordedby varchar(30)not null,status varchar(30),foreign key(recordedby)references tblsystemuser(userid),foreign key(userid)references tblsystemuser(userid),foreign key(class_entryid)references tblclassentry(class_entryid))
+
+//Class registry
+create table tblclassentry(class_entryid varchar(30) not null PRIMARY KEY,class_name varchar(30)not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(recordedby) references tblsystemuser(userid))
+
+//Term Registry
+create table tbltermregistry(termid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,class_entryid varchar(30)not null,termname int not null,batchid varchar(30)not null,status varchar(20)not null,datetimeentry datetime not null, recordedby varchar(30)not null,foreign key(userid)references tblsystemuser(userid),foreign key(class_entryid)references tblclassentry(class_entryid),foreign key(batchid)references tblbatch(batchid))
+
+//Item
+create table tblitem(itemid varchar(30)not null PRIMARY KEY,itemname varchar(40)not null,datetimeentry datetime not null,recordedby varchar(30)not null,status varchar(20)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+//Transaction
+create table tbltransaction(transactionid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,payment double not null,datetimepayment datetime not null,recordedby varchar(30)not null,status varchar(20),unique key(transactionid),foreign key(userid)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid))
+
+//Payment
+create table tblpayment(paymentid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,billid varchar(30)not null,transactionid varchar(30)not null,payment double not null,datetimepayment datetime not null,recordedby varchar(30)not null,status varchar(20),foreign key(userid)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid),foreign key(transactionid)references tbltransaction(transactionid),foreign key(billid)references tblbilling(billid))
+
+
+//Billing
+create table tblbilling(billid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,itempriceid varchar(30)not null,transactionid varchar(30)not null,cost double not null,datetimebilled datetime not null,recordedby varchar(30),status varchar(20),paymentstatus varchar(20)not null,foreign key(userid)references tblsystemuser(userid),foreign key(itempriceid)references tblitemprice(itempriceid),foreign key(transactionid)references tbltransaction(transactionid))
+
+//Item Pricing
+create table tblitemprice(itempriceid varchar(30)not null PRIMARY KEY,class_name varchar(30) not null,term int not null,batch varchar(30)not null,itemid varchar(30)not null,price double not null,datetimeprice datetime not null,status varchar(20),recordedby varchar(30)not null,foreign key(itemid)references tblitem(itemid),foreign key(recordedby)references tblsystemuser(userid))
+//Courses
+create table
+
+//Batch
+create table tblbatch(batchid varchar(30) not null PRIMARY KEY,batch varchar(30)not null,datetimeentry datetime not null,status varchar(20),recordedby varchar(30)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+
+//Batch Selection
+create table tblbatchselection(batchselid varchar(30)not null PRIMARY KEY,classid varchar(30)not null,termid varchar(30)not null,batchid varchar(30)not null,userid varchar(30)not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(classid)references tblclass(classid),foreign key(termid)references tbltermregistry(termid),foreign key(batchid)references tblbatch(batchid),foreign key(userid)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid))
+
+//Subject
+create table tblsubject(subjectid varchar(30)not null PRIMARY KEY,subject varchar(40)not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+//Subject Classification
+create table tblsubjectclassification(classificationid varchar(30)not null PRIMARY KEY,classid varchar(30)not null,subjectid varchar(30)not null,status varchar(20)not null,datetimeentry datetime not null,recordedby varchar(30)not null,foreign key(classid)references tblclassentry(class_entryid),foreign key(subjectid)references tblsubject(subjectid),foreign key(recordedby)references tblsystemuser(userid))
+
+//Subject Assignment
+create table tblsubjectassignment(assignmentid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,classid varchar(30) not null, classificationid varchar(30)not null,batchid varchar(30)not null,termname int not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(userid)references tblsystemuser(userid),foreign key(classificationid)references tblsubjectclassification(classificationid),foreign key(recordedby)references tblsystemuser(userid),foreign key(classid)references tblclassentry(class_entryid),foreign key(batchid)references tblbatch(batchid))
+
+//List of Users
+drop view vw_systemusers
+create view vw_systemusers AS SELECT * FROM tblsystemuser WHERE systemtype="User" OR systemtype="super_user"
+
+create view vw_dailyusers AS SELECT * FROM tblsystemuser WHERE date_format(registereddatetime,'%d-%m-%Y')=date_format(NOW(),'%d-%m-%Y') AND (systemtype='Student' OR systemtype='Teacher' OR systemtype='User') ORDER BY registereddatetime DESC
+
+
+//Payroll
+create table tblsalarydetails(salarydetailid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,grosssalary double not null,allowance double not null,totaldeduction double not null,netpay double not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(userid)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid))
+
+create table tblsalarypayment(salaryid varchar(30)not null PRIMARY KEY,salarydetailid varchar(30)not null,userid varchar(30)not null,paymentdate varchar(30)not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(userid)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid),foreign key(salarydetailid)references tblsalarydetails(salarydetailid))
+
+//Module 
+create table tblmodule(moduleid varchar(30)not null PRIMARY KEY,module varchar(60)not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+//Preferences
+create table tblpreferences(preferenceid varchar(30)not null PRIMARY KEY,moduleid varchar(30)not null,userid varchar(30)not null,module varchar(40)not null,datetimeentry datetime not null,status varchar(20) not null,recordedby varchar(30) not null,foreign key(userid)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid),foreign key(moduleid)references tblmodule(moduleid))
+
+//Total Deductions
+create table tbldeductions(deductionid varchar(30)not null PRIMARY KEY,deductionname varchar(60)not null,percent double not null,status varchar(20)not null,datetimeentry datetime not null,recordedby varchar(30)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+//Messages
+create table tblmessages(messageid varchar(30) not null PRIMARY KEY,messages varchar(1000)not null,datetimeentry datetime not null,status varchar(20)not null,sentby varchar(30)not null,foreign key(sentby)references tblsystemuser(userid))
+
+//Mark
+create table tblmark(markid varchar(30)not null PRIMARY KEY,assignmentid varchar(30)not null,userid varchar(30)not null,testtype varchar(40)not null,mark double not null,totalmark double not null,datetimeentry datetime not null,status varchar(30)not null,recordedby varchar(30) not null,foreign key(userid)references tblsystemuser(userid),foreign key(assignmentid)references tblsubjectassignment(assignmentid),foreign key(recordedby)references tblsystemuser(userid))
+
+//School Information
+create table tblschoolinfo(infoid varchar(30)not null PRIMARY KEY,batchid varchar(30)not null,termname int not null,schoolcloses date not null,nexttermbegins date not null,datetimeentry datetime not null,status varchar(20)not null,recordedby varchar(30)not null,foreign key(recordedby)references tblsystemuser(userid),foreign key(batchid)references tblbatch(batchid))
+
+//StudentTerminalreport
+create table tblstudentterminalreport(terminalid varchar(30)not null PRIMARY KEY,userid varchar(30)not null,batchid varchar(30)not null,roll int not null,attendance int not null,totalattendance int not null,promotedto varchar(30)not null,conduct varchar(100)not null,interest varchar(100)not null,class_teacher_remark varchar(100)not null,head_teacher_remark varchar(100)not null,recordedby varchar(30)not null,status varchar(20)not null,datetimeentry datetime not null,foreign key(recordedby)references tblsystemuser(userid),foreign key(recordedby)references tblsystemuser(userid),foreign key(batchid)references tblbatch(batchid))
+
+//Time Table
+create table tbltimetable(timeid varchar(30)not null PRIMARY KEY,subjectid varchar(60)not null,tablestarttime time not null,tableendtime time not null,tabledate date not null,class_entryid varchar(30)not null,termname int not null,batchid varchar(30)not null,recordedby varchar(30)not null,status varchar(20)not null,foreign key(subjectid)references tblsubject(subjectid),foreign key(class_entryid)references tblclassentry(class_entryid),foreign key(batchid)references tblbatch(batchid),foreign key(recordedby)references tblsystemuser(userid))
+
+//Account Type
+create table xschoolmanager_db.tblaccounttype(typeid varchar(30)not null PRIMARY KEY,accounttype varchar(80)not null,datetimeentry datetime not null,recordedby varchar(30)not null,status varchar(20)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+//Book Keeping Entry
+create table tblbookkeepingentry(bookid varchar(40)not null PRIMARY KEY, datetimeentry datetime not null,particulars varchar(700)not null,amount double not null,recordedby varchar(30)not null,status varchar(20)not null,foreign key(recordedby)references tblsystemuser(userid))
+
+//SMS Reporting
+create table tblsmsexamresults(smsexamid varchar(40)not null primary key,userid varchar(30)not null,mobile varchar(15)not null,batchid varchar(30)not null,status varchar(20)not null,examresults varchar(150),entrydatetime datetime not null,recordedby varchar(30)not null,foreign key(batchid)references tblbatch(batchid),foreign key(recordedby)references tblsystemuser(userid))
+
+
+//API KEY
+create table tblapi(apikey varchar(40),startdate date,enddate date,status varchar(20))
+
+create table tblauditdate(auditid varchar(40)not null primary key,auditdate date not null,status varchar(15)not null,deviceinformation varchar(80)not null,recordedby varchar(40)not null,branchid varchar(40)not null,foreign key(recordedby)references tblsystemuser(userid),unique key(auditdate))
+	
+
+//alter table tblsystemuser add foreign key (branchid) references tblbranch(branchid) on delete restrict on update restrict
+
+//alter table tblsubject add foreign key (branchid) references tblbranch(branchid)
+
+//alter table tblsubject add column branchid varchar(30)not null after  recordedby
+//alter table tblsubjectassignment add column branchid varchar(30)not null after recordedby
+//alter table tblsubjectclassification add column branchid varchar(30) not null after recordedby
+//alter table tbltermregistry add column branchid varchar(30)not null after  recordedby
+//alter table tblpayment add column branchid varchar(30)not null after  status
+//alter table tblbilling add column branchid varchar(30)not null after  status
+//alter table tblclass add column branchid varchar(30)not null after  status
+//alter table tblclassentry add column branchid varchar(30)not null after  recordedby
+//alter table tblauditdate add column branchid varchar(30)not null after  recordedby
+//alter table tblbatch add column branchid varchar(30)not null after  recordedby
+//alter table tblitem add column branchid varchar(30)not null after status
+//alter table tblitemprice add column branchid varchar(30)not null after  recordedby
+//alter table tblmark add column branchid varchar(30)not null after  recordedby
+//alter table tblschoolinfo add column branchid varchar(30)not null after  recordedby
+//alter table tblitem add column branchid varchar(30)not null
+//alter table tblitem add foreign key(branchid)references tblbranch(branchid)
+alter table tblitemprice add column branchid varchar(30)not null
+alter table tblitemprice add foreign key(branchid)references tblbranch(branchid)
+
+ALTER table tblbilling add foreign key(referenceid) references tblaccounttype(typeid)
+
+ALTER table tblpayment add foreign key(referenceid) references tblaccounttype(typeid)
+
+
+
+alter table tblstudentterminalreport add foreign key(userid)references tblsystemuser(userid)
+
+alter table tblstudentterminalreport add foreign key(batchid)references tblbatch(batchid)
+
+alter table `accountingbookentries` add primary key(id)
+
+alter table accountingbookentries add foreign key(refAccountId)references accountingbooks(id)
+
+alter table accountingbookentries add foreign key(accountid)references accountingbooks(id)
+
+alter table accountingbookentries add foreign key(refAccountId)references accountingbooks(id)

@@ -1,0 +1,74 @@
+.teacher-register-page .rs-hero {
+    background:
+        linear-gradient(150deg, rgba(11, 33, 43, 0.96), rgba(19, 65, 79, 0.93)),
+        linear-gradient(135deg, rgba(220, 135, 54, 0.16), transparent 55%);
+}
+
+.teacher-register-page .rs-hero::before {
+    background: linear-gradient(145deg, rgba(220, 135, 54, 0.18), rgba(51, 184, 166, 0.12));
+}
+
+.teacher-register-page .rs-kicker {
+    color: #8fe6da;
+}
+
+.teacher-register-page .rs-kicker--dark {
+    color: #5d7786;
+}
+
+.teacher-register-page .rs-hero-card .rs-kicker {
+    color: #ffd09b;
+}
+
+.teacher-register-page .rs-id-chip {
+    background: linear-gradient(145deg, #f6fbfb, #edf7f7);
+    border-color: #d7e8ea;
+}
+
+.teacher-register-page .rs-id-chip strong {
+    color: #0f4b5a;
+}
+
+.teacher-register-page .rs-photo-card {
+    background: linear-gradient(145deg, #f7fbfb, #eef6f7);
+    border-color: #d8e7ea;
+}
+
+.teacher-register-page .rs-choice input:checked + span {
+    background: linear-gradient(145deg, #103645, #15606d);
+    border-color: #15606d;
+    box-shadow: 0 16px 28px rgba(16, 54, 69, 0.22);
+}
+
+.teacher-register-page .rs-submit {
+    background: linear-gradient(145deg, #103645, #167180);
+    box-shadow: 0 18px 28px rgba(16, 54, 69, 0.24);
+}
+
+.teacher-register-page .rs-recent-top.tr-recent-top {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+}
+
+.teacher-register-page .rs-recent-top.tr-recent-top img {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    object-fit: cover;
+    background: #eaf1f7;
+}
+
+@media (max-width: 640px) {
+    .teacher-register-page .rs-recent-top.tr-recent-top {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .teacher-register-page .rs-recent-top.tr-recent-top img {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+    }
+}

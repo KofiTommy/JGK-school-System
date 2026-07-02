@@ -1,0 +1,286 @@
+body.promotion-center-page .main-platform {
+    padding: 22px 18px 34px;
+}
+
+.promotion-center-hero {
+    margin: 0 0 20px;
+    padding: 26px;
+    border-radius: 28px;
+    background:
+        linear-gradient(145deg, rgba(10, 31, 56, 0.94), rgba(18, 67, 95, 0.88)),
+        linear-gradient(135deg, rgba(212, 153, 52, 0.14), transparent 58%);
+    color: #eef5fa;
+    box-shadow: 0 22px 44px rgba(10, 28, 48, 0.18);
+}
+
+.promotion-center-hero__copy {
+    max-width: 720px;
+}
+
+.promotion-center-kicker {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(212, 153, 52, 0.18);
+    color: #ffe9bf;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.promotion-center-hero h1 {
+    margin: 14px 0 10px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.06;
+    color: #fff7ea;
+}
+
+.promotion-center-hero p {
+    margin: 0;
+    max-width: 60ch;
+    color: rgba(238, 245, 250, 0.84);
+    line-height: 1.7;
+}
+
+.promotion-center-stats {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.promotion-center-stat {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.promotion-center-stat span {
+    display: block;
+    color: rgba(238, 245, 250, 0.78);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: none;
+}
+
+.promotion-center-stat strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+.promotion-center-stat small {
+    display: block;
+    margin-top: 8px;
+    color: rgba(238, 245, 250, 0.72);
+    line-height: 1.55;
+}
+
+body.promotion-center-page .main-platform > table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 18px;
+    table-layout: fixed;
+}
+
+body.promotion-center-page .main-platform > table > tbody > tr > td {
+    vertical-align: top;
+}
+
+.promotion-card {
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(214, 224, 235, 0.96);
+    box-shadow: 0 18px 36px rgba(17, 34, 58, 0.08);
+}
+
+.promotion-card + .promotion-card {
+    margin-top: 18px;
+}
+
+.promotion-card__head {
+    margin-bottom: 16px;
+}
+
+.promotion-card__head h3 {
+    margin: 0;
+    color: #14314b;
+    font-size: 1.2rem;
+}
+
+.promotion-card__head p {
+    margin: 8px 0 0;
+    color: #5b7388;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.promotion-flash {
+    margin-bottom: 12px;
+}
+
+.promotion-form label {
+    display: block;
+    margin-bottom: 7px;
+    color: #183550;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.promotion-field-block + .promotion-field-block {
+    margin-top: 12px;
+}
+
+.promotion-form select,
+.promotion-form input[type="text"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid #d0dcea;
+    background: #fbfdff;
+    color: #163048;
+    box-sizing: border-box;
+    margin-bottom: 0;
+}
+
+.promotion-form select:focus,
+.promotion-form input[type="text"]:focus {
+    outline: none;
+    border-color: #0f7f7c;
+    box-shadow: 0 0 0 3px rgba(15, 127, 124, 0.12);
+}
+
+.promotion-form br {
+    display: none;
+}
+
+.promotion-action-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.promotion-action-group button {
+    margin: 0;
+    min-height: 48px;
+    padding: 0 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    box-shadow: none;
+}
+
+.promotion-action-group--danger button {
+    width: 100%;
+}
+
+.promotion-archive-block {
+    margin-top: 16px;
+    padding-top: 2px;
+}
+
+.promotion-archive-block hr {
+    border: 0;
+    border-top: 1px solid #e0e8f0;
+}
+
+.promotion-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e0e8f0;
+    border-radius: 18px;
+}
+
+.promotion-data-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.promotion-data-table thead th {
+    padding: 14px 12px;
+    background: #f3f8fb;
+    color: #163149;
+    font-size: 0.84rem;
+    text-align: left;
+    border-bottom: 1px solid #dbe5ef;
+}
+
+.promotion-data-table tbody td {
+    padding: 13px 12px;
+    border-bottom: 1px solid #edf2f7;
+    color: #294357;
+    font-size: 0.93rem;
+    line-height: 1.5;
+}
+
+.promotion-data-table tbody tr:hover {
+    background: #f9fbfd;
+}
+
+.promotion-empty-state {
+    padding: 18px;
+    border-radius: 16px;
+    background: #f7fafc;
+    border: 1px dashed #d7e1ea;
+    color: #627a8d;
+    line-height: 1.65;
+}
+
+@media (max-width: 1120px) {
+    .promotion-center-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body.promotion-center-page .main-platform > table,
+    body.promotion-center-page .main-platform > table > tbody,
+    body.promotion-center-page .main-platform > table > tbody > tr {
+        display: block;
+        width: 100%;
+    }
+
+    body.promotion-center-page .main-platform > table > tbody > tr > td {
+        display: block;
+        width: 100% !important;
+        padding: 0;
+    }
+
+    body.promotion-center-page .main-platform > table > tbody > tr > td + td {
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 720px) {
+    body.promotion-center-page .main-platform {
+        padding: 14px 12px 26px;
+    }
+
+    .promotion-center-hero,
+    .promotion-card {
+        border-radius: 22px;
+    }
+
+    .promotion-center-hero {
+        padding: 20px;
+    }
+
+    .promotion-center-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .promotion-action-group button {
+        width: 100%;
+    }
+
+    .promotion-data-table {
+        min-width: 640px;
+    }
+}

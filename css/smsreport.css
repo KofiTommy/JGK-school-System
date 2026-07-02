@@ -1,0 +1,617 @@
+:root {
+    --sms-report-bg: #f4f7fb;
+    --sms-report-surface: #ffffff;
+    --sms-report-border: #d8e1ef;
+    --sms-report-text: #183153;
+    --sms-report-muted: #607089;
+    --sms-report-primary: #0f6cbf;
+    --sms-report-primary-dark: #0b568f;
+    --sms-report-accent: #0f9d7a;
+    --sms-report-warn: #d9822b;
+    --sms-report-danger: #cb4d4d;
+    --sms-report-shadow: 0 18px 38px rgba(23, 43, 77, 0.08);
+}
+
+body.sms-report-page {
+    background:
+        radial-gradient(circle at top left, rgba(15, 108, 191, 0.12), transparent 24%),
+        linear-gradient(180deg, #eef4fb 0%, var(--sms-report-bg) 34%, #f8fafc 100%);
+    color: var(--sms-report-text);
+}
+
+.sms-report-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 28px 20px 56px;
+}
+
+.sms-report-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+    gap: 22px;
+    align-items: stretch;
+    margin-bottom: 22px;
+}
+
+.sms-report-hero__copy,
+.sms-report-stats {
+    background: var(--sms-report-surface);
+    border: 1px solid rgba(216, 225, 239, 0.95);
+    border-radius: 28px;
+    box-shadow: var(--sms-report-shadow);
+}
+
+.sms-report-hero__copy {
+    padding: 28px;
+    background:
+        linear-gradient(135deg, rgba(15, 108, 191, 0.06), rgba(15, 157, 122, 0.04)),
+        var(--sms-report-surface);
+}
+
+.sms-report-kicker,
+.sms-report-panel-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sms-report-primary);
+}
+
+.sms-report-hero__copy h1 {
+    margin: 16px 0 10px;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 1.08;
+}
+
+.sms-report-hero__copy p {
+    margin: 0;
+    max-width: 760px;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--sms-report-muted);
+}
+
+.sms-report-hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.sms-report-chip,
+.sms-report-panel-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(15, 108, 191, 0.08);
+    color: var(--sms-report-primary-dark);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.sms-report-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    background: var(--sms-report-border);
+}
+
+.sms-report-stat {
+    padding: 22px;
+    background: var(--sms-report-surface);
+}
+
+.sms-report-stat span {
+    display: block;
+    font-size: 0.83rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sms-report-muted);
+}
+
+.sms-report-stat strong {
+    display: block;
+    margin-top: 10px;
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    line-height: 1;
+}
+
+.sms-report-stat small {
+    display: block;
+    margin-top: 10px;
+    color: var(--sms-report-muted);
+    line-height: 1.55;
+}
+
+.sms-report-stat--accent {
+    background: linear-gradient(180deg, #fff7f3 0%, #fffdfc 100%);
+}
+
+.sms-report-message-stack {
+    margin-bottom: 18px;
+}
+
+.sms-report-flash {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid var(--sms-report-border);
+    background: var(--sms-report-surface);
+    box-shadow: var(--sms-report-shadow);
+}
+
+.sms-report-flash__icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.sms-report-flash__body {
+    line-height: 1.6;
+}
+
+.sms-report-flash--success {
+    border-color: rgba(15, 157, 122, 0.24);
+    background: #f4fcf9;
+    color: #0f6a53;
+}
+
+.sms-report-flash--error {
+    border-color: rgba(203, 77, 77, 0.24);
+    background: #fff5f5;
+    color: #a23f3f;
+}
+
+.sms-report-flash--warning {
+    border-color: rgba(217, 130, 43, 0.24);
+    background: #fff8ef;
+    color: #9b631d;
+}
+
+.sms-report-flash--info {
+    border-color: rgba(15, 108, 191, 0.22);
+    background: #f3f8fd;
+    color: #0d598f;
+}
+
+.sms-report-surface {
+    background: var(--sms-report-surface);
+    border: 1px solid rgba(216, 225, 239, 0.95);
+    border-radius: 26px;
+    box-shadow: var(--sms-report-shadow);
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+.sms-report-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.sms-report-panel-head h2 {
+    margin: 10px 0 8px;
+    font-size: 1.45rem;
+}
+
+.sms-report-panel-head p {
+    margin: 0;
+    color: var(--sms-report-muted);
+    line-height: 1.65;
+    max-width: 760px;
+}
+
+.sms-report-filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: end;
+}
+
+.sms-report-field {
+    flex: 1 1 320px;
+    display: grid;
+    gap: 8px;
+}
+
+.sms-report-field span {
+    font-weight: 700;
+    color: var(--sms-report-text);
+}
+
+.sms-report-field select,
+.sms-report-search input {
+    width: 100%;
+    min-height: 52px;
+    border: 1px solid var(--sms-report-border);
+    border-radius: 16px;
+    background: #fbfdff;
+    color: var(--sms-report-text);
+    padding: 0 16px;
+    font-size: 0.98rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sms-report-field select:focus,
+.sms-report-search input:focus {
+    border-color: rgba(15, 108, 191, 0.5);
+    box-shadow: 0 0 0 4px rgba(15, 108, 191, 0.12);
+}
+
+.sms-report-filter-actions,
+.sms-report-toolbar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sms-report-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    padding: 0 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.sms-report-btn:hover {
+    transform: translateY(-1px);
+}
+
+.sms-report-btn--primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--sms-report-primary), #0b82d8);
+    box-shadow: 0 12px 24px rgba(15, 108, 191, 0.2);
+}
+
+.sms-report-btn--primary:hover {
+    background: linear-gradient(135deg, #0d5fa6, #0a71bc);
+}
+
+.sms-report-btn--secondary {
+    color: var(--sms-report-text);
+    background: #f7fafe;
+    border-color: var(--sms-report-border);
+}
+
+.sms-report-btn--secondary:hover {
+    background: #edf4fb;
+}
+
+.sms-report-btn--inline {
+    min-height: 44px;
+}
+
+.sms-report-empty-state {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    text-align: center;
+    padding: 36px 18px;
+    color: var(--sms-report-muted);
+}
+
+.sms-report-empty-state i {
+    font-size: 2rem;
+    color: var(--sms-report-primary);
+}
+
+.sms-report-empty-state h3 {
+    margin: 6px 0 0;
+    color: var(--sms-report-text);
+}
+
+.sms-report-empty-state p {
+    max-width: 560px;
+    margin: 0;
+    line-height: 1.65;
+}
+
+.sms-report-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.sms-report-search {
+    position: relative;
+    flex: 1 1 340px;
+}
+
+.sms-report-search i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--sms-report-muted);
+}
+
+.sms-report-search input {
+    padding-left: 44px;
+}
+
+.sms-report-selection-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-bottom: 14px;
+    color: var(--sms-report-muted);
+}
+
+.sms-report-selection-meta strong {
+    color: var(--sms-report-text);
+}
+
+.sms-report-table-wrap {
+    border: 1px solid rgba(216, 225, 239, 0.95);
+    border-radius: 22px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #ffffff;
+    -webkit-overflow-scrolling: touch;
+}
+
+.sms-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 860px;
+}
+
+.sms-report-table thead th {
+    background: #f6f9fd;
+    color: var(--sms-report-text);
+    font-size: 0.84rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 16px 14px;
+    border-bottom: 1px solid var(--sms-report-border);
+    vertical-align: middle;
+}
+
+.sms-report-table tbody td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #eef3f9;
+    vertical-align: middle;
+}
+
+.sms-report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.sms-report-table tbody tr[hidden] {
+    display: none;
+}
+
+.sms-report-table__check {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.sms-report-table thead input[type="checkbox"] {
+    margin-left: 8px;
+    transform: translateY(2px);
+}
+
+.sms-report-student,
+.sms-report-contact,
+.sms-report-status-block {
+    display: grid;
+    gap: 4px;
+}
+
+.sms-report-student strong,
+.sms-report-contact strong {
+    color: var(--sms-report-text);
+}
+
+.sms-report-student small,
+.sms-report-contact small,
+.sms-report-status-block small {
+    color: var(--sms-report-muted);
+}
+
+.sms-report-username {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #eff5fb;
+    color: var(--sms-report-primary-dark);
+    font-weight: 700;
+}
+
+.sms-report-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.sms-report-badge--saved {
+    background: rgba(15, 157, 122, 0.12);
+    color: #0b7a60;
+}
+
+.sms-report-badge--fresh {
+    background: rgba(217, 130, 43, 0.14);
+    color: #a1651b;
+}
+
+.sms-report-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--sms-report-text);
+}
+
+.sms-report-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.sms-report-save-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    margin-top: 16px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #eff6fd, #f7fbff);
+    border: 1px solid var(--sms-report-border);
+}
+
+.sms-report-save-bar__copy {
+    display: grid;
+    gap: 4px;
+}
+
+.sms-report-save-bar__copy strong {
+    color: var(--sms-report-text);
+}
+
+.sms-report-save-bar__copy span {
+    color: var(--sms-report-muted);
+    line-height: 1.55;
+}
+
+@media (max-width: 1100px) {
+    .sms-report-hero {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .sms-report-shell {
+        padding: 22px 14px 40px;
+    }
+
+    .sms-report-surface,
+    .sms-report-hero__copy {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .sms-report-panel-head,
+    .sms-report-toolbar,
+    .sms-report-save-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sms-report-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .sms-report-table-wrap {
+        border: none;
+        background: transparent;
+        overflow: visible;
+    }
+
+    .sms-report-table,
+    .sms-report-table thead,
+    .sms-report-table tbody,
+    .sms-report-table th,
+    .sms-report-table td,
+    .sms-report-table tr {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .sms-report-table thead {
+        display: none;
+    }
+
+    .sms-report-table tbody {
+        display: grid;
+        gap: 14px;
+    }
+
+    .sms-report-table tbody tr {
+        background: #ffffff;
+        border: 1px solid rgba(216, 225, 239, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 12px 26px rgba(23, 43, 77, 0.06);
+        overflow: hidden;
+    }
+
+    .sms-report-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 14px 16px;
+        border-bottom: 1px solid #eef3f9;
+        text-align: right;
+    }
+
+    .sms-report-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .sms-report-table tbody td::before {
+        content: attr(data-label);
+        flex: 0 0 110px;
+        text-align: left;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--sms-report-muted);
+        font-size: 0.78rem;
+    }
+
+    .sms-report-table__check,
+    .sms-report-table tbody td[data-label="Send"] {
+        text-align: right;
+    }
+
+    .sms-report-check {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 560px) {
+    .sms-report-hero__copy h1 {
+        font-size: 1.8rem;
+    }
+
+    .sms-report-btn,
+    .sms-report-field select,
+    .sms-report-search input {
+        min-height: 48px;
+    }
+
+    .sms-report-selection-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
+}

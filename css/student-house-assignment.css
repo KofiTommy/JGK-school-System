@@ -1,0 +1,327 @@
+.student-house-assignment-page .main-platform {
+    padding: 24px;
+}
+
+.sha-page-header {
+    margin-bottom: 18px;
+    padding: 24px 26px;
+    border: 1px solid #d8e2ef;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #f8fbff 0%, #eef4fb 100%);
+    box-shadow: 0 16px 30px rgba(20, 55, 90, 0.08);
+}
+
+.sha-page-header__eyebrow {
+    margin: 0 0 8px;
+    color: #486581;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.sha-page-header h3 {
+    margin: 0;
+    color: #15324b;
+    font-size: 30px;
+    line-height: 1.1;
+}
+
+.sha-page-header__copy {
+    margin: 10px 0 0;
+    max-width: 760px;
+    color: #5d7288;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.sha-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.sha-column {
+    min-width: 0;
+}
+
+.sha-card {
+    border: 1px solid #d8e2ef;
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 16px 30px rgba(20, 55, 90, 0.08);
+}
+
+.sha-card__title {
+    margin-bottom: 16px;
+}
+
+.sha-card__title h4 {
+    margin: 0 0 6px;
+    color: #17324d;
+    font-size: 21px;
+    line-height: 1.2;
+}
+
+.sha-card__title p {
+    margin: 0;
+    color: #60758a;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.sha-card--note {
+    margin-top: 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+}
+
+.student-house-assignment-page .form-entry label {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: #17324d;
+    font-weight: 700;
+}
+
+.student-house-assignment-page .form-entry input[type="text"],
+.student-house-assignment-page .form-entry select {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 14px;
+    border: 1px solid #c9d7e6;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #17324d;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.student-house-assignment-page .form-entry input[type="text"]:focus,
+.student-house-assignment-page .form-entry select:focus {
+    outline: none;
+    border-color: #2c6aa0;
+    box-shadow: 0 0 0 3px rgba(44, 106, 160, 0.12);
+}
+
+.sha-filter-form,
+.sha-inline-tools,
+.sha-form-actions,
+.sha-select-all {
+    margin-bottom: 14px;
+}
+
+.sha-filter-actions,
+.sha-inline-tools,
+.sha-form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.sha-inline-tools {
+    justify-content: space-between;
+}
+
+.sha-inline-tools label {
+    margin: 0;
+}
+
+.student-house-assignment-page .main-platform button,
+.student-house-assignment-page .main-platform .button-save {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 14px;
+    background: #1d4f7a;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.student-house-assignment-page .main-platform button:hover,
+.student-house-assignment-page .main-platform .button-save:hover {
+    background: #163f62;
+    box-shadow: 0 10px 20px rgba(29, 79, 122, 0.18);
+    transform: translateY(-1px);
+}
+
+.student-house-assignment-page .main-platform button[type="button"] {
+    background: #e8eef5;
+    color: #17324d;
+}
+
+.student-house-assignment-page .main-platform button[type="button"]:hover {
+    background: #dce6f0;
+}
+
+.sha-subheading {
+    margin: 0 0 10px;
+    color: #17324d;
+    font-size: 18px;
+}
+
+.sha-select-all {
+    color: #4e647a;
+    font-weight: 600;
+}
+
+.sha-select-all input {
+    margin-right: 8px;
+}
+
+.sha-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #d9e2ec;
+    border-radius: 18px;
+}
+
+.student-house-assignment-page table {
+    border-collapse: collapse;
+    min-width: 620px;
+}
+
+.student-house-assignment-page table thead th {
+    padding: 14px 12px;
+    background: #eff5fb;
+    color: #17324d;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.student-house-assignment-page table tbody td {
+    padding: 13px 12px;
+    border-top: 1px solid #e3ebf3;
+    color: #27455f;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.student-house-assignment-page table tbody tr:nth-child(even) td {
+    background: #fbfdff;
+}
+
+.sha-count-note {
+    margin-top: 10px;
+    color: #5f7388;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.sha-inline-form {
+    margin: 0;
+}
+
+.sha-icon-button {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border-radius: 12px;
+    background: #fff1f1;
+    color: #b42318;
+}
+
+.sha-icon-button:hover {
+    background: #ffd9d9;
+    box-shadow: none;
+    transform: none;
+}
+
+.sha-alert {
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    font-weight: 700;
+}
+
+.sha-alert--success {
+    background: #e9f9ef;
+    color: #146c2e;
+    border: 1px solid #b9e7c6;
+}
+
+.sha-alert--warning {
+    background: #fff8e8;
+    color: #8b5e00;
+    border: 1px solid #f1dea5;
+}
+
+.sha-alert--error {
+    background: #fff0f0;
+    color: #b42318;
+    border: 1px solid #efc2c2;
+}
+
+@media (max-width: 1100px) {
+    .sha-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .sha-card--note {
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .student-house-assignment-page .main-platform {
+        padding: 14px;
+    }
+
+    .student-house-assignment-page .header .dropbtnNew,
+    .student-house-assignment-page .header .dropdownNew-content button {
+        width: auto;
+        background: transparent;
+        color: inherit;
+        box-shadow: none;
+    }
+
+    .sha-page-header {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .sha-page-header h3 {
+        font-size: 25px;
+    }
+
+    .sha-card {
+        border-radius: 18px;
+    }
+
+    .sha-filter-actions,
+    .sha-inline-tools,
+    .sha-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .student-house-assignment-page .main-platform button,
+    .student-house-assignment-page .main-platform .button-save {
+        width: 100%;
+    }
+
+    .sha-inline-tools select,
+    .sha-inline-tools button {
+        width: 100%;
+    }
+
+    .student-house-assignment-page table {
+        min-width: 540px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sha-page-header__copy,
+    .sha-card__title p,
+    .student-house-assignment-page table tbody td,
+    .student-house-assignment-page table thead th {
+        font-size: 13px;
+    }
+
+    .sha-page-header h3,
+    .sha-card__title h4 {
+        font-size: 22px;
+    }
+}

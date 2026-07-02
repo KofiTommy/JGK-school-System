@@ -1,0 +1,607 @@
+body.duty-roster-page {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(14, 116, 144, 0.12), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.14), transparent 22%),
+        linear-gradient(180deg, #f7fafc 0%, #eef4f8 100%);
+    color: #14324a;
+}
+
+.duty-roster-shell {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 26px 20px 40px;
+}
+
+.duty-roster-flash {
+    margin-bottom: 16px;
+}
+
+.duty-roster-alert {
+    padding: 14px 16px;
+    border-radius: 18px;
+    font-weight: 600;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+}
+
+.duty-roster-alert--success {
+    background: #ecfdf3;
+    color: #166534;
+    border: 1px solid rgba(22, 101, 52, 0.14);
+}
+
+.duty-roster-alert--error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid rgba(185, 28, 28, 0.14);
+}
+
+.duty-roster-alert--warning {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1px solid rgba(194, 65, 12, 0.14);
+}
+
+.duty-roster-alert--info {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid rgba(29, 78, 216, 0.14);
+}
+
+.duty-roster-hero,
+.duty-roster-panel {
+    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
+}
+
+.duty-roster-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 360px);
+    gap: 22px;
+    padding: clamp(22px, 3vw, 34px);
+    border-radius: 30px;
+    background:
+        linear-gradient(135deg, rgba(13, 42, 74, 0.98), rgba(10, 91, 110, 0.94)),
+        linear-gradient(150deg, rgba(245, 158, 11, 0.16), transparent 55%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.duty-roster-hero::before {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -70px;
+    width: 220px;
+    height: 220px;
+    border-radius: 28px;
+    transform: rotate(28deg);
+    background: linear-gradient(145deg, rgba(245, 158, 11, 0.18), rgba(255, 255, 255, 0.04));
+}
+
+.duty-roster-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.duty-roster-kicker,
+.duty-roster-panel__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+}
+
+.duty-roster-kicker {
+    color: #a5f3fc;
+}
+
+.duty-roster-hero h1,
+.duty-roster-panel h2,
+.duty-roster-quick-note h3,
+.duty-roster-form-card h2,
+.duty-roster-table-card h2,
+.duty-roster-summary-card strong {
+    font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif;
+}
+
+.duty-roster-hero h1 {
+    margin: 14px 0 14px;
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    line-height: 1.04;
+    max-width: 12ch;
+}
+
+.duty-roster-hero p {
+    margin: 0;
+    max-width: 62ch;
+    color: rgba(240, 249, 255, 0.84);
+    line-height: 1.7;
+}
+
+.duty-roster-summary-grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.duty-roster-summary-card {
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+}
+
+.duty-roster-summary-card span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.duty-roster-summary-card strong {
+    display: block;
+    font-size: 1.45rem;
+    color: #fef3c7;
+}
+
+.duty-roster-quick-note {
+    padding: 22px;
+    border-radius: 26px;
+    background: linear-gradient(160deg, rgba(255, 251, 235, 0.98), rgba(255, 255, 255, 0.96));
+    border: 1px solid rgba(245, 158, 11, 0.22);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.duty-roster-quick-note h3 {
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+    color: #102a43;
+}
+
+.duty-roster-quick-note p,
+.duty-roster-quick-note li {
+    color: #334e68;
+    line-height: 1.65;
+}
+
+.duty-roster-quick-note ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.duty-roster-quick-note li::marker {
+    color: #d97706;
+}
+
+.duty-roster-layout {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+    gap: 22px;
+    align-items: start;
+}
+
+.duty-roster-panel {
+    padding: 22px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(20, 50, 74, 0.08);
+}
+
+.duty-roster-panel__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.duty-roster-panel__eyebrow {
+    color: #0f766e;
+}
+
+.duty-roster-panel__head h2,
+.duty-roster-form-card h2,
+.duty-roster-table-card h2 {
+    margin: 8px 0 0;
+    color: #102a43;
+    font-size: clamp(1.4rem, 2vw, 1.9rem);
+}
+
+.duty-roster-helper {
+    color: #5f748c;
+    line-height: 1.65;
+}
+
+.duty-roster-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.duty-roster-field {
+    display: grid;
+    gap: 8px;
+}
+
+.duty-roster-field--full {
+    grid-column: 1 / -1;
+}
+
+.duty-roster-field label {
+    font-weight: 700;
+    color: #102a43;
+}
+
+.duty-roster-field input,
+.duty-roster-field select,
+.duty-roster-field textarea {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 16px;
+    border: 1px solid rgba(20, 50, 74, 0.12);
+    background: #ffffff;
+    padding: 12px 14px;
+    font: inherit;
+    color: #14324a;
+    box-sizing: border-box;
+}
+
+.duty-roster-field textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.duty-roster-teacher-picker {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-height: 280px;
+    overflow: auto;
+    padding: 6px;
+    border-radius: 18px;
+    border: 1px solid rgba(20, 50, 74, 0.08);
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(255, 255, 255, 0.98));
+}
+
+.duty-roster-teacher-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(20, 50, 74, 0.08);
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.duty-roster-teacher-option input {
+    width: auto;
+    min-height: 0;
+    margin-top: 2px;
+    accent-color: #0f766e;
+}
+
+.duty-roster-teacher-option__body {
+    display: grid;
+    gap: 4px;
+}
+
+.duty-roster-teacher-option__body strong {
+    color: #102a43;
+}
+
+.duty-roster-teacher-option__body small,
+.duty-roster-picker-note {
+    color: #5f748c;
+}
+
+.duty-roster-picker-note {
+    display: block;
+    margin-top: 8px;
+    line-height: 1.55;
+}
+
+.duty-roster-field input:focus,
+.duty-roster-field select:focus,
+.duty-roster-field textarea:focus {
+    outline: none;
+    border-color: rgba(15, 118, 110, 0.46);
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+}
+
+.duty-roster-form-actions,
+.duty-roster-tools {
+    margin-top: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.duty-roster-btn,
+.duty-roster-btn-secondary,
+.duty-roster-inline-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 18px;
+    border-radius: 16px;
+    border: 0;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
+    font-family: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.duty-roster-btn {
+    background: linear-gradient(135deg, #0f766e, #155e75);
+    color: #f0fdfa;
+    box-shadow: 0 18px 28px rgba(15, 118, 110, 0.22);
+}
+
+.duty-roster-btn-secondary {
+    background: rgba(20, 50, 74, 0.06);
+    color: #14324a;
+}
+
+.duty-roster-inline-btn {
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: rgba(20, 50, 74, 0.06);
+    color: #14324a;
+}
+
+.duty-roster-btn:hover,
+.duty-roster-btn-secondary:hover,
+.duty-roster-inline-btn:hover {
+    transform: translateY(-2px);
+}
+
+.duty-roster-btn[disabled],
+.duty-roster-btn-secondary[disabled],
+.duty-roster-inline-btn[disabled] {
+    opacity: 0.58;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.duty-roster-note-box,
+.duty-roster-run-card,
+.duty-roster-table-card {
+    border-radius: 22px;
+    border: 1px solid rgba(20, 50, 74, 0.08);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(245, 248, 250, 0.96));
+}
+
+.duty-roster-note-box,
+.duty-roster-run-card {
+    padding: 18px;
+}
+
+.duty-roster-note-box strong,
+.duty-roster-run-card strong {
+    color: #102a43;
+}
+
+.duty-roster-note-box p,
+.duty-roster-run-card p {
+    color: #38506a;
+}
+
+.duty-roster-note-box code,
+.duty-roster-run-card code {
+    display: block;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #08111f;
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.duty-roster-run-summary {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(15, 118, 110, 0.06);
+    border: 1px solid rgba(15, 118, 110, 0.12);
+}
+
+.duty-roster-run-summary ul {
+    margin: 10px 0 0;
+    padding-left: 18px;
+}
+
+.duty-roster-run-summary li {
+    color: #38506a;
+    line-height: 1.6;
+}
+
+.duty-roster-table-card {
+    margin-top: 24px;
+    padding: 22px;
+}
+
+.duty-roster-table-wrap {
+    margin-top: 18px;
+    overflow-x: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(20, 50, 74, 0.08);
+}
+
+.duty-roster-table {
+    width: 100%;
+    min-width: 920px;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+.duty-roster-table th,
+.duty-roster-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(20, 50, 74, 0.08);
+    text-align: left;
+    vertical-align: top;
+}
+
+.duty-roster-table thead th {
+    background: #f8fafc;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #4b637d;
+}
+
+.duty-roster-table tbody tr:hover {
+    background: #f8fbfd;
+}
+
+.duty-roster-person {
+    display: grid;
+    gap: 4px;
+}
+
+.duty-roster-person strong {
+    color: #102a43;
+}
+
+.duty-roster-person small,
+.duty-roster-muted {
+    color: #5f748c;
+}
+
+.duty-roster-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.duty-roster-badge--active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.duty-roster-badge--upcoming {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.duty-roster-badge--completed {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.duty-roster-badge--inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.duty-roster-badge--sent {
+    background: #ecfdf3;
+    color: #166534;
+}
+
+.duty-roster-badge--failed {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.duty-roster-badge--neutral {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.duty-roster-row-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.duty-roster-row-actions form {
+    margin: 0;
+}
+
+.duty-roster-empty {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(20, 50, 74, 0.04);
+    border: 1px dashed rgba(20, 50, 74, 0.16);
+    color: #5f748c;
+}
+
+@media (max-width: 1080px) {
+    .duty-roster-hero,
+    .duty-roster-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .duty-roster-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .duty-roster-shell {
+        padding: 18px 14px 28px;
+    }
+
+    .duty-roster-hero,
+    .duty-roster-panel,
+    .duty-roster-table-card {
+        border-radius: 24px;
+    }
+
+    .duty-roster-hero,
+    .duty-roster-panel,
+    .duty-roster-table-card {
+        padding: 18px;
+    }
+
+    .duty-roster-summary-grid,
+    .duty-roster-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .duty-roster-teacher-picker {
+        grid-template-columns: 1fr;
+    }
+
+    .duty-roster-form-actions,
+    .duty-roster-tools,
+    .duty-roster-row-actions {
+        flex-direction: column;
+    }
+
+    .duty-roster-btn,
+    .duty-roster-btn-secondary,
+    .duty-roster-inline-btn {
+        width: 100%;
+    }
+}

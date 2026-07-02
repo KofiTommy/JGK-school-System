@@ -1,0 +1,110 @@
+
+
+ul {
+    list-style-type: none;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-top: -2px;
+    padding: 0;
+    overflow: hidden;
+    /*background-color: #444666;*/
+    background-color: #eeeeee;
+    
+}
+
+li {
+    float: left;
+     border-right:solid 0px white;
+}
+
+li a, .dropbtn {
+    display: inline-block;
+    color: #222;
+    text-align: center;
+    padding: 15px 16px;
+    text-decoration: none;
+}
+.active{
+/*background:#444777;*/
+background-color: #dddddd;
+color:darkblue;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    /*background-color: #444aaa;*/
+    background-color: #ffffff;
+    color:#333;
+}
+
+li.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    border:solid 1px transparent;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+     
+    
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    /*border-bottom:solid 0px orange;*/
+   
+}
+
+.dropdown-content a:hover {
+/*background-color: #444aaa;*/
+background-color: #ffffff;
+color:royalblue;
+/*border-bottom:solid 0px orange;*/
+border-top:solid 0px orange;
+}
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+.menu-inner{
+    background-color: #333;
+    padding:8px;
+}
+.menu-inner a{
+    margin-right: 5px;
+    padding:10px;
+    background-color: transparent !important;
+    color:white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
+    text-decoration: none;
+    line-height: 30px;
+}
+.menu-inner a:hover{
+    margin-right: 5px;
+    padding:10px;
+    background-color: transparent !important;
+    color:lightblue;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
+    text-decoration: none;
+    line-height: 30px;
+}
+.menu-inner strong{
+    text-transform: uppercase;
+    color:orange;
+    margin-right: 15px;
+}
+.menu-inner b{
+    color:white;
+}
+

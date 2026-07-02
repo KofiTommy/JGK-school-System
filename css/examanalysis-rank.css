@@ -1,0 +1,436 @@
+.rankdash-shell{
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 16px 40px;
+}
+
+.rankdash-hero{
+    background: linear-gradient(135deg, rgba(17,54,93,0.98), rgba(43,95,153,0.95));
+    color: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 18px 40px rgba(13, 43, 71, 0.18);
+}
+
+.rankdash-hero h1,
+.rankdash-hero h2,
+.rankdash-hero h3{
+    margin: 0;
+    color: #fff;
+}
+
+.rankdash-hero p{
+    margin: 10px 0 0;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.6;
+}
+
+.rankdash-badges{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.rankdash-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.rankdash-layout{
+    display: grid;
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+    gap: 18px;
+    margin-top: 18px;
+    align-items: start;
+}
+
+.rankdash-card{
+    background: #fff;
+    border: 1px solid #d7e4f2;
+    border-radius: 22px;
+    box-shadow: 0 14px 32px rgba(17,54,93,0.08);
+    padding: 20px;
+}
+
+.rankdash-card h3{
+    margin: 0 0 14px;
+    color: #17324d;
+}
+
+.rankdash-filter-form fieldset{
+    border: 1px solid #d8e5f2;
+    border-radius: 16px;
+    padding: 14px;
+    margin: 0;
+}
+
+.rankdash-filter-form legend{
+    padding: 0 8px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #4a647d;
+    font-weight: 700;
+}
+
+.rankdash-field{
+    display: grid;
+    gap: 8px;
+}
+
+.rankdash-field label{
+    font-size: 13px;
+    font-weight: 700;
+    color: #26425f;
+}
+
+.rankdash-field select,
+.rankdash-field input{
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #cddced;
+    background: #f9fbfe;
+    color: #10253c;
+    font-size: 15px;
+    text-align: left;
+}
+
+.rankdash-field select option{
+    color: #10253c;
+    background: #fff;
+}
+
+.rankdash-actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.rankdash-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 14px;
+    background: #155b9a;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.rankdash-btn:hover{
+    background: #0e4b81;
+    color: #fff;
+}
+
+.rankdash-btn--ghost{
+    background: #edf4fb;
+    color: #17324d;
+}
+
+.rankdash-btn--ghost:hover{
+    background: #dcebf8;
+    color: #17324d;
+}
+
+.rankdash-message{
+    margin-bottom: 14px;
+}
+
+.rankdash-summary{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.rankdash-stat{
+    background: #f8fbff;
+    border: 1px solid #d7e4f2;
+    border-radius: 18px;
+    padding: 16px;
+}
+
+.rankdash-stat h4{
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5a748d;
+}
+
+.rankdash-stat strong{
+    display: block;
+    margin-top: 10px;
+    font-size: 28px;
+    color: #17324d;
+}
+
+.rankdash-stat span{
+    display: block;
+    margin-top: 8px;
+    color: #607d99;
+    line-height: 1.5;
+}
+
+.rankdash-class-grid{
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.rankdash-class-card{
+    border: 1px solid #d7e4f2;
+    border-radius: 22px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.rankdash-class-card__header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid #e4eef8;
+    background: linear-gradient(180deg, #fbfdff, #f4f9ff);
+}
+
+.rankdash-class-card__title{
+    margin: 0;
+    color: #17324d;
+    font-size: 20px;
+}
+
+.rankdash-class-card__meta{
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.rankdash-class-card__meta span{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eaf3fc;
+    color: #295377;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rankdash-class-card__body{
+    padding: 18px 20px 20px;
+}
+
+.rankdash-class-card__actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.rankdash-table-wrap{
+    margin-top: 14px;
+    overflow-x: auto;
+    border: 1px solid #dce8f4;
+    border-radius: 18px;
+}
+
+.rankdash-table{
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+}
+
+.rankdash-table thead th{
+    background: #eef5fc;
+    color: #35516d;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 14px;
+    text-align: left;
+}
+
+.rankdash-table tbody td{
+    padding: 13px 14px;
+    border-top: 1px solid #edf3f8;
+    color: #17324d;
+}
+
+.rankdash-table tbody tr:nth-child(even){
+    background: #fbfdff;
+}
+
+.rankdash-rank-pill{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: #e8f2fc;
+    color: #12497c;
+    font-weight: 800;
+}
+
+.rankdash-total{
+    font-weight: 800;
+    color: #0d4f88;
+}
+
+.rankdash-empty{
+    padding: 30px 18px;
+    border: 1px dashed #c8d8ea;
+    border-radius: 18px;
+    text-align: center;
+    color: #5d7892;
+    line-height: 1.7;
+    background: #fbfdff;
+}
+
+.rankdash-update-table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rankdash-update-table td,
+.rankdash-update-table th{
+    padding: 10px 12px;
+    border-top: 1px solid #edf3f8;
+    color: #17324d;
+}
+
+.rankdash-update-table th{
+    background: #eef5fc;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.rankdash-update-table input{
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #cddced;
+    background: #fff;
+    color: #10253c;
+}
+
+.rankdash-print-title{
+    display: none;
+}
+
+@media (max-width: 980px){
+    .rankdash-layout{
+        grid-template-columns: 1fr;
+    }
+
+    .rankdash-summary{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px){
+    .rankdash-shell{
+        padding: 12px 12px 32px;
+    }
+
+    .rankdash-hero,
+    .rankdash-card{
+        border-radius: 18px;
+        padding: 16px;
+    }
+
+    .rankdash-summary{
+        grid-template-columns: 1fr;
+    }
+
+    .rankdash-class-card__header,
+    .rankdash-class-card__body{
+        padding: 14px;
+    }
+
+    .rankdash-table{
+        min-width: 0;
+    }
+
+    .rankdash-table thead{
+        display: none;
+    }
+
+    .rankdash-table,
+    .rankdash-table tbody,
+    .rankdash-table tr,
+    .rankdash-table td{
+        display: block;
+        width: 100%;
+    }
+
+    .rankdash-table tbody tr{
+        padding: 12px 12px 8px;
+        border-top: 1px solid #edf3f8;
+    }
+
+    .rankdash-table tbody td{
+        border-top: 0;
+        padding: 6px 0;
+    }
+
+    .rankdash-table tbody td::before{
+        content: attr(data-label);
+        display: block;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #69839c;
+        margin-bottom: 4px;
+    }
+}
+
+@media print{
+    body{
+        background: #fff !important;
+    }
+
+    .header,
+    #myBtn,
+    .rankdash-print-hide{
+        display: none !important;
+    }
+
+    .rankdash-shell,
+    .rankdash-card,
+    .rankdash-class-card{
+        box-shadow: none !important;
+        border-color: #b9c9d9 !important;
+    }
+
+    .rankdash-print-title{
+        display: block;
+        margin: 0 0 10px;
+        color: #17324d;
+        font-size: 20px;
+    }
+}

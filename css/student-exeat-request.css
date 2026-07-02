@@ -1,0 +1,370 @@
+.student-exeat-page {
+    min-height: 100vh;
+    padding: 22px;
+    background:
+        radial-gradient(circle at top left, rgba(16, 76, 142, 0.12), transparent 34%),
+        linear-gradient(135deg, #f5f8fc 0%, #eaf0f8 100%);
+    color: #1b2b41;
+}
+
+.student-exeat-hero {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 18px;
+    margin: 0 auto 18px;
+    padding: 24px;
+    border: 1px solid rgba(19, 65, 116, 0.12);
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+    box-shadow: 0 18px 45px rgba(21, 54, 91, 0.12);
+}
+
+.student-exeat-kicker {
+    display: inline-flex;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #dcecff;
+    color: #0f4e8f;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.student-exeat-hero h1,
+.student-exeat-panel-heading h2 {
+    margin: 0;
+    color: #12365d;
+    line-height: 1.15;
+}
+
+.student-exeat-hero h1 {
+    font-size: clamp(26px, 4vw, 42px);
+}
+
+.student-exeat-hero p,
+.student-exeat-panel-heading p {
+    margin: 8px 0 0;
+    color: #5a6f87;
+}
+
+.student-exeat-hero-card {
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 20px;
+    background: #123f70;
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.student-exeat-hero-card i {
+    font-size: 30px;
+    color: #cfe4ff;
+}
+
+.student-exeat-hero-card span {
+    font-weight: 800;
+}
+
+.student-exeat-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.student-exeat-panel {
+    border: 1px solid rgba(19, 65, 116, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 16px 40px rgba(21, 54, 91, 0.1);
+}
+
+.student-exeat-form-panel {
+    position: sticky;
+    top: 12px;
+    padding: 18px;
+}
+
+.student-exeat-history-panel {
+    padding: 18px;
+    overflow: hidden;
+}
+
+.student-exeat-panel-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.student-exeat-panel-heading h2 {
+    font-size: 20px;
+}
+
+.student-exeat-icon {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    background: #e5f0ff;
+    color: #12599c;
+}
+
+.student-exeat-house-card {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 16px;
+    padding: 14px;
+    border: 1px solid #d7e6f7;
+    border-radius: 16px;
+    background: #f8fbff;
+}
+
+.student-exeat-house-card span {
+    color: #5a6f87;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.student-exeat-house-card strong {
+    color: #12365d;
+    font-size: 18px;
+}
+
+.student-exeat-house-card-warning {
+    border-color: #fecaca;
+    background: #fff7f7;
+}
+
+.student-exeat-house-card-warning strong {
+    color: #b91c1c;
+}
+
+.student-exeat-form-panel form {
+    display: grid;
+    gap: 14px;
+}
+
+.student-exeat-field label {
+    display: inline-flex;
+    margin-bottom: 7px;
+    color: #12365d;
+    font-weight: 900;
+}
+
+.student-exeat-field br {
+    display: none;
+}
+
+.student-exeat-field select,
+.student-exeat-field textarea,
+.student-exeat-field input[type="date"],
+.student-exeat-field input[type="time"] {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #d7e1ed;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #1b2b41;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-exeat-field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.student-exeat-field select:focus,
+.student-exeat-field textarea:focus,
+.student-exeat-field input[type="date"]:focus,
+.student-exeat-field input[type="time"]:focus {
+    border-color: #176fb8;
+    box-shadow: 0 0 0 4px rgba(23, 111, 184, 0.12);
+}
+
+.student-exeat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.student-exeat-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.student-exeat-btn,
+.student-exeat-page .button-save {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.student-exeat-btn-primary,
+.student-exeat-page .button-save.student-exeat-btn-primary {
+    background: linear-gradient(135deg, #0f4e8f 0%, #176fb8 100%);
+    color: #ffffff !important;
+    box-shadow: 0 10px 22px rgba(23, 111, 184, 0.22);
+}
+
+.student-exeat-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #e1eaf4;
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+.student-exeat-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+}
+
+.student-exeat-table caption {
+    padding: 16px;
+    color: #12365d;
+    font-size: 18px;
+    font-weight: 900;
+    text-align: left;
+    background: #f5f9fe;
+}
+
+.student-exeat-table thead th {
+    padding: 12px 10px;
+    background: #123f70;
+    color: #ffffff;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.student-exeat-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #edf2f7;
+    color: #253b56;
+    vertical-align: middle;
+}
+
+.student-exeat-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.student-exeat-table tbody tr:hover td {
+    background: #f8fbff;
+}
+
+.student-exeat-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 84px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.student-exeat-status-pending {
+    background: #fff7ed;
+    color: #b45309;
+}
+
+.student-exeat-status-approved {
+    background: #ecfdf3;
+    color: #15803d;
+}
+
+.student-exeat-status-declined {
+    background: #fff1f2;
+    color: #b91c1c;
+}
+
+.student-exeat-empty-row {
+    padding: 26px !important;
+    color: #5a6f87 !important;
+    text-align: center;
+}
+
+@media (max-width: 1040px) {
+    .student-exeat-page {
+        padding: 14px;
+    }
+
+    .student-exeat-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .student-exeat-form-panel {
+        position: static;
+    }
+
+    .student-exeat-hero {
+        flex-direction: column;
+    }
+
+    .student-exeat-hero-card {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .student-exeat-page {
+        padding: 10px;
+    }
+
+    .student-exeat-hero,
+    .student-exeat-panel {
+        border-radius: 18px;
+    }
+
+    .student-exeat-hero,
+    .student-exeat-form-panel,
+    .student-exeat-history-panel {
+        padding: 14px;
+    }
+
+    .student-exeat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-exeat-actions,
+    .student-exeat-btn,
+    .student-exeat-page .button-save {
+        width: 100%;
+    }
+
+    .student-exeat-panel-heading {
+        align-items: flex-start;
+    }
+
+    .student-exeat-table {
+        min-width: 760px;
+    }
+}

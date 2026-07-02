@@ -1,0 +1,3 @@
+https://api.hubtel.com/v1/messages/send?From=From&To=To&Content=Content&ClientID=ClientID&ClientSecret=ClientSecret 
+
+https://api.hubtel.com/v1/messages

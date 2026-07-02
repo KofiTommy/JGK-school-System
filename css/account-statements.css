@@ -1,0 +1,613 @@
+body.account-statements-page {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(28, 126, 214, 0.12), transparent 24%),
+        radial-gradient(circle at 84% 16%, rgba(14, 163, 140, 0.14), transparent 20%),
+        linear-gradient(145deg, #f4f7fb 0%, #eef6f7 48%, #e9eef5 100%);
+    color: #17324d;
+}
+
+.account-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 24px 42px;
+}
+
+.account-flash {
+    margin-bottom: 18px;
+}
+
+.account-flash > div,
+.account-flash > p,
+.account-flash {
+    border-radius: 18px;
+}
+
+.account-hero,
+.account-summary-card,
+.account-toolbar,
+.account-class-section,
+.account-statement-card {
+    box-shadow: 0 24px 48px rgba(9, 27, 44, 0.08);
+}
+
+.account-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 360px);
+    gap: 24px;
+    padding: clamp(24px, 4vw, 36px);
+    border-radius: 32px;
+    background:
+        linear-gradient(145deg, rgba(8, 27, 48, 0.96), rgba(18, 58, 89, 0.92)),
+        linear-gradient(130deg, rgba(245, 188, 75, 0.2), transparent 56%);
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.account-hero::before,
+.account-hero::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.account-hero::before {
+    width: 220px;
+    height: 220px;
+    top: -90px;
+    right: -46px;
+}
+
+.account-hero::after {
+    width: 160px;
+    height: 160px;
+    left: 32%;
+    bottom: -70px;
+}
+
+.account-hero__copy,
+.account-hero__profile {
+    position: relative;
+    z-index: 1;
+}
+
+.account-hero__eyebrow,
+.account-class-section__eyebrow,
+.account-statement-card__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.account-hero__eyebrow {
+    color: #9fe7dc;
+    background: rgba(159, 231, 220, 0.14);
+    border: 1px solid rgba(159, 231, 220, 0.2);
+}
+
+.account-hero h1,
+.account-class-section__header h2,
+.account-statement-card h3,
+.account-summary-card strong,
+.account-meta-card strong,
+.account-empty-state h2 {
+    font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif;
+}
+
+.account-hero h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(2.2rem, 4.2vw, 4rem);
+    line-height: 1.04;
+}
+
+.account-hero p {
+    margin: 0;
+    max-width: 62ch;
+    color: rgba(237, 244, 247, 0.82);
+    line-height: 1.75;
+}
+
+.account-hero__profile {
+    padding: 22px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(10px);
+    display: grid;
+    gap: 10px;
+    align-content: start;
+}
+
+.account-hero__label {
+    color: #ffd79d;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.account-hero__profile strong {
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.account-hero__profile small {
+    color: rgba(237, 244, 247, 0.76);
+    font-size: 0.95rem;
+}
+
+.account-hero__meta {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.account-hero__meta div {
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.account-hero__meta span,
+.account-summary-card span,
+.account-meta-card span,
+.account-statement-card__latest span {
+    display: block;
+    margin-bottom: 8px;
+    color: #6b8197;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.account-hero__meta span {
+    color: rgba(237, 244, 247, 0.66);
+}
+
+.account-hero__meta strong {
+    display: block;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.account-summary-grid {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.account-summary-card {
+    padding: 20px 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 251, 0.96));
+    position: relative;
+    overflow: hidden;
+}
+
+.account-summary-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--account-summary-accent), rgba(255, 255, 255, 0));
+}
+
+.account-summary-card strong {
+    display: block;
+    color: #112b45;
+    font-size: 1.28rem;
+    line-height: 1.4;
+}
+
+.account-summary-card--billed {
+    --account-summary-accent: #1c7ed6;
+}
+
+.account-summary-card--paid {
+    --account-summary-accent: #0ea38c;
+}
+
+.account-summary-card--balance {
+    --account-summary-accent: #dd7a51;
+}
+
+.account-summary-card--latest {
+    --account-summary-accent: #d69b37;
+}
+
+.account-toolbar {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: 26px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: rgba(255, 255, 255, 0.94);
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.account-toolbar__field {
+    flex: 1 1 420px;
+    display: grid;
+    gap: 8px;
+}
+
+.account-toolbar__field label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #617991;
+}
+
+.account-toolbar__field input {
+    min-height: 54px;
+    border-radius: 18px;
+    border: 1px solid rgba(17, 43, 69, 0.12);
+    background: #ffffff;
+    color: #17324d;
+    padding: 0 16px;
+    font-size: 1rem;
+}
+
+.account-toolbar__field input:focus {
+    outline: none;
+    border-color: rgba(28, 126, 214, 0.34);
+    box-shadow: 0 0 0 4px rgba(28, 126, 214, 0.1);
+}
+
+.account-toolbar__hint {
+    min-width: 160px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: rgba(28, 126, 214, 0.08);
+    color: #17324d;
+    text-align: center;
+}
+
+.account-toolbar__hint strong {
+    display: block;
+    font-size: 1.22rem;
+}
+
+.account-toolbar__hint span {
+    color: #5d748d;
+    font-size: 0.92rem;
+}
+
+.account-class-section {
+    margin-top: 22px;
+    padding: 22px;
+    border-radius: 28px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.account-class-section.is-hidden {
+    display: none;
+}
+
+.account-class-section__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.account-class-section__eyebrow {
+    color: #2672c5;
+    background: rgba(38, 114, 197, 0.08);
+    border: 1px solid rgba(38, 114, 197, 0.12);
+}
+
+.account-class-section__header h2 {
+    margin: 10px 0 6px;
+    color: #112b45;
+    font-size: clamp(1.4rem, 2.3vw, 1.9rem);
+}
+
+.account-class-section__header p {
+    margin: 0;
+    color: #5d748d;
+    line-height: 1.65;
+}
+
+.account-statement-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.account-statement-card {
+    padding: 20px;
+    border-radius: 24px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.99), rgba(245, 249, 252, 0.96));
+    position: relative;
+    overflow: hidden;
+}
+
+.account-statement-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--account-card-accent), rgba(255, 255, 255, 0));
+}
+
+.account-statement-card--settled {
+    --account-card-accent: #0ea38c;
+}
+
+.account-statement-card--partial {
+    --account-card-accent: #d69b37;
+}
+
+.account-statement-card--pending {
+    --account-card-accent: #dd7a51;
+}
+
+.account-statement-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.account-statement-card__eyebrow {
+    color: #5d748d;
+    background: rgba(17, 43, 69, 0.06);
+}
+
+.account-statement-card h3 {
+    margin: 12px 0 6px;
+    color: #112b45;
+    font-size: 1.26rem;
+}
+
+.account-statement-card p {
+    margin: 0;
+    color: #5d748d;
+}
+
+.account-status-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.account-status-pill--settled {
+    background: rgba(14, 163, 140, 0.14);
+    color: #0e7468;
+}
+
+.account-status-pill--partial {
+    background: rgba(214, 155, 55, 0.16);
+    color: #9a5f09;
+}
+
+.account-status-pill--pending {
+    background: rgba(221, 122, 81, 0.14);
+    color: #ad5635;
+}
+
+.account-meta-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.account-meta-card {
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(17, 43, 69, 0.04);
+    border: 1px solid rgba(17, 43, 69, 0.08);
+}
+
+.account-meta-card strong,
+.account-statement-card__latest strong {
+    display: block;
+    color: #112b45;
+    font-size: 1.04rem;
+    line-height: 1.45;
+}
+
+.account-table-wrap {
+    margin-top: 18px;
+    overflow-x: auto;
+    border-radius: 20px;
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    background: #ffffff;
+}
+
+.account-table {
+    width: 100%;
+    min-width: 620px;
+    border-collapse: collapse;
+}
+
+.account-table th,
+.account-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid rgba(17, 43, 69, 0.08);
+    text-align: left;
+}
+
+.account-table th {
+    background: rgba(17, 43, 69, 0.04);
+    color: #617991;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+}
+
+.account-table td {
+    color: #17324d;
+    font-weight: 600;
+}
+
+.account-empty-inline {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(17, 43, 69, 0.04);
+    border: 1px dashed rgba(17, 43, 69, 0.14);
+}
+
+.account-empty-inline p {
+    margin: 0;
+    color: #5d748d;
+    line-height: 1.65;
+}
+
+.account-statement-card__footer {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.account-statement-card__latest {
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(17, 43, 69, 0.04);
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    flex: 1 1 220px;
+}
+
+.account-print-form {
+    margin: 0;
+}
+
+.account-print-btn {
+    border: 0;
+    min-height: 50px;
+    padding: 0 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1a4a73, #0ea38c);
+    color: #eefbfa;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 18px 30px rgba(17, 43, 69, 0.14);
+}
+
+.account-print-btn:hover {
+    transform: translateY(-2px);
+}
+
+.account-empty-state {
+    margin-top: 22px;
+    padding: 28px 24px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px dashed rgba(17, 43, 69, 0.14);
+    text-align: center;
+}
+
+.account-empty-state h2 {
+    margin: 0 0 10px;
+    color: #112b45;
+}
+
+.account-empty-state p {
+    margin: 0;
+    color: #5d748d;
+    line-height: 1.7;
+}
+
+@media (max-width: 1100px) {
+    .account-summary-grid,
+    .account-statement-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .account-shell {
+        padding: 18px 16px 30px;
+    }
+
+    .account-hero,
+    .account-toolbar,
+    .account-statement-card__header,
+    .account-statement-card__footer {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .account-summary-grid,
+    .account-statement-grid,
+    .account-meta-grid,
+    .account-hero__meta {
+        grid-template-columns: 1fr;
+    }
+
+    .account-toolbar {
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 560px) {
+    .account-shell {
+        padding: 14px 12px 24px;
+    }
+
+    .account-hero,
+    .account-class-section,
+    .account-statement-card,
+    .account-summary-card,
+    .account-toolbar,
+    .account-empty-state {
+        border-radius: 22px;
+    }
+
+    .account-hero,
+    .account-class-section,
+    .account-statement-card,
+    .account-toolbar {
+        padding: 18px;
+    }
+
+    .account-hero h1 {
+        font-size: clamp(1.9rem, 11vw, 2.8rem);
+    }
+
+    .account-print-form,
+    .account-print-btn {
+        width: 100%;
+    }
+
+    .account-print-btn {
+        justify-content: center;
+    }
+}

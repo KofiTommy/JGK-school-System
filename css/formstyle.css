@@ -1,0 +1,72 @@
+.form-entry{
+	border: 1px solid #eee;
+	width:96%;
+	margin-top: 0%;
+	background-color: rgba(255,255,255,0.9);
+	box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.2);
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 8px;
+	color:black;
+}
+.form-entry h3{
+	background-color: #eeeeee;
+	border-bottom: 1px solid #dddddd;
+	padding:10px;
+	margin-top:-10px;
+	margin-left:-10px;
+	margin-right: -10px;
+	text-transform: uppercase;
+
+}
+
+.form-entry input[type=file]{
+	width: 95%;
+	height:40px;
+	border-top:0px solid #cccccc;
+	border-right:0px solid #cccccc;
+	border-left:0px solid #cccccc;
+	border-bottom:1px solid #cccccc;
+	background-color: white;
+	font-size: 16px;
+	font-family: Helvetica Tahoma Arial;
+	text-align: center;
+}
+
+.form-entry input[type=text],
+input[type=password]{
+	width: 95%;
+	height:40px;
+	border-top:0px solid #cccccc;
+	border-right:0px solid #cccccc;
+	border-left:0px solid #cccccc;
+	border-bottom:1px solid #cccccc;
+	background-color: #fff;
+	text-align: center;
+}
+
+.form-entry input[type=text],
+input[type=password]:hover{
+	width: 95%;
+	height:40px;
+	border-top:0px solid #cccccc;
+	border-right:0px solid #cccccc;
+	border-left:0px solid #cccccc;
+	border-bottom:1px solid #cccccc;
+	background-color: #fff;
+	text-align: center;
+}
+.form-entry select{
+	width: 95%;
+	height:35px;
+	border-top:0px solid #cccccc;
+	border:1px solid #cccccc;
+	background-color: #fff;
+	text-align: center;
+}
+.form-entry label{
+	color:black;
+}
+.form-entry a{
+	text-decoration: none;
+}

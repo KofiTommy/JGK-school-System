@@ -1,0 +1,589 @@
+body.teacher-directory-page {
+    background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 22%),
+        #f8fbff;
+}
+
+.teacher-directory-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 24px auto 72px;
+}
+
+.teacher-directory-message {
+    margin-bottom: 18px;
+}
+
+.teacher-directory-flash {
+    border-radius: 18px;
+    padding: 14px 18px;
+    border: 1px solid #dbeafe;
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+}
+
+.teacher-directory-flash--success {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.teacher-directory-flash--warning {
+    border-color: #fde68a;
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.teacher-directory-flash--error {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.teacher-directory-hero,
+.teacher-directory-panel,
+.teacher-directory-stat {
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(8px);
+}
+
+.teacher-directory-hero {
+    border-radius: 30px;
+    padding: 26px 28px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) auto;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.teacher-directory-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #0f766e;
+    margin-bottom: 10px;
+}
+
+.teacher-directory-hero h1,
+.teacher-directory-panel h2,
+.teacher-directory-empty h3 {
+    margin: 0;
+    color: #0f172a;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.teacher-directory-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+}
+
+.teacher-directory-hero p {
+    margin: 10px 0 0;
+    max-width: 680px;
+    color: #475569;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.teacher-directory-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.teacher-directory-link,
+.teacher-directory-print-btn,
+.teacher-directory-filter,
+.teacher-directory-action {
+    border-radius: 999px;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+}
+
+.teacher-directory-link,
+.teacher-directory-print-btn {
+    padding: 12px 18px;
+    font-weight: 700;
+    min-height: 46px;
+}
+
+.teacher-directory-link {
+    background: #ffffff;
+    border-color: #bfdbfe;
+    color: #0f172a;
+}
+
+.teacher-directory-print-btn {
+    background: linear-gradient(135deg, #0f172a, #1d4ed8);
+    color: #ffffff;
+    box-shadow: 0 16px 35px rgba(29, 78, 216, 0.24);
+}
+
+.teacher-directory-link:hover,
+.teacher-directory-print-btn:hover,
+.teacher-directory-filter:hover,
+.teacher-directory-action:hover {
+    transform: translateY(-1px);
+}
+
+.teacher-directory-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.teacher-directory-stat {
+    border-radius: 24px;
+    padding: 18px 20px;
+}
+
+.teacher-directory-stat span {
+    display: block;
+    color: #64748b;
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+.teacher-directory-stat strong {
+    display: block;
+    margin-top: 10px;
+    color: #0f172a;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+}
+
+.teacher-directory-panel {
+    border-radius: 30px;
+    padding: 24px;
+}
+
+.teacher-directory-panel__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.teacher-directory-panel__top h2 {
+    font-size: 1.7rem;
+}
+
+.teacher-directory-print-note {
+    color: #64748b;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    text-align: right;
+}
+
+.teacher-directory-toolbar {
+    display: grid;
+    grid-template-columns: minmax(260px, 1.2fr) auto auto;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.teacher-directory-search {
+    position: relative;
+    display: block;
+}
+
+.teacher-directory-search i {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+
+.teacher-directory-search input {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 16px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    padding: 0 16px 0 46px;
+    color: #0f172a;
+    font-size: 0.98rem;
+}
+
+.teacher-directory-search input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+}
+
+.teacher-directory-filters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.teacher-directory-filter {
+    min-height: 42px;
+    padding: 0 16px;
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #334155;
+    font-weight: 700;
+}
+
+.teacher-directory-filter.is-active {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+}
+
+.teacher-directory-results {
+    justify-self: end;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.teacher-directory-print-head {
+    display: none;
+}
+
+.teacher-directory-table-wrap {
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.teacher-directory-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.teacher-directory-table thead {
+    background: linear-gradient(135deg, #eff6ff, #f8fafc);
+}
+
+.teacher-directory-table th,
+.teacher-directory-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.teacher-directory-table th {
+    color: #334155;
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.teacher-directory-table td {
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.teacher-directory-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.teacher-directory-name {
+    display: grid;
+    gap: 6px;
+}
+
+.teacher-directory-name strong {
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.teacher-directory-name span {
+    color: #64748b;
+    font-size: 0.84rem;
+}
+
+.teacher-directory-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.83rem;
+    font-weight: 800;
+}
+
+.teacher-directory-badge--active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.teacher-directory-badge--blocked {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.teacher-directory-actions-col {
+    width: 160px;
+}
+
+.teacher-directory-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.teacher-directory-action {
+    min-height: 38px;
+    padding: 0 12px;
+    border-color: #dbeafe;
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.teacher-directory-action--view {
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.teacher-directory-action--edit {
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+.teacher-directory-empty {
+    padding: 38px 22px;
+    text-align: center;
+    color: #475569;
+}
+
+.teacher-directory-empty i {
+    font-size: 1.8rem;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.teacher-directory-empty p {
+    margin: 10px auto 0;
+    max-width: 420px;
+    line-height: 1.7;
+}
+
+@media (max-width: 1080px) {
+    .teacher-directory-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .teacher-directory-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-directory-results {
+        justify-self: start;
+    }
+}
+
+@media (max-width: 820px) {
+    .teacher-directory-shell {
+        width: min(100% - 18px, 1000px);
+    }
+
+    .teacher-directory-hero,
+    .teacher-directory-panel {
+        border-radius: 24px;
+        padding: 20px;
+    }
+
+    .teacher-directory-hero,
+    .teacher-directory-panel__top {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .teacher-directory-hero__actions,
+    .teacher-directory-print-note {
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .teacher-directory-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .teacher-directory-table thead {
+        display: none;
+    }
+
+    .teacher-directory-table,
+    .teacher-directory-table tbody,
+    .teacher-directory-table tr,
+    .teacher-directory-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .teacher-directory-table tbody {
+        display: grid;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .teacher-directory-table tr {
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+    }
+
+    .teacher-directory-table td {
+        border-bottom: 1px solid #eef2f7;
+        padding: 12px 16px;
+    }
+
+    .teacher-directory-table td:last-child {
+        border-bottom: none;
+    }
+
+    .teacher-directory-table td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 6px;
+        color: #64748b;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .teacher-directory-actions-col {
+        width: 100%;
+    }
+
+    .teacher-directory-actions {
+        width: 100%;
+    }
+
+    .teacher-directory-action {
+        flex: 1 1 120px;
+    }
+}
+
+@media (max-width: 520px) {
+    .teacher-directory-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .teacher-directory-hero h1 {
+        font-size: 2rem;
+    }
+
+    .teacher-directory-hero__actions,
+    .teacher-directory-filters,
+    .teacher-directory-actions {
+        width: 100%;
+    }
+
+    .teacher-directory-link,
+    .teacher-directory-print-btn,
+    .teacher-directory-filter,
+    .teacher-directory-action {
+        width: 100%;
+    }
+
+    .teacher-directory-panel {
+        padding: 18px 16px;
+    }
+}
+
+@media print {
+    body.teacher-directory-page {
+        background: #ffffff;
+    }
+
+    .header,
+    .teacher-directory-message,
+    .teacher-directory-hero,
+    .teacher-directory-toolbar,
+    .teacher-directory-actions-col,
+    #myBtn {
+        display: none !important;
+    }
+
+    .teacher-directory-shell {
+        width: 100%;
+        margin: 0;
+    }
+
+    .teacher-directory-panel,
+    .teacher-directory-stat,
+    .teacher-directory-table-wrap {
+        box-shadow: none;
+        border: none;
+        background: #ffffff;
+    }
+
+    .teacher-directory-stats {
+        margin-bottom: 12px;
+    }
+
+    .teacher-directory-panel {
+        padding: 0;
+    }
+
+    .teacher-directory-panel__top {
+        margin-bottom: 10px;
+    }
+
+    .teacher-directory-panel__top .teacher-directory-eyebrow,
+    .teacher-directory-panel__top h2,
+    .teacher-directory-print-note {
+        display: none;
+    }
+
+    .teacher-directory-print-head {
+        display: block;
+        text-align: center;
+        margin-bottom: 14px;
+    }
+
+    .teacher-directory-print-head h2 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .teacher-directory-print-head p,
+    .teacher-directory-print-head span {
+        display: block;
+        margin-top: 4px;
+        color: #475569;
+        font-size: 0.9rem;
+    }
+
+    .teacher-directory-table {
+        font-size: 11px;
+    }
+
+    .teacher-directory-table th,
+    .teacher-directory-table td {
+        padding: 8px 6px;
+    }
+}

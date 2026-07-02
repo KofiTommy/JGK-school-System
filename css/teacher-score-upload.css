@@ -1,0 +1,208 @@
+body.score-entry-page .score-upload-shell {
+    padding-bottom: 48px;
+}
+
+.score-upload-layout {
+    align-items: start;
+}
+
+.score-upload-grid,
+.score-upload-field-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.score-upload-card {
+    border: 1px solid rgba(17, 43, 69, 0.08);
+    box-shadow: 0 24px 48px rgba(9, 27, 44, 0.08);
+}
+
+.score-upload-card h3 {
+    font-family: Georgia, "Palatino Linotype", "Book Antiqua", serif;
+}
+
+.score-upload-grid {
+    margin-top: 18px;
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.score-upload-card {
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.96);
+}
+
+.score-upload-lead {
+    margin: 10px 0 0;
+    color: #5f748c;
+    line-height: 1.68;
+}
+
+.score-upload-form {
+    margin-top: 18px;
+    display: grid;
+    gap: 16px;
+}
+
+.score-upload-field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.score-upload-field {
+    display: grid;
+    gap: 10px;
+}
+
+.score-upload-field label {
+    color: #112a44;
+    font-size: 0.94rem;
+    font-weight: 700;
+}
+
+.score-upload-input,
+.score-upload-file-picker {
+    width: 100%;
+    border-radius: 20px;
+    border: 1px solid rgba(17, 43, 69, 0.12);
+    background: #f8fafc;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.score-upload-input {
+    min-height: 54px;
+    padding: 0 18px;
+    color: #17324d;
+    font-size: 1rem;
+}
+
+.score-upload-input:focus {
+    outline: none;
+    border-color: rgba(38, 114, 197, 0.48);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(38, 114, 197, 0.12);
+}
+
+.score-upload-field small,
+.score-upload-file-picker__copy small {
+    color: #6c8096;
+    line-height: 1.6;
+}
+
+.score-upload-file-picker {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 88px;
+    padding: 14px 16px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.score-upload-file-picker:hover,
+.score-upload-file-picker:focus-within {
+    border-color: rgba(38, 114, 197, 0.3);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(38, 114, 197, 0.1);
+    transform: translateY(-1px);
+}
+
+.score-upload-file-picker input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.score-upload-file-picker__icon {
+    width: 48px;
+    height: 48px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--page-accent-soft);
+    color: var(--page-accent-dark);
+    font-size: 1.18rem;
+}
+
+.score-upload-file-picker__copy {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.score-upload-file-picker__copy strong {
+    color: #112a44;
+    font-size: 0.96rem;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.score-upload-callout {
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: rgba(248, 250, 252, 0.98);
+    border: 1px solid rgba(17, 43, 69, 0.08);
+}
+
+.score-upload-callout ul {
+    margin: 10px 0 0;
+    padding-left: 22px;
+    list-style: disc;
+    line-height: 1.62;
+    color: #17324d;
+}
+
+.score-upload-callout li + li {
+    margin-top: 6px;
+}
+
+.score-upload-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.score-upload-actions .score-entry-button {
+    border: 0;
+}
+
+@media (max-width: 1180px) {
+    .score-upload-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 860px) {
+    .score-upload-field-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+    .score-upload-card {
+        border-radius: 22px;
+    }
+
+    .score-upload-card {
+        padding: 18px;
+    }
+
+    .score-upload-grid {
+        margin-top: 18px;
+    }
+
+    .score-upload-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .score-upload-actions .score-entry-link-button,
+    .score-upload-actions .score-entry-button {
+        width: 100%;
+        justify-content: center;
+    }
+}

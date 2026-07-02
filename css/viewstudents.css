@@ -1,0 +1,640 @@
+body.student-directory-page {
+    background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.11), transparent 22%),
+        #f8fbff;
+}
+
+.student-directory-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 24px auto 72px;
+}
+
+.student-directory-message {
+    margin-bottom: 18px;
+}
+
+.student-directory-message > div {
+    border-radius: 18px;
+    padding: 14px 18px;
+    border: 1px solid #dbeafe;
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+}
+
+.student-directory-hero,
+.student-directory-panel,
+.student-directory-stat,
+.student-directory-empty {
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(8px);
+}
+
+.student-directory-hero {
+    border-radius: 30px;
+    padding: 26px 28px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) auto;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.student-directory-eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #0f766e;
+    margin-bottom: 10px;
+}
+
+.student-directory-hero h1,
+.student-directory-panel h2,
+.student-directory-empty h3 {
+    margin: 0;
+    color: #0f172a;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.student-directory-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+}
+
+.student-directory-hero p {
+    margin: 10px 0 0;
+    max-width: 700px;
+    color: #475569;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.student-directory-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.student-directory-hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid #bfdbfe;
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.student-directory-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.student-directory-stat {
+    border-radius: 24px;
+    padding: 18px 20px;
+}
+
+.student-directory-stat span {
+    display: block;
+    color: #64748b;
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+.student-directory-stat strong {
+    display: block;
+    margin-top: 10px;
+    color: #0f172a;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 800;
+}
+
+.student-directory-panel,
+.student-directory-empty {
+    border-radius: 30px;
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.student-directory-panel__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.student-directory-panel__top h2 {
+    font-size: 1.7rem;
+}
+
+.student-directory-scope {
+    margin: 8px 0 0;
+    color: #475569;
+    font-weight: 600;
+}
+
+.student-directory-filter-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    align-items: end;
+}
+
+.student-directory-field {
+    display: grid;
+    gap: 8px;
+}
+
+.student-directory-field span {
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.student-directory-field select,
+.student-directory-search input {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 16px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    padding: 0 16px;
+    color: #0f172a;
+    font-size: 0.98rem;
+}
+
+.student-directory-field select:focus,
+.student-directory-search input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+}
+
+.student-directory-filter-actions,
+.student-directory-print-actions,
+.student-directory-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.student-directory-primary-btn,
+.student-directory-secondary-btn,
+.student-directory-action {
+    border-radius: 999px;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+    min-height: 46px;
+    padding: 0 18px;
+    font-weight: 700;
+}
+
+.student-directory-primary-btn {
+    background: linear-gradient(135deg, #0f172a, #1d4ed8);
+    color: #ffffff;
+    box-shadow: 0 16px 35px rgba(29, 78, 216, 0.24);
+}
+
+.student-directory-secondary-btn,
+.student-directory-action {
+    background: #ffffff;
+    border-color: #bfdbfe;
+    color: #0f172a;
+}
+
+.student-directory-primary-btn:hover,
+.student-directory-secondary-btn:hover,
+.student-directory-action:hover {
+    transform: translateY(-1px);
+}
+
+.student-directory-action--view {
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.student-directory-action--edit {
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+.student-directory-toolbar {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.student-directory-search {
+    position: relative;
+    display: block;
+}
+
+.student-directory-search i {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+
+.student-directory-search input {
+    padding-left: 46px;
+}
+
+.student-directory-results {
+    justify-self: end;
+    color: #475569;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.student-directory-print-head {
+    display: none;
+}
+
+.student-directory-table-wrap {
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #ffffff;
+}
+
+.student-directory-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.student-directory-table caption {
+    padding: 14px 16px;
+    background: #f8fbff;
+    color: #334155;
+    font-weight: 700;
+    text-align: left;
+}
+
+.student-directory-table thead {
+    background: linear-gradient(135deg, #eff6ff, #f8fafc);
+}
+
+.student-directory-table th,
+.student-directory-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.student-directory-table th {
+    color: #334155;
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.student-directory-table td {
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.student-directory-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.student-directory-name {
+    display: grid;
+    gap: 6px;
+}
+
+.student-directory-name strong {
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.student-directory-name span {
+    color: #64748b;
+    font-size: 0.84rem;
+}
+
+.student-directory-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.83rem;
+    font-weight: 800;
+}
+
+.student-directory-badge--active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.student-directory-badge--blocked {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.student-directory-actions-col {
+    width: 108px;
+    min-width: 108px;
+}
+
+.student-directory-actions-cell {
+    min-width: 108px;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.student-directory-actions {
+    min-width: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+}
+
+.student-directory-action {
+    width: 100%;
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+.student-directory-action i {
+    font-size: 0.78rem;
+}
+
+.student-directory-empty {
+    text-align: center;
+    color: #475569;
+}
+
+.student-directory-empty i {
+    font-size: 1.8rem;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.student-directory-empty p {
+    margin: 10px auto 0;
+    max-width: 420px;
+    line-height: 1.7;
+}
+
+.student-directory-empty--standalone {
+    margin-bottom: 0;
+}
+
+.student-directory-top-btn {
+    display: none;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 99;
+    border: none;
+    outline: none;
+    background: #0f172a;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 999px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.22);
+}
+
+@media (max-width: 1080px) {
+    .student-directory-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .student-directory-filter-form,
+    .student-directory-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .student-directory-results {
+        justify-self: start;
+    }
+}
+
+@media (max-width: 820px) {
+    .student-directory-shell {
+        width: min(100% - 18px, 1000px);
+    }
+
+    .student-directory-hero,
+    .student-directory-panel,
+    .student-directory-empty {
+        border-radius: 24px;
+        padding: 20px;
+    }
+
+    .student-directory-hero,
+    .student-directory-panel__top {
+        grid-template-columns: 1fr;
+        display: grid;
+    }
+
+    .student-directory-hero__meta {
+        justify-content: flex-start;
+    }
+
+    .student-directory-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .student-directory-table thead {
+        display: none;
+    }
+
+    .student-directory-table,
+    .student-directory-table tbody,
+    .student-directory-table tr,
+    .student-directory-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .student-directory-table caption {
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .student-directory-table tbody {
+        display: grid;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .student-directory-table tr {
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+    }
+
+    .student-directory-table td {
+        border-bottom: 1px solid #eef2f7;
+        padding: 12px 16px;
+    }
+
+    .student-directory-table td:last-child {
+        border-bottom: none;
+    }
+
+    .student-directory-table td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 6px;
+        color: #64748b;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .student-directory-actions-col,
+    .student-directory-actions-cell,
+    .student-directory-actions {
+        width: 100%;
+    }
+
+    .student-directory-actions {
+        min-width: 0;
+        flex-wrap: wrap;
+    }
+
+    .student-directory-action {
+        flex: 1 1 120px;
+    }
+}
+
+@media (max-width: 520px) {
+    .student-directory-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .student-directory-hero h1 {
+        font-size: 2rem;
+    }
+
+    .student-directory-hero__meta,
+    .student-directory-filter-actions,
+    .student-directory-print-actions,
+    .student-directory-actions {
+        width: 100%;
+    }
+
+    .student-directory-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .student-directory-hero-chip,
+    .student-directory-primary-btn,
+    .student-directory-secondary-btn,
+    .student-directory-action {
+        width: 100%;
+    }
+
+    .student-directory-panel,
+    .student-directory-empty {
+        padding: 18px 16px;
+    }
+}
+
+@media print {
+    body.student-directory-page {
+        background: #ffffff;
+    }
+
+    .header,
+    .student-directory-message,
+    .student-directory-hero,
+    .student-directory-filter-form,
+    .student-directory-toolbar,
+    .student-directory-actions-col,
+    .student-directory-top-btn,
+    .student-directory-print-actions {
+        display: none !important;
+    }
+
+    .student-directory-shell {
+        width: 100%;
+        margin: 0;
+    }
+
+    .student-directory-panel,
+    .student-directory-stat,
+    .student-directory-table-wrap,
+    .student-directory-empty {
+        box-shadow: none;
+        border: none;
+        background: #ffffff;
+    }
+
+    .student-directory-panel,
+    .student-directory-empty {
+        padding: 0;
+    }
+
+    .student-directory-stats {
+        margin-bottom: 12px;
+    }
+
+    .student-directory-print-head {
+        display: block;
+        text-align: center;
+        margin-bottom: 14px;
+    }
+
+    .student-directory-print-head h2 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .student-directory-print-head p,
+    .student-directory-print-head span {
+        display: block;
+        margin-top: 4px;
+        color: #475569;
+        font-size: 0.9rem;
+    }
+
+    .student-directory-table {
+        font-size: 11px;
+    }
+
+    .student-directory-table th,
+    .student-directory-table td {
+        padding: 8px 6px;
+    }
+}
