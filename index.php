@@ -195,18 +195,17 @@ include("backgroundphoto.php");
 $_LandingBackgroundPhoto = htmlspecialchars((string)$_BackgroundPhoto, ENT_QUOTES, "UTF-8");
 $_LandingHelpLine = trim((string)(isset($_Telephone1) ? $_Telephone1 : ""));
 if($_LandingHelpLine === ""){
-    $_LandingHelpLine = "+233(0)245067195";
+    $_LandingHelpLine = "+233(0)243317232";
 }
 $_LandingSchoolName = trim((string)(isset($_CompanyName) ? $_CompanyName : ""));
 if($_LandingSchoolName === ""){
     $_LandingSchoolName = "Live Campus";
 }
 $_LandingSchoolNameSafe = htmlspecialchars($_LandingSchoolName, ENT_QUOTES, "UTF-8");
-$_LandingFacebookUrl = "https://www.facebook.com/Ayirebiseniorhighschool/";
-$_LandingTiktokLabel = "Official Ayisec Tv";
+$_LandingTiktokLabel = "JG Knol Technical";
 $_LandingTiktokUrl = "https://www.tiktok.com/search?q=".rawurlencode($_LandingTiktokLabel);
-$_LandingWhatsappNumber = "+233245065954";
-$_LandingWhatsappUrl = "https://wa.me/233245065954?text=".rawurlencode("Hello, I need help with admission.");
+$_LandingWhatsappNumber = "+233243317232";
+$_LandingWhatsappUrl = "https://wa.me/233243317232?text=".rawurlencode("Hello, I need help with admission.");
 $_LandingPhoneHref = preg_replace('/[^0-9+]/', '', $_LandingHelpLine);
 if($_LandingPhoneHref !== ""){
     $_LandingPhoneHref = "tel:".$_LandingPhoneHref;
