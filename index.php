@@ -385,10 +385,6 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
                 </a>
                 <?php } ?>
 
-                <a href="<?php echo htmlspecialchars($_LandingFacebookUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-social-link landing-social-link--facebook" target="_blank" rel="noopener noreferrer">
-                    <i class="fa fa-facebook-square"></i> Follow Us On Facebook
-                </a>
-
                 <a href="<?php echo htmlspecialchars($_LandingTiktokUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-social-link landing-social-link--tiktok" target="_blank" rel="noopener noreferrer">
                     <span class="landing-social-mark">TT</span> <?php echo htmlspecialchars($_LandingTiktokLabel, ENT_QUOTES, "UTF-8"); ?> On TikTok
                 </a>
@@ -400,7 +396,6 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
         <p>&copy 2026. XSCHOOL V2.20.2.2</p>
         <p>
             <?php if($_LandingWhatsappUrl !== ""){ ?><a href="<?php echo htmlspecialchars($_LandingWhatsappUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-footer__link" target="_blank" rel="noopener noreferrer">WhatsApp</a> | <?php } ?>
-            <a href="<?php echo htmlspecialchars($_LandingFacebookUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-footer__link" target="_blank" rel="noopener noreferrer">Facebook Page</a> |
             <a href="<?php echo htmlspecialchars($_LandingTiktokUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-footer__link" target="_blank" rel="noopener noreferrer">TikTok: <?php echo htmlspecialchars($_LandingTiktokLabel, ENT_QUOTES, "UTF-8"); ?></a>
         </p>
     </footer>
