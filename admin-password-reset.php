@@ -249,11 +249,15 @@ if (!function_exists('adminPasswordResetApplyCredentialReset')) {
 
         $targetUserId = trim((string)(isset($userRow['userid']) ? $userRow['userid'] : ''));
         $resetType = trim((string)$resetType);
-        $newUsername = trim((string)$newUsername);
+        $newUsername = function_exists('um_normalize_username') ? um_normalize_username($newUsername) : trim((string)$newUsername);
         $newPasswordRaw = trim((string)$newPasswordRaw);
 
         if ($targetUserId === '' || $newUsername === '' || $newPasswordRaw === '') {
             $result['message'] = 'User, username and password are required.';
+            return $result;
+        }
+        if (function_exists('um_is_username_taken') && um_is_username_taken($con, $newUsername, $targetUserId)) {
+            $result['message'] = 'That username is already in use by another account.';
             return $result;
         }
 
@@ -268,9 +272,10 @@ if (!function_exists('adminPasswordResetApplyCredentialReset')) {
 
         mysqli_stmt_bind_param($stmtUpdate, "ssss", $newUsername, $newPassword, $targetUserId, $resetType);
         $okUpdate = mysqli_stmt_execute($stmtUpdate);
+        $affectedRows = mysqli_stmt_affected_rows($stmtUpdate);
         mysqli_stmt_close($stmtUpdate);
 
-        if (!$okUpdate) {
+        if (!$okUpdate || $affectedRows < 1) {
             return $result;
         }
 
@@ -288,21 +293,25 @@ if (!function_exists('adminPasswordResetApplyCredentialReset')) {
         if ($resetType === "Teacher") {
             $teacherPhone = trim((string)(isset($userRow['mobile']) ? $userRow['mobile'] : ''));
             $teacherName = adminPasswordResetFullName($userRow);
-            $smsMessage = "Hello " . $teacherName . ", your account password was reset by school admin. Username: " . $newUsername . ". Please login and change password immediately.";
+            if ($teacherName === '') {
+                $teacherName = $targetUserId;
+            }
+            $smsMessage = "Hello " . $teacherName . ", your account password was reset by school admin. Username: " . $newUsername . ". Password: " . $newPasswordRaw . ". Please login and change password immediately.";
+            $smsLogMessage = str_replace($newPasswordRaw, "[REDACTED]", $smsMessage);
             if ($teacherPhone !== "") {
                 $smsCode = "";
                 $smsSent = send_bulk_sms_message($teacherPhone, $smsMessage, $smsCode);
                 if ($smsSent) {
-                    logAdminPasswordResetSmsOutcome($con, $targetUserId, $resetType, $teacherPhone, $smsMessage, "SENT", (string)$smsCode);
+                    logAdminPasswordResetSmsOutcome($con, $targetUserId, $resetType, $teacherPhone, $smsLogMessage, "SENT", (string)$smsCode);
                     $result['sms_status'] = 'SENT';
                     $result['sms_note'] = "Teacher SMS notification sent.";
                 } else {
-                    logAdminPasswordResetSmsOutcome($con, $targetUserId, $resetType, $teacherPhone, $smsMessage, "FAILED", (string)$smsCode);
+                    logAdminPasswordResetSmsOutcome($con, $targetUserId, $resetType, $teacherPhone, $smsLogMessage, "FAILED", (string)$smsCode);
                     $result['sms_status'] = 'FAILED';
                     $result['sms_note'] = "Password reset completed, but teacher SMS failed (code: " . htmlspecialchars((string)$smsCode) . ").";
                 }
             } else {
-                logAdminPasswordResetSmsOutcome($con, $targetUserId, $resetType, "", $smsMessage, "NO_PHONE", "NO_PHONE");
+                logAdminPasswordResetSmsOutcome($con, $targetUserId, $resetType, "", $smsLogMessage, "NO_PHONE", "NO_PHONE");
                 $result['sms_status'] = 'NO_PHONE';
                 $result['sms_note'] = "Password reset completed, but no teacher phone number is available.";
             }

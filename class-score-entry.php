@@ -116,64 +116,87 @@ if(isset($_POST['save_all_mark'])){
         $messages[] = score_entry_alert("warning", "Select at least one student. Typing a mark will auto-select that student row.");
     }else{
         $assignmentSafe = mysqli_real_escape_string($con, $assignmentId);
-        $assignmentAuth = mysqli_query($con, "SELECT assignmentid FROM tblsubjectassignment
+        $assignmentAuth = mysqli_query($con, "SELECT
+                sa.assignmentid,
+                sa.classid,
+                sa.batchid,
+                sa.termname,
+                ".semester_registry_assignment_year_sql("sa")." AS assignment_year
+            FROM tblsubjectassignment sa
             WHERE assignmentid='$assignmentSafe' AND userid='$teacherIdSafe' LIMIT 1");
 
         if(!$assignmentAuth || mysqli_num_rows($assignmentAuth) === 0){
             $messages[] = score_entry_alert("error", "That score sheet no longer belongs to your account. Please re-open the assignment and try again.");
         }else{
-            $assignmentStudentContext = score_entry_assignment_student_context($con, $assignmentId, $selectedClassId, $selectedBatchId, $selectedYearId, $selectedTermId);
-            $allowedStudentIds = array_flip($assignmentStudentContext['userids']);
+            $assignmentRow = mysqli_fetch_array($assignmentAuth, MYSQLI_ASSOC);
+            if($assignmentRow && trim((string)$selectedYearId) === ''){
+                $selectedYearId = trim((string)$assignmentRow['assignment_year']);
+            }
+            $assignmentApprovalMeta = $assignmentRow ? score_entry_assignment_approval_meta($con, $assignmentRow) : null;
 
-            if(count($allowedStudentIds) === 0){
-                $messages[] = score_entry_alert("warning", "No students have registered this course for the selected semester yet.");
+            if($assignmentApprovalMeta && !empty($assignmentApprovalMeta['score_edit_locked'])){
+                $messages[] = score_entry_scope_lock_alert($assignmentApprovalMeta);
             }else{
-                foreach($selectedUsers as $selectedUserRaw){
-                    $selectedUser = trim((string)$selectedUserRaw);
-                    if($selectedUser === ""){
-                        continue;
-                    }
+                $assignmentStudentContext = score_entry_assignment_student_context(
+                    $con,
+                    $assignmentId,
+                    $assignmentRow ? $assignmentRow['classid'] : $selectedClassId,
+                    $assignmentRow ? $assignmentRow['batchid'] : $selectedBatchId,
+                    $assignmentRow ? $assignmentRow['assignment_year'] : $selectedYearId,
+                    $assignmentRow ? $assignmentRow['termname'] : $selectedTermId
+                );
+                $allowedStudentIds = array_flip($assignmentStudentContext['userids']);
 
-                    if(!isset($allowedStudentIds[$selectedUser])){
-                        $unregisteredCount++;
-                        continue;
-                    }
+                if(count($allowedStudentIds) === 0){
+                    $messages[] = score_entry_alert("warning", "No students have registered this course for the selected semester yet.");
+                }else{
+                    foreach($selectedUsers as $selectedUserRaw){
+                        $selectedUser = trim((string)$selectedUserRaw);
+                        if($selectedUser === ""){
+                            continue;
+                        }
 
-                    $selectedMark = trim((string)(isset($marks[$selectedUser]) ? $marks[$selectedUser] : ''));
-                    if($selectedMark === '' || !is_numeric($selectedMark)){
-                        $skippedCount++;
-                        continue;
-                    }
+                        if(!isset($allowedStudentIds[$selectedUser])){
+                            $unregisteredCount++;
+                            continue;
+                        }
 
-                    if((float)$selectedMark < 0 || (float)$selectedMark > (float)$totalMark || (float)$selectedMark > (float)$scoreLimit){
-                        $invalidCount++;
-                        continue;
-                    }
+                        $selectedMark = trim((string)(isset($marks[$selectedUser]) ? $marks[$selectedUser] : ''));
+                        if($selectedMark === '' || !is_numeric($selectedMark)){
+                            $skippedCount++;
+                            continue;
+                        }
 
-                    include("code.php");
-                    $markId = mysqli_real_escape_string($con, (string)$code);
-                    $selectedUserSafe = mysqli_real_escape_string($con, $selectedUser);
-                    $selectedMarkSafe = mysqli_real_escape_string($con, $selectedMark);
-                    $totalMarkSafe = mysqli_real_escape_string($con, $totalMark);
-                    $recordedBySafe = mysqli_real_escape_string($con, $teacherId);
+                        if((float)$selectedMark < 0 || (float)$selectedMark > (float)$totalMark || (float)$selectedMark > (float)$scoreLimit){
+                            $invalidCount++;
+                            continue;
+                        }
 
-                    $duplicateRes = mysqli_query($con, "SELECT 1 FROM tblmark
-                        WHERE assignmentid='$assignmentSafe'
-                          AND userid='$selectedUserSafe'
-                          AND testtype='$scoreType'
-                        LIMIT 1");
-                    if($duplicateRes && mysqli_num_rows($duplicateRes) > 0){
-                        $duplicateCount++;
-                        continue;
-                    }
+                        include("code.php");
+                        $markId = mysqli_real_escape_string($con, (string)$code);
+                        $selectedUserSafe = mysqli_real_escape_string($con, $selectedUser);
+                        $selectedMarkSafe = mysqli_real_escape_string($con, $selectedMark);
+                        $totalMarkSafe = mysqli_real_escape_string($con, $totalMark);
+                        $recordedBySafe = mysqli_real_escape_string($con, $teacherId);
 
-                    $insertRes = mysqli_query($con, "INSERT INTO tblmark(markid,assignmentid,userid,testtype,mark,totalmark,datetimeentry,status,recordedby)
-                        VALUES('$markId','$assignmentSafe','$selectedUserSafe','$scoreType','$selectedMarkSafe','$totalMarkSafe',NOW(),'active','$recordedBySafe')");
+                        $duplicateRes = mysqli_query($con, "SELECT 1 FROM tblmark
+                            WHERE assignmentid='$assignmentSafe'
+                              AND userid='$selectedUserSafe'
+                              AND testtype='$scoreType'
+                            LIMIT 1");
+                        if($duplicateRes && mysqli_num_rows($duplicateRes) > 0){
+                            $duplicateCount++;
+                            continue;
+                        }
 
-                    if($insertRes){
-                        $savedCount++;
-                    }else{
-                        $errorCount++;
+                        $insertRes = mysqli_query($con, "INSERT INTO tblmark(markid,assignmentid,userid,testtype,mark,totalmark,datetimeentry,status,recordedby)
+                            VALUES('$markId','$assignmentSafe','$selectedUserSafe','$scoreType','$selectedMarkSafe','$totalMarkSafe',NOW(),'active','$recordedBySafe')");
+
+                        if($insertRes){
+                            $savedCount++;
+                        }else{
+                            $errorCount++;
+                        }
                     }
                 }
             }
@@ -273,6 +296,7 @@ if($assignmentRes){
         $row['status_meta'] = score_entry_status_meta($row['total_students'], $row['saved_students']);
         $row['session_label'] = score_entry_session_label($row['assignment_datetimeentry'], $row['batch'], $row['termname'], $row['assignment_year']);
         $row['search_label'] = strtolower(trim($row['class_name']." ".$row['subject']." ".$row['session_label']." ".$row['batch']." semester ".$row['termname']));
+        $row['approval_meta'] = score_entry_assignment_approval_meta($con, $row);
         $assignments[] = $row;
 
         $assignmentCount++;
@@ -300,12 +324,13 @@ if($assignmentRes){
 }
 
 $pendingStudents = array();
+$selectedAssignmentApprovalMeta = null;
 
 if($selectedAssignment){
     $assignmentIdSafe = mysqli_real_escape_string($con, (string)$selectedAssignment['assignmentid']);
-    $selectedClassSafe = mysqli_real_escape_string($con, (string)$selectedAssignment['class_entryid']);
-    $selectedBatchSafe = mysqli_real_escape_string($con, (string)$selectedAssignment['batchid']);
-    $selectedTermSafe = mysqli_real_escape_string($con, (string)$selectedAssignment['termname']);
+    $selectedAssignmentApprovalMeta = isset($selectedAssignment['approval_meta']) && is_array($selectedAssignment['approval_meta'])
+        ? $selectedAssignment['approval_meta']
+        : score_entry_assignment_approval_meta($con, $selectedAssignment);
     $assignmentStudentContext = score_entry_assignment_student_context(
         $con,
         $selectedAssignment['assignmentid'],
@@ -443,6 +468,11 @@ if($selectedAssignment){
                         </div>
                         <div class="score-entry-chip-row">
                             <span class="score-entry-chip score-entry-chip--accent"><?php echo score_entry_esc($assignment['session_label']); ?></span>
+                            <?php if(!empty($assignment['approval_meta']['score_edit_locked'])){ ?>
+                            <span class="score-entry-chip score-entry-chip--warning">Locked</span>
+                            <?php }elseif(!empty($assignment['approval_meta']['score_edit_override_enabled'])){ ?>
+                            <span class="score-entry-chip score-entry-chip--success">Correction Open</span>
+                            <?php } ?>
                         </div>
                         <div class="score-entry-assignment-card__bottom">
                             <div class="score-entry-meta-row">
@@ -493,11 +523,28 @@ if($selectedAssignment){
                             <article class="score-entry-summary-card"><span>Total Students</span><strong><?php echo (int)$selectedAssignment['total_students']; ?></strong></article>
                             <article class="score-entry-summary-card"><span>Already Saved</span><strong><?php echo (int)$selectedAssignment['saved_students']; ?></strong></article>
                             <article class="score-entry-summary-card"><span>Still Pending</span><strong><?php echo (int)$selectedAssignment['pending_students']; ?></strong></article>
-                        <article class="score-entry-summary-card"><span>Mode</span><strong><?php echo score_entry_esc($scoreLabel); ?></strong></article>
+                            <article class="score-entry-summary-card"><span>Mode</span><strong><?php echo score_entry_esc($scoreLabel); ?></strong></article>
+                            <article class="score-entry-summary-card"><span>Score Entry</span><strong><?php echo score_entry_esc($selectedAssignmentApprovalMeta ? $selectedAssignmentApprovalMeta['score_edit_status_label'] : 'Open for Score Entry'); ?></strong></article>
                     </div>
                 </div>
 
-                <?php if((int)$selectedAssignment['total_students'] === 0){ ?>
+                <?php if($selectedAssignmentApprovalMeta){ ?>
+                <div class="score-entry-flash">
+                    <?php echo score_entry_scope_lock_alert($selectedAssignmentApprovalMeta, "warning"); ?>
+                    <?php echo score_entry_scope_override_alert($selectedAssignmentApprovalMeta); ?>
+                </div>
+                <?php } ?>
+
+                <?php if($selectedAssignmentApprovalMeta && !empty($selectedAssignmentApprovalMeta['score_edit_locked'])){ ?>
+                <div class="score-entry-empty-state">
+                    <h3>Score entry is locked for this sheet</h3>
+                    <p>The result for this class and semester has already been approved, so score changes are paused until the administrator reopens corrections.</p>
+                    <div class="score-entry-empty-state__actions">
+                        <a class="score-entry-link-button" href="<?php echo score_entry_esc($scoresReportUrl); ?>"><i class="fa fa-line-chart"></i> View Saved Scores</a>
+                        <a class="score-entry-link-button" href="<?php echo score_entry_esc($uploadUrl); ?>"><i class="fa fa-upload"></i> Bulk Upload Page</a>
+                    </div>
+                </div>
+                <?php } elseif((int)$selectedAssignment['total_students'] === 0){ ?>
                 <div class="score-entry-empty-state">
                     <h3>No registered students yet</h3>
                     <p>This assignment does not currently have registered students for the selected session, so there is no score sheet to enter yet.</p>
@@ -515,7 +562,8 @@ if($selectedAssignment){
                 <form
                     method="post"
                     action="<?php echo score_entry_esc(score_entry_build_url($pageFile, $selectedAssignment['class_entryid'], $selectedAssignment['termname'], $selectedAssignment['batchid'], $selectedAssignment['subjectid'], $prefillTotal, $selectedAssignment['assignment_year'])); ?>"
-                    data-score-sheet>
+                    data-score-sheet
+                    data-confirm-message="Please check these class scores carefully before saving. Once the result is approved, you will not be able to change the scores unless the administrator reopens corrections. Do you want to save now?">
                     <input type="hidden" name="assignmentid" value="<?php echo score_entry_esc((string)$selectedAssignment['assignmentid']); ?>">
                     <input type="hidden" name="class_ID" value="<?php echo score_entry_esc((string)$selectedAssignment['class_entryid']); ?>">
                     <input type="hidden" name="term_ID" value="<?php echo score_entry_esc((string)$selectedAssignment['termname']); ?>">
@@ -607,6 +655,11 @@ if($selectedAssignment){
                                 </div>
                             </article>
                         <?php } ?>
+                    </div>
+
+                    <div class="score-entry-warning-card">
+                        <strong>Check well before saving.</strong>
+                        <p>Please review the marks carefully. Once the result is approved, score changes will be blocked unless the administrator reopens corrections.</p>
                     </div>
 
                     <div class="score-entry-sticky">

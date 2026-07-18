@@ -30,6 +30,19 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
 ?>
 <script>
 (function () {
+    var currentTitle = (document.title || "").trim();
+    if (currentTitle === "") {
+        document.title = "LiveCampus";
+        return;
+    }
+
+    if (/xschool/i.test(currentTitle)) {
+        document.title = currentTitle.replace(/xschool/ig, "LiveCampus");
+    }
+})();
+</script>
+<script>
+(function () {
     var root = document.documentElement;
     root.classList.add('xschool-loading');
     var didFinish = false;

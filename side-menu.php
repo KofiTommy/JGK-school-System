@@ -157,6 +157,7 @@ else if($_SESSION['ACCESSLEVEL']=="user" && $_SESSION['SYSTEMTYPE']=="Student")
       <div class="dropdown-content">
         <a href="student-exeat-request.php"><i class="fa fa-file" ></i> Request Exeat</a>
         <a href="guidance-counselling.php"><i class="fa fa-heartbeat" ></i> Guidance &amp; Counselling</a>
+        <a href="student-store-records.php"><i class="fa fa-book" ></i> My Store Items</a>
       </div>
     </li>
 
@@ -264,6 +265,13 @@ else if($_SESSION['ACCESSLEVEL']=="administrator" && $_SESSION['SYSTEMTYPE']=="s
       <a href="student-house-assignment.php"><i class="fa fa-users" ></i> Student House Assignment</a>
       <a href="senior-house-assignment.php"><i class="fa fa-star" ></i> Senior House Assignment</a>
       <a href="senior-house-dashboard.php"><i class="fa fa-dashboard" ></i> Senior House Dashboard</a>
+      <a href="matron-dashboard.php"><i class="fa fa-cutlery" ></i> Matron Dashboard</a>
+      <a href="storekeeper-dashboard.php"><i class="fa fa-archive" ></i> Storekeeper Dashboard</a>
+      <a href="store-item-entry.php"><i class="fa fa-tags" ></i> Store Item Master</a>
+      <a href="store-stock-receipt.php"><i class="fa fa-download" ></i> Store Stock Receipt</a>
+      <a href="store-stock-issue.php"><i class="fa fa-upload" ></i> Store Stock Issue</a>
+      <a href="store-student-issue.php"><i class="fa fa-book" ></i> Student Item Register</a>
+      <a href="store-balance-report.php"><i class="fa fa-line-chart" ></i> Store Balance Report</a>
       <a href="counsellor-assignment.php"><i class="fa fa-heartbeat" ></i> Counsellor Assignment</a>
     </div>
   </li>
@@ -381,6 +389,13 @@ else if($_SESSION['ACCESSLEVEL']=="administrator" && $_SESSION['SYSTEMTYPE']=="n
       <a href="student-house-assignment.php"><i class="fa fa-users" ></i> Student House Assignment</a>
       <a href="senior-house-assignment.php"><i class="fa fa-star" ></i> Senior House Assignment</a>
       <a href="senior-house-dashboard.php"><i class="fa fa-dashboard" ></i> Senior House Dashboard</a>
+      <a href="matron-dashboard.php"><i class="fa fa-cutlery" ></i> Matron Dashboard</a>
+      <a href="storekeeper-dashboard.php"><i class="fa fa-archive" ></i> Storekeeper Dashboard</a>
+      <a href="store-item-entry.php"><i class="fa fa-tags" ></i> Store Item Master</a>
+      <a href="store-stock-receipt.php"><i class="fa fa-download" ></i> Store Stock Receipt</a>
+      <a href="store-stock-issue.php"><i class="fa fa-upload" ></i> Store Stock Issue</a>
+      <a href="store-student-issue.php"><i class="fa fa-book" ></i> Student Item Register</a>
+      <a href="store-balance-report.php"><i class="fa fa-line-chart" ></i> Store Balance Report</a>
       <a href="counsellor-assignment.php"><i class="fa fa-heartbeat" ></i> Counsellor Assignment</a>
     </div>
   </li>
@@ -526,6 +541,29 @@ else if($_SESSION['ACCESSLEVEL']=="user" && $_SESSION['SYSTEMTYPE']=="User"){
  <a href="school-data-entry.php"><i class="fa fa-plus" ></i> School Data Entry</a>
   </div>
   </li>
+
+  <?php if(function_exists('um_current_user_can_access_module') && um_current_user_can_access_module($con, 'stores_management')){ ?>
+  <li class="dropdown">
+    <a href="#" class="dropbtn"><i class="fa fa-archive" ></i> Stores</a>
+    <div class="dropdown-content">
+      <a href="storekeeper-dashboard.php"><i class="fa fa-dashboard" ></i> Storekeeper Dashboard</a>
+      <a href="store-item-entry.php"><i class="fa fa-tags" ></i> Store Item Master</a>
+      <a href="store-stock-receipt.php"><i class="fa fa-download" ></i> Stock Receipt</a>
+      <a href="store-stock-issue.php"><i class="fa fa-upload" ></i> Stock Issue</a>
+      <a href="store-student-issue.php"><i class="fa fa-book" ></i> Student Item Register</a>
+      <a href="store-balance-report.php"><i class="fa fa-line-chart" ></i> Balance Report</a>
+    </div>
+  </li>
+  <?php } ?>
+
+  <?php if(function_exists('um_current_user_can_access_module') && um_current_user_can_access_module($con, 'matron_management')){ ?>
+  <li class="dropdown">
+    <a href="#" class="dropbtn"><i class="fa fa-cutlery" ></i> Matron</a>
+    <div class="dropdown-content">
+      <a href="matron-dashboard.php"><i class="fa fa-dashboard" ></i> Matron Dashboard</a>
+    </div>
+  </li>
+  <?php } ?>
 
   <li class="dropdown">
           <a href="#" class="dropbtn"><i class="fa fa-file" ></i> Record</a>

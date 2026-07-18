@@ -160,6 +160,11 @@ if(!$assignmentRow){
     $messages[] = score_entry_alert("error", "That upload sheet no longer belongs to your account. Please reopen the subject card and try again.");
     score_upload_finish($redirectUrl, $messages);
 }
+$assignmentApprovalMeta = score_entry_assignment_approval_meta($con, $assignmentRow);
+if($assignmentApprovalMeta && !empty($assignmentApprovalMeta['score_edit_locked'])){
+    $messages[] = score_entry_scope_lock_alert($assignmentApprovalMeta);
+    score_upload_finish($redirectUrl, $messages);
+}
 
 $assignmentStudentContext = score_entry_assignment_student_context(
     $con,

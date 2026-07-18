@@ -5,6 +5,7 @@ $_SESSION['Message']="";
 <?php
 include("dbstring.php");
 include_once("semester-registry-utils.php");
+include_once("report-approval-utils.php");
 semester_registry_ensure_academic_year_column($con);
 @$_Mark=$_POST['marks'];
 @$_AssignmentId=$_POST['assignmentid'];
@@ -14,6 +15,10 @@ semester_registry_ensure_academic_year_column($con);
 
 if(isset($_POST['save_all_mark']))
 {
+    $_AssignmentApprovalMeta = report_approval_assignment_scope_meta($con, $_AssignmentId);
+    if($_AssignmentApprovalMeta && !empty($_AssignmentApprovalMeta['score_edit_locked'])){
+        $_SESSION['Message']=$_SESSION['Message']."<div style='color:red;padding:10px;background-color:white;'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
+    }else{
 	@$_CheckMark=0;
 	foreach ($_Mark as $_Selected_Mark) 
 	{
@@ -93,6 +98,7 @@ $_Selected_Mark=$_Mark[$k];
 	}
 	}	
 	
+}
 }
 ?>
 
@@ -225,6 +231,7 @@ if(isset($_GET['class_ID']))
 @$_AcademicYear=semester_registry_normalize_year($_GET['year_ID'] ?? '');
 @$_ClassName="";
 @$_BatchName="";
+$_SelectedScopeApprovalMeta = report_approval_scope_meta($con, $_BatchId, $_AcademicYear, $_Term, $_ClassId);
 $_AcademicYearWhere = "";
 if($_AcademicYear!==""){
 $_AcademicYearWhere = " AND ".semester_registry_resolved_year_sql("tr")."='".mysqli_real_escape_string($con,$_AcademicYear)."'";
@@ -272,11 +279,15 @@ $_BatchName=$row_bch['batch'];
 <?php
 
 echo "<div class='form-entry'>";
+if($_SelectedScopeApprovalMeta && !empty($_SelectedScopeApprovalMeta['score_edit_locked'])){
+echo "<div style='padding:10px;color:#b91c1c;background-color:#fef2f2;text-align:center;border:1px solid rgba(185,28,28,0.12);border-radius:12px;'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
+}
 if($row_ss=mysqli_fetch_array($_SQL_EXE,MYSQLI_ASSOC)){
 echo "<div style='background-color:lightblue;color:black;padding:10px;text-align:center'>". strtoupper($_ClassName)." : ".strtoupper(semester_registry_session_label($_AcademicYear!=="" ? $_AcademicYear : date('Y'), $_BatchName, $_Term))." : ". strtoupper($row_ss['subject'])."</div>";
 
 echo "<input type='hidden' id='assignment-id' name='assignment-id' value='$row_ss[assignmentid]' />";
 
+if(!($_SelectedScopeApprovalMeta && !empty($_SelectedScopeApprovalMeta['score_edit_locked']))){
 echo "<label>*Total Score</label><br/><input type='text' id='totalscore' name='totalscore' placeholder='Enter Total Score' class='validate[required,custom[number]]'/><br/><br/>";
 ?>
 
@@ -296,6 +307,7 @@ echo "<label>*Total Score</label><br/><input type='text' id='totalscore' name='t
 	
 
 <?php
+}
 }
 else{
 	echo "<div style='padding:10px;color:red;background-color:#fee;text-align:center'>**********No Student Available to upload scores***************</div>";

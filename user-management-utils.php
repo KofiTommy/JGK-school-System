@@ -496,6 +496,18 @@ function um_module_catalog(){
             'description' => 'House, house master, and exeat workflows.',
             'scripts' => array('house-entry.php','house-master-assignment.php','student-house-assignment.php','senior-house-assignment.php','senior-house-dashboard.php','house-master-dashboard.php','house-master-exeat.php')
         ),
+        'stores_management' => array(
+            'label' => 'Stores Management',
+            'group' => 'Operations',
+            'description' => 'Storekeeper item master, stock receipts, issues, and balance reporting.',
+            'scripts' => array('storekeeper-dashboard.php','store-item-entry.php','store-stock-receipt.php','store-stock-issue.php','store-student-issue.php','store-balance-report.php')
+        ),
+        'matron_management' => array(
+            'label' => 'Matron Management',
+            'group' => 'Operations',
+            'description' => 'Matron dashboard for boarders, house coverage, welfare, and food-store coordination.',
+            'scripts' => array('matron-dashboard.php')
+        ),
         'billing' => array(
             'label' => 'Billing',
             'group' => 'Finance',
@@ -611,6 +623,8 @@ function um_assignable_module_keys_for_role($roleKey){
             'student_attendance',
             'duty_roster',
             'house_management',
+            'stores_management',
+            'matron_management',
             'billing',
             'notice_communication',
             'online_admission',
@@ -752,6 +766,16 @@ function um_teacher_extra_nav_links($con, $userId = ''){
         'house_management' => array(
             array('href' => 'house-entry.php', 'label' => 'House Entry', 'icon' => 'fa-home'),
             array('href' => 'student-house-assignment.php', 'label' => 'Student House Assignment', 'icon' => 'fa-users')
+        ),
+        'stores_management' => array(
+            array('href' => 'storekeeper-dashboard.php', 'label' => 'Storekeeper Dashboard', 'icon' => 'fa-archive'),
+            array('href' => 'store-item-entry.php', 'label' => 'Store Item Master', 'icon' => 'fa-tags'),
+            array('href' => 'store-stock-receipt.php', 'label' => 'Stock Receipt', 'icon' => 'fa-download'),
+            array('href' => 'store-stock-issue.php', 'label' => 'Stock Issue', 'icon' => 'fa-upload'),
+            array('href' => 'store-student-issue.php', 'label' => 'Student Issue Register', 'icon' => 'fa-book')
+        ),
+        'matron_management' => array(
+            array('href' => 'matron-dashboard.php', 'label' => 'Matron Dashboard', 'icon' => 'fa-cutlery')
         ),
         'billing' => array(
             array('href' => 'payments.php', 'label' => 'Class Payments', 'icon' => 'fa-credit-card')
@@ -1281,6 +1305,46 @@ function um_fetch_user_row($con, $userId){
     $row = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
     mysqli_stmt_close($stmt);
     return $row ?: null;
+}
+}
+
+if(!function_exists('um_normalize_username')){
+function um_normalize_username($username){
+    return trim((string)$username);
+}
+}
+
+if(!function_exists('um_is_username_taken')){
+function um_is_username_taken($con, $username, $excludeUserId = ''){
+    if(!$con){
+        return false;
+    }
+
+    $username = um_normalize_username($username);
+    $excludeUserId = trim((string)$excludeUserId);
+    if($username === ''){
+        return false;
+    }
+
+    if($excludeUserId !== ''){
+        $stmt = @mysqli_prepare($con, "SELECT userid FROM tblsystemuser WHERE username=? AND userid<>? LIMIT 1");
+        if(!$stmt){
+            return false;
+        }
+        mysqli_stmt_bind_param($stmt, 'ss', $username, $excludeUserId);
+    }else{
+        $stmt = @mysqli_prepare($con, "SELECT userid FROM tblsystemuser WHERE username=? LIMIT 1");
+        if(!$stmt){
+            return false;
+        }
+        mysqli_stmt_bind_param($stmt, 's', $username);
+    }
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $isTaken = $result && mysqli_num_rows($result) > 0;
+    mysqli_stmt_close($stmt);
+    return $isTaken;
 }
 }
 

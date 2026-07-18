@@ -89,7 +89,12 @@
 .upload-register-form-panel {
     position: sticky;
     top: 12px;
+    display: grid;
+    gap: 18px;
     padding: 18px;
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 }
 
 .upload-register-list-panel {
@@ -166,6 +171,31 @@
     justify-content: flex-end;
 }
 
+.upload-register-template-box {
+    padding: 16px;
+    border: 1px solid #dbe7f3;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+.upload-register-template-box h3 {
+    margin: 0;
+    color: #12365d;
+    font-size: 17px;
+}
+
+.upload-register-template-box p {
+    margin: 8px 0 0;
+    color: #5a6f87;
+}
+
+.upload-register-template-actions {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 14px;
+}
+
 .upload-register-btn,
 .upload-register-page .button-pay {
     min-height: 44px;
@@ -187,6 +217,17 @@
     background: linear-gradient(135deg, #0f4e8f 0%, #176fb8 100%);
     color: #ffffff !important;
     box-shadow: 0 10px 22px rgba(23, 111, 184, 0.22);
+}
+
+.upload-register-btn-secondary {
+    border: 1px solid #c7d9ee;
+    background: #ffffff;
+    color: #12599c !important;
+    box-shadow: 0 8px 18px rgba(18, 89, 156, 0.1);
+}
+
+.upload-register-template-hint strong {
+    color: #12365d;
 }
 
 .upload-register-table-wrap {
@@ -293,6 +334,8 @@
 
     .upload-register-form-panel {
         position: static;
+        max-height: none;
+        overflow: visible;
     }
 
     .upload-register-hero {
@@ -321,9 +364,14 @@
     }
 
     .upload-register-actions,
+    .upload-register-template-actions,
     .upload-register-btn,
     .upload-register-page .button-pay {
         width: 100%;
+    }
+
+    .upload-register-template-actions {
+        grid-template-columns: 1fr;
     }
 
     .upload-register-panel-heading {

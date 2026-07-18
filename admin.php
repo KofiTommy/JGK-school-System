@@ -1,12 +1,28 @@
 <?php
 session_start();
+include_once("dashboard-student-utils.php");
+include_once("storekeeper-utils.php");
+include_once("portal-help-utils.php");
 
 if(isset($_POST['mark_changes_read'])){
     include("dbstring.php");
     include("audit_notifications.php");
     ensureSystemChangeLogTable($con);
-    mysqli_query($con, "UPDATE tblsystemchangelog SET status='read' WHERE status='unread' AND actor_type IN ('Teacher','Student')");
+    mysqli_query($con, "UPDATE tblsystemchangelog SET status='read' WHERE status='unread' AND actor_type IN ('Teacher','Student','Portal')");
     header("Location: admin.php#system-change-notifications");
+    exit();
+}
+
+if(isset($_POST['save_portal_help_request'])){
+    include("dbstring.php");
+    include_once("portal-help-utils.php");
+    ensure_portal_help_request_table($con);
+    $_HelpRequestId = isset($_POST['requestid']) ? trim((string)$_POST['requestid']) : '';
+    $_HelpRequestStatus = isset($_POST['status']) ? trim((string)$_POST['status']) : 'open';
+    $_HelpRequestAdminNote = isset($_POST['adminnote']) ? trim((string)$_POST['adminnote']) : '';
+    $_HelpUpdatedBy = isset($_SESSION['USERID']) ? trim((string)$_SESSION['USERID']) : '';
+    portal_help_update_request($con, $_HelpRequestId, $_HelpRequestStatus, $_HelpRequestAdminNote, $_HelpUpdatedBy);
+    header("Location: admin.php#portal-help-requests");
     exit();
 }
 
@@ -57,7 +73,8 @@ function admin_dashboard_action_label($actionType){
         "RESULT_REOPEN" => "Results Reopened",
         "MARK_DELETE" => "Mark Deleted",
         "ONLINE_ADMISSION_SUBMITTED" => "Online Admission Submitted",
-        "ONLINE_ADMISSION_HELP_REQUEST" => "Online Admission Help Request"
+        "ONLINE_ADMISSION_HELP_REQUEST" => "Online Admission Help Request",
+        "PORTAL_HELP_REQUEST" => "Portal Help Request"
     );
     if(isset($map[$actionType])){
         return $map[$actionType];
@@ -77,6 +94,9 @@ function admin_dashboard_activity_icon($actionType, $source = "log"){
     }
     if(strpos($actionType, "PASSWORD") !== false){
         return "fa-key";
+    }
+    if(strpos($actionType, "HELP") !== false){
+        return "fa-life-ring";
     }
     if(strpos($actionType, "UPLOAD") !== false || strpos($actionType, "SCORE") !== false){
         return "fa-line-chart";
@@ -102,6 +122,9 @@ function admin_dashboard_activity_tone($actionType, $source = "log"){
     }
     if(strpos($actionType, "PASSWORD") !== false){
         return "warning";
+    }
+    if(strpos($actionType, "HELP") !== false){
+        return "accent";
     }
     if(strpos($actionType, "UPLOAD") !== false || strpos($actionType, "SCORE") !== false){
         return "info";
@@ -396,6 +419,48 @@ include("links.php");
     color: #0f172a;
 }
 
+.card small {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.74rem;
+    line-height: 1.45;
+    white-space: pre-line;
+}
+
+.student-batch-toggle {
+    margin-top: 8px;
+}
+
+.student-batch-toggle summary {
+    cursor: pointer;
+    color: var(--brand);
+    font-size: 0.74rem;
+    font-weight: 700;
+    list-style: none;
+}
+
+.student-batch-toggle summary::-webkit-details-marker {
+    display: none;
+}
+
+.student-batch-toggle__list {
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.74rem;
+    line-height: 1.45;
+}
+
+.student-batch-toggle__empty {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.74rem;
+    line-height: 1.45;
+}
+
 .card.total {
     background:
         radial-gradient(circle at top right, rgba(245, 158, 11, 0.28), transparent 34%),
@@ -405,7 +470,11 @@ include("links.php");
 }
 
 .card.total h4,
-.card.total p {
+.card.total p,
+.card.total small,
+.card.total .student-batch-toggle summary,
+.card.total .student-batch-toggle__list,
+.card.total .student-batch-toggle__empty {
     color: #ecfeff;
 }
 
@@ -1563,6 +1632,235 @@ include("links.php");
     text-align: center;
 }
 
+.portal-help-panel {
+    margin-top: 14px;
+    padding: 0;
+    border: 1px solid rgba(16, 185, 129, 0.16);
+    background:
+        radial-gradient(circle at top right, rgba(16, 185, 129, 0.12), transparent 28%),
+        linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    overflow: hidden;
+}
+
+.portal-help-panel__header {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.portal-help-panel__title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 260px;
+}
+
+.portal-help-panel__icon {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    border-radius: 15px;
+    background: #ecfdf5;
+    color: #047857;
+    box-shadow: inset 0 0 0 1px #a7f3d0;
+}
+
+.portal-help-panel__title h3 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.1rem;
+}
+
+.portal-help-panel__title p {
+    margin: 4px 0 0;
+    color: #64748b;
+    font-size: 0.84rem;
+}
+
+.portal-help-panel__body {
+    padding: 16px;
+}
+
+.portal-help-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(90px, 1fr));
+    gap: 10px;
+    min-width: 320px;
+}
+
+.portal-help-summary-card {
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+}
+
+.portal-help-summary-card span {
+    display: block;
+    color: #64748b;
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.portal-help-summary-card strong {
+    display: block;
+    margin-top: 6px;
+    color: #0f172a;
+    font-size: 1.35rem;
+}
+
+.portal-help-empty {
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    min-height: 150px;
+    color: #64748b;
+    text-align: center;
+}
+
+.portal-help-empty i {
+    font-size: 1.3rem;
+    color: #0f766e;
+}
+
+.portal-help-list {
+    display: grid;
+    gap: 14px;
+}
+
+.portal-help-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    background: #ffffff;
+    padding: 15px;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+}
+
+.portal-help-item__topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.portal-help-item__topline h4 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.portal-help-meta,
+.portal-help-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 0.82rem;
+}
+
+.portal-help-meta span,
+.portal-help-contact span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.portal-help-message-copy {
+    margin-top: 12px;
+    padding: 13px 14px;
+    border-radius: 16px;
+    background: #f8fafc;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.portal-help-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 92px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.portal-help-badge--open {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.portal-help-badge--contacted {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.portal-help-badge--resolved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.portal-help-update-form {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: end;
+    margin-top: 14px;
+}
+
+.portal-help-update-form label {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+}
+
+.portal-help-update-form label span {
+    color: #475569;
+    font-size: 0.76rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.portal-help-update-form select,
+.portal-help-update-form input {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 9px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #0f172a;
+    font: inherit;
+}
+
+.portal-help-update-btn {
+    min-height: 42px;
+    align-self: end;
+    border-radius: 12px;
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #047857;
+    font-weight: 800;
+}
+
+.portal-help-update-btn:hover {
+    background: #d1fae5;
+    border-color: #34d399;
+}
+
 .admin-danger-zone {
     margin-top: 14px;
     border: 1px solid #fecaca;
@@ -1919,6 +2217,10 @@ include("links.php");
                             $students_no_status = (int)$statsRow['no_status_students'];
                         }
 
+                        $_AdminStudentBatchSummary = dashboard_student_population_summary($con, array(
+                            'require_active_class' => true
+                        ));
+
                         /* 3) Convenient vars + totals */
                         $boys_day        = $counts['Male']['Day'];
                         $boys_boarding   = $counts['Male']['Boarding'];
@@ -2212,10 +2514,13 @@ include("links.php");
                         $_SQL_UNREAD = mysqli_query($con, "SELECT COUNT(*) AS total_unread
                             FROM tblsystemchangelog
                             WHERE status='unread'
-                              AND actor_type IN ('Teacher','Student')");
+                              AND actor_type IN ('Teacher','Student','Portal')");
                         if($_SQL_UNREAD && $row_unread = mysqli_fetch_array($_SQL_UNREAD, MYSQLI_ASSOC)){
                             $_UnreadChangeCount = (int)$row_unread['total_unread'];
                         }
+
+                        $_PortalHelpSummary = portal_help_request_summary($con);
+                        $_PortalHelpRows = portal_help_recent_requests($con, 12);
 
                         $_RecentActivities = array();
                         $_RecentActivityFeedCount = 0;
@@ -2267,6 +2572,9 @@ include("links.php");
                                 } elseif(strtoupper($_ActionType) === 'ONLINE_ADMISSION_HELP_REQUEST'){
                                     $_Link = 'online-admission-admin.php#help-requests';
                                     $_LinkLabel = 'Open Help Requests';
+                                } elseif(strtoupper($_ActionType) === 'PORTAL_HELP_REQUEST'){
+                                    $_Link = 'admin.php#portal-help-requests';
+                                    $_LinkLabel = 'Open Portal Help';
                                 } elseif($_TargetUserId !== ''){
                                     $_Link = 'register_edit.php?edit_user='.urlencode($_TargetUserId);
                                     $_LinkLabel = 'Open Record';
@@ -2399,7 +2707,7 @@ include("links.php");
                         <?php
                         $_SQL_CHANGE_LOG = mysqli_query($con, "SELECT *
                             FROM tblsystemchangelog
-                            WHERE actor_type IN ('Teacher','Student')
+                            WHERE actor_type IN ('Teacher','Student','Portal')
                             ORDER BY (CASE WHEN status='unread' THEN 0 ELSE 1 END), datetimeentry DESC
                             LIMIT 120");
                         ?>
@@ -2411,7 +2719,7 @@ include("links.php");
                                     <span class="system-change-icon"><i class="fa fa-bell"></i></span>
                                     <div>
                                         <h3>System Change Notifications</h3>
-                                        <p>Track teacher/student changes and online admission submissions in the audit view.</p>
+                                        <p>Track teacher, student, portal help, and online admission activity in the audit view.</p>
                                     </div>
                                 </div>
                                 <div class="system-change-actions">
@@ -2428,7 +2736,7 @@ include("links.php");
                             </div>
                             <div class="system-change-table-wrap">
                                 <table class="table system-change-table">
-                                    <caption>System Change Notifications (Teachers, Students, and Admissions)</caption>
+                                    <caption>System Change Notifications (Teachers, Students, Portal Help, and Admissions)</caption>
                                     <thead>
                                         <tr>
                                             <th scope="col">Date/Time</th>
@@ -2452,6 +2760,8 @@ include("links.php");
                                                     $_NotificationAction = "<br><a class='system-change-action-link' href='".admin_dashboard_safe($_AdmissionReviewLink)."'><i class='fa fa-arrow-right'></i> Review Admission</a>";
                                                 }elseif(strtoupper(trim((string)$row_log['action_type'])) === 'ONLINE_ADMISSION_HELP_REQUEST'){
                                                     $_NotificationAction = "<br><a class='system-change-action-link' href='online-admission-admin.php#help-requests'><i class='fa fa-arrow-right'></i> Open Help Requests</a>";
+                                                }elseif(strtoupper(trim((string)$row_log['action_type'])) === 'PORTAL_HELP_REQUEST'){
+                                                    $_NotificationAction = "<br><a class='system-change-action-link' href='admin.php#portal-help-requests'><i class='fa fa-arrow-right'></i> Open Portal Help</a>";
                                                 }
                                                 echo "<tr class='".$_RowClass."'>";
                                                 echo "<td>".htmlspecialchars($row_log['datetimeentry'])."</td>";
@@ -2468,6 +2778,93 @@ include("links.php");
                                         ?>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                        <div class="table-wrap portal-help-panel" role="region" aria-label="Portal Help Requests" id="portal-help-requests">
+                            <div class="portal-help-panel__header">
+                                <div class="portal-help-panel__title">
+                                    <span class="portal-help-panel__icon"><i class="fa fa-life-ring"></i></span>
+                                    <div>
+                                        <h3>Portal Help Requests</h3>
+                                        <p>Messages sent from the home page help button. Update the status after you have responded.</p>
+                                    </div>
+                                </div>
+                                <div class="portal-help-summary-grid">
+                                    <article class="portal-help-summary-card">
+                                        <span>Total</span>
+                                        <strong><?php echo number_format((int)$_PortalHelpSummary['total']); ?></strong>
+                                    </article>
+                                    <article class="portal-help-summary-card">
+                                        <span>Open</span>
+                                        <strong><?php echo number_format((int)$_PortalHelpSummary['open']); ?></strong>
+                                    </article>
+                                    <article class="portal-help-summary-card">
+                                        <span>Contacted</span>
+                                        <strong><?php echo number_format((int)$_PortalHelpSummary['contacted']); ?></strong>
+                                    </article>
+                                    <article class="portal-help-summary-card">
+                                        <span>Resolved</span>
+                                        <strong><?php echo number_format((int)$_PortalHelpSummary['resolved']); ?></strong>
+                                    </article>
+                                </div>
+                            </div>
+                            <div class="portal-help-panel__body">
+                                <?php if(empty($_PortalHelpRows)){ ?>
+                                <div class="portal-help-empty">
+                                    <i class="fa fa-inbox"></i>
+                                    <span>No portal help request has been sent yet.</span>
+                                </div>
+                                <?php }else{ ?>
+                                <div class="portal-help-list">
+                                    <?php foreach($_PortalHelpRows as $_HelpRow){ ?>
+                                    <article class="portal-help-item">
+                                        <div class="portal-help-item__topline">
+                                            <div>
+                                                <h4><?php echo admin_dashboard_safe(trim((string)$_HelpRow['requestername']) !== '' ? trim((string)$_HelpRow['requestername']) : 'Portal Visitor'); ?></h4>
+                                                <div class="portal-help-meta">
+                                                    <span><i class="fa fa-user-circle-o"></i> <?php echo admin_dashboard_safe(portal_help_role_label($_HelpRow['requesterrole'])); ?></span>
+                                                    <span><i class="fa fa-tag"></i> <?php echo admin_dashboard_safe(portal_help_topic_label($_HelpRow['helptopic'])); ?></span>
+                                                    <span><i class="fa fa-clock-o"></i> <?php echo admin_dashboard_safe(admin_dashboard_relative_time($_HelpRow['requestedat'])); ?></span>
+                                                </div>
+                                            </div>
+                                            <span class="<?php echo admin_dashboard_safe(portal_help_status_badge_class($_HelpRow['status'])); ?>">
+                                                <?php echo admin_dashboard_safe(portal_help_status_label($_HelpRow['status'])); ?>
+                                            </span>
+                                        </div>
+                                        <div class="portal-help-contact">
+                                            <?php if(trim((string)$_HelpRow['contactphone']) !== ''){ ?>
+                                            <span><i class="fa fa-phone"></i> <?php echo admin_dashboard_safe($_HelpRow['contactphone']); ?></span>
+                                            <?php } ?>
+                                            <?php if(trim((string)$_HelpRow['contactemail']) !== ''){ ?>
+                                            <span><i class="fa fa-envelope-o"></i> <?php echo admin_dashboard_safe($_HelpRow['contactemail']); ?></span>
+                                            <?php } ?>
+                                            <?php if(trim((string)$_HelpRow['sourcepage']) !== ''){ ?>
+                                            <span><i class="fa fa-globe"></i> <?php echo admin_dashboard_safe($_HelpRow['sourcepage']); ?></span>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="portal-help-message-copy"><?php echo nl2br(admin_dashboard_safe($_HelpRow['helpmessage'])); ?></div>
+                                        <form method="post" action="admin.php#portal-help-requests" class="portal-help-update-form">
+                                            <input type="hidden" name="requestid" value="<?php echo admin_dashboard_safe($_HelpRow['requestid']); ?>">
+                                            <label>
+                                                <span>Status</span>
+                                                <select name="status">
+                                                    <option value="open" <?php echo trim((string)$_HelpRow['status']) === 'open' ? 'selected' : ''; ?>>Open</option>
+                                                    <option value="contacted" <?php echo trim((string)$_HelpRow['status']) === 'contacted' ? 'selected' : ''; ?>>Contacted</option>
+                                                    <option value="resolved" <?php echo trim((string)$_HelpRow['status']) === 'resolved' ? 'selected' : ''; ?>>Resolved</option>
+                                                </select>
+                                            </label>
+                                            <label class="portal-help-update-form__note">
+                                                <span>Admin Note</span>
+                                                <input type="text" name="adminnote" value="<?php echo admin_dashboard_safe((string)$_HelpRow['adminnote']); ?>" placeholder="Optional note about your follow-up">
+                                            </label>
+                                            <button type="submit" name="save_portal_help_request" class="quick-action-btn portal-help-update-btn">
+                                                <i class="fa fa-save"></i> Save
+                                            </button>
+                                        </form>
+                                    </article>
+                                    <?php } ?>
+                                </div>
+                                <?php } ?>
                             </div>
                         </div>
                         <details class="admin-danger-zone">
@@ -2495,22 +2892,27 @@ include("links.php");
                                 <div class="card" role="article" aria-label="Boys Day Students">
                                     <h4><i class="fa fa-male" style="color:#2563eb; margin-right:4px;"></i>Boys - Day</h4>
                                     <p><?php echo number_format($boys_day); ?></p>
+                                    <?php echo dashboard_student_batch_breakdown_html($_AdminStudentBatchSummary, 'day_boys', 'Batches', 'No batch yet.'); ?>
                                 </div>
                                 <div class="card" role="article" aria-label="Boys Boarding Students">
                                     <h4><i class="fa fa-male" style="color:#38bdf8; margin-right:4px;"></i>Boys - Boarding</h4>
                                     <p><?php echo number_format($boys_boarding); ?></p>
+                                    <?php echo dashboard_student_batch_breakdown_html($_AdminStudentBatchSummary, 'boarding_boys', 'Batches', 'No batch yet.'); ?>
                                 </div>
                                 <div class="card" role="article" aria-label="Girls Day Students">
                                     <h4><i class="fa fa-female" style="color:#db2777; margin-right:4px;"></i>Girls - Day</h4>
                                     <p><?php echo number_format($girls_day); ?></p>
+                                    <?php echo dashboard_student_batch_breakdown_html($_AdminStudentBatchSummary, 'day_girls', 'Batches', 'No batch yet.'); ?>
                                 </div>
                                 <div class="card" role="article" aria-label="Girls Boarding Students">
                                     <h4><i class="fa fa-female" style="color:#f472b6; margin-right:4px;"></i>Girls - Boarding</h4>
                                     <p><?php echo number_format($girls_boarding); ?></p>
+                                    <?php echo dashboard_student_batch_breakdown_html($_AdminStudentBatchSummary, 'boarding_girls', 'Batches', 'No batch yet.'); ?>
                                 </div>
                                 <div class="card" role="article" aria-label="Students With No Residence Status">
                                     <h4><i class="fa fa-question-circle" style="color:#b45309; margin-right:4px;"></i>No Residence Status</h4>
                                     <p><?php echo number_format($students_no_status); ?></p>
+                                    <?php echo dashboard_student_batch_breakdown_html($_AdminStudentBatchSummary, 'students_no_status', 'Batches', 'All set.'); ?>
                                 </div>
                                 <div class="card total" role="article" aria-label="Total Active Students">
                                     <h4><i class="fa fa-users" style="color:#fff; margin-right:4px;"></i>Total Active Students</h4>
@@ -2823,7 +3225,7 @@ include("links.php");
 
                             function syncDashboardSectionFromLocation() {
                                 const urlParams = new URLSearchParams(window.location.search);
-                                if (window.location.hash === '#system-change-notifications') {
+                                if (window.location.hash === '#system-change-notifications' || window.location.hash === '#portal-help-requests') {
                                     showDashboardSection('section-notifications');
                                     return;
                                 }

@@ -79,12 +79,13 @@ function buildHeaderMap($row) {
 }
 
 function valueByMap($row, $map, $headerKeys, $defaultIndex) {
-    if (is_array($map)) {
+    if (is_array($map) && !empty($map)) {
         foreach ($headerKeys as $key) {
             if (isset($map[$key]) && array_key_exists($map[$key], $row)) {
                 return trim((string)$row[$map[$key]]);
             }
         }
+        return '';
     }
     return isset($row[$defaultIndex]) ? trim((string)$row[$defaultIndex]) : '';
 }

@@ -1479,3 +1479,66 @@ body.teacher-dashboard-page {
         grid-template-columns: 1fr;
     }
 }
+
+.teacher-panel--menu-board {
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.98), rgba(255, 245, 232, 0.96));
+}
+
+.teacher-menu-board__week {
+    margin-bottom: 14px;
+    color: #7d6853;
+    font-weight: 700;
+}
+
+.teacher-menu-board {
+    display: grid;
+    gap: 12px;
+}
+
+.teacher-menu-board__day {
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(23, 49, 75, 0.08);
+    background: rgba(255, 255, 255, 0.94);
+}
+
+.teacher-menu-board__day h3 {
+    margin: 0 0 10px;
+    color: #17314b;
+    font-size: 1rem;
+}
+
+.teacher-menu-board__meals {
+    display: grid;
+    gap: 10px;
+}
+
+.teacher-menu-board__meal {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(244, 168, 76, 0.08);
+}
+
+.teacher-menu-board__meal strong,
+.teacher-menu-board__meal small {
+    display: block;
+}
+
+.teacher-menu-board__meal strong {
+    color: #17314b;
+}
+
+.teacher-menu-board__meal small {
+    margin-top: 4px;
+    color: #6a7e91;
+}
+
+.teacher-menu-board__meal-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #94602d;
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

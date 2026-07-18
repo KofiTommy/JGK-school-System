@@ -161,6 +161,10 @@ if($_TermFilter !== "1" && $_TermFilter !== "2"){
 @$_CurrentTermIdSafe = mysqli_real_escape_string($con, $_CurrentTermId);
 @$_CurrentSubjectIdSafe = mysqli_real_escape_string($con, $_CurrentSubjectId);
 @$_CurrentBatchIdSafe = mysqli_real_escape_string($con, $_CurrentBatchId);
+@$_CurrentScopeApprovalMeta = null;
+if($_CurrentClassId !== "" && $_CurrentBatchId !== "" && $_CurrentTermId !== "" && $_YearBatchFilter !== ""){
+    $_CurrentScopeApprovalMeta = report_approval_scope_meta($con, $_CurrentBatchId, $_YearBatchFilter, $_CurrentTermId, $_CurrentClassId);
+}
 @$_Mark=$_POST['marks'];
 @$_AssignmentId=$_POST['assignmentid'];
 @$_UserId=$_POST['userid'];
@@ -209,6 +213,10 @@ if(
 
 if(isset($_POST['save_all_mark']))
 {
+    $_AssignmentApprovalMeta = report_approval_assignment_scope_meta($con, $_AssignmentId);
+    if($_AssignmentApprovalMeta && !empty($_AssignmentApprovalMeta['score_edit_locked'])){
+        $_SESSION['Message']=$_SESSION['Message']."<div style='color:red;padding:10px;background-color:white;'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
+    }else{
 	@$_CheckMark=0;
 	foreach ($_Mark as $_Selected_Mark) 
 	{
@@ -289,6 +297,7 @@ $_Selected_Mark=$_Mark[$k];
 	}	
 	
 }
+}
 ?>
 
 <?php
@@ -331,9 +340,12 @@ if($row_auth=mysqli_fetch_array($_SQL_AUTH,MYSQLI_ASSOC))
 {
     $isAdmin = (isset($_SESSION['ACCESSLEVEL']) && $_SESSION['ACCESSLEVEL']=="administrator");
     $isOwnerTeacher = ($row_auth['teacher_userid']==$_SESSION['USERID']);
+    $_MarkApprovalMeta = report_approval_mark_scope_meta($con, $_MarkId);
 
     if(!$isAdmin && !$isOwnerTeacher){
         $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>You are not allowed to edit this mark.</div>";
+    } else if($_MarkApprovalMeta && !empty($_MarkApprovalMeta['score_edit_locked'])){
+        $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
     } else if(!is_numeric($_NewMark) || $_NewMark<0 || $_NewMark>$row_auth['totalmark']){
         $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>Invalid mark. It must be between 0 and ".$row_auth['totalmark'].".</div>";
     } else {
@@ -437,10 +449,17 @@ $_DeleteCount=0;
 $_DeleteStudentCount=0;
 $_DeletedStudents=array();
 $_DeleteError="";
+$_DeleteBlockedMessage="";
 
 $_SQL_CHECK_DELETE = mysqli_query(
     $con,
-    "SELECT mk.markid,mk.userid
+    "SELECT
+        mk.markid,
+        mk.userid,
+        sc.classid,
+        sa.batchid,
+        sa.termname,
+        ".semester_registry_assignment_year_sql("sa")." AS assignment_year
      FROM tblmark mk
      INNER JOIN tblsubjectassignment sa ON sa.assignmentid=mk.assignmentid
      INNER JOIN tblsubjectclassification sc ON sa.classificationid=sc.classificationid
@@ -456,6 +475,11 @@ $_SQL_CHECK_DELETE = mysqli_query(
 
 if($_SQL_CHECK_DELETE){
     while($row_del=mysqli_fetch_array($_SQL_CHECK_DELETE,MYSQLI_ASSOC)){
+        $_DeleteMeta = report_approval_scope_meta($con, $row_del['batchid'], $row_del['assignment_year'], $row_del['termname'], $row_del['classid']);
+        if($_DeleteMeta && !empty($_DeleteMeta['score_edit_locked'])){
+            $_DeleteBlockedMessage = report_approval_score_edit_locked_message();
+            break;
+        }
         $_DeleteCount++;
         $_DeletedStudents[$row_del['userid']]=1;
     }
@@ -464,7 +488,7 @@ if($_SQL_CHECK_DELETE){
     $_DeleteError=mysqli_error($con);
 }
 
-if($_DeleteError==""){
+if($_DeleteError=="" && $_DeleteBlockedMessage===""){
     $_SQL_DELETE = mysqli_query(
         $con,
         "DELETE mk
@@ -485,7 +509,10 @@ if($_DeleteError==""){
     }
 }
 
-if($_DeleteError!=""){
+if($_DeleteBlockedMessage!==""){
+    mysqli_rollback($con);
+    $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>".htmlspecialchars($_DeleteBlockedMessage, ENT_QUOTES, 'UTF-8')."</div>";
+}elseif($_DeleteError!=""){
     mysqli_rollback($con);
     $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>Bulk delete failed: $_DeleteError</div>";
 }else{
@@ -520,8 +547,11 @@ if($row_auth=mysqli_fetch_array($_SQL_AUTH,MYSQLI_ASSOC))
 {
     $isAdmin = (isset($_SESSION['ACCESSLEVEL']) && $_SESSION['ACCESSLEVEL']=="administrator");
     $isOwnerTeacher = ($row_auth['teacher_userid']==$_SESSION['USERID']);
+    $_MarkApprovalMeta = report_approval_mark_scope_meta($con, $_GET["delete_mark"]);
     if(!$isAdmin && !$isOwnerTeacher){
         $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>You are not allowed to delete this mark.</div>";
+    } elseif($_MarkApprovalMeta && !empty($_MarkApprovalMeta['score_edit_locked'])){
+        $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
     } else {
 $_SQL_EXECUTE=mysqli_query($con,"DELETE FROM tblmark WHERE markid='$_MarkIdSafe'");
 	if($_SQL_EXECUTE){
@@ -710,13 +740,23 @@ if(trim((string)$_SESSION['Message']) !== ""){
 echo "<div class='scores-report-flash'>".$_SESSION['Message']."</div>";
 $_SESSION['Message']="";
 }
+if($_CurrentScopeApprovalMeta){
+    echo "<div class='scores-report-flash'>";
+    if(!empty($_CurrentScopeApprovalMeta['score_edit_locked'])){
+        echo "<div style='color:#b91c1c;background-color:#fef2f2;border:1px solid rgba(185,28,28,0.12);padding:12px 14px;border-radius:16px;'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
+    }elseif(!empty($_CurrentScopeApprovalMeta['score_edit_override_enabled'])){
+        echo "<div style='color:#1d4ed8;background-color:#eff6ff;border:1px solid rgba(29,78,216,0.12);padding:12px 14px;border-radius:16px;'>This approved result is temporarily open for score correction.</div>";
+    }
+    echo "</div>";
+}
 include("dbstring.php");
 
 if(isset($_GET['class_id']))
 {
 echo "<div class='scores-report-toolbar'>";
 echo "<label class='scores-report-select-all'><input type='checkbox' id='bulk_select_students' onclick='toggleBulkStudents(this)' /> <span>Select all visible students</span></label>";
-echo "<button type='submit' name='bulk_delete_students_scores' onclick='return confirmBulkDeleteStudents();' class='scores-report-button scores-report-button--danger'><i class='fa fa-trash-o'></i> Delete Selected Class + Exam Scores</button>";
+$_BulkDeleteDisabled = ($_CurrentScopeApprovalMeta && !empty($_CurrentScopeApprovalMeta['score_edit_locked'])) ? " disabled" : "";
+echo "<button type='submit' name='bulk_delete_students_scores' onclick='return confirmBulkDeleteStudents();' class='scores-report-button scores-report-button--danger'$_BulkDeleteDisabled><i class='fa fa-trash-o'></i> Delete Selected Class + Exam Scores</button>";
 echo "</div>";
 $_ReportTeacherScope = score_report_is_admin_viewer() ? "" : " AND sa.userid='$_SESSION[USERID]'";
 $_SQL_2=mysqli_query($con,"SELECT sa.*, sa.termname AS assignment_termname, ".semester_registry_assignment_year_sql("sa")." AS assignment_year, sa.datetimeentry AS assignment_datetimeentry, sc.*, sub.*, ce.*, bch.batch FROM tblsubjectassignment sa 
@@ -745,6 +785,7 @@ $_RenderedStudentRows = false;
 while($row_sub=mysqli_fetch_array($_SQL_2,MYSQLI_ASSOC))
 {
 $_ReportHasRows = true;
+$_RowApprovalMeta = report_approval_scope_meta($con, $row_sub['batchid'], isset($row_sub['assignment_year']) ? $row_sub['assignment_year'] : "", $row_sub['assignment_termname'], $row_sub['class_entryid']);
 @$_BatchName="";
 $_SQL_Batch=mysqli_query($con,"SELECT * FROM tblbatch WHERE batchid='$row_sub[batchid]'");
 if($rowb=mysqli_fetch_array($_SQL_Batch,MYSQLI_ASSOC)){
@@ -752,6 +793,11 @@ $_BatchName=$rowb["batch"];
 }
 $_SessionHeading = score_report_session_label($row_sub['assignment_datetimeentry'], $_BatchName, $row_sub['assignment_termname'], isset($row_sub['assignment_year']) ? $row_sub['assignment_year'] : "");
 echo "<tr class='scores-report-row scores-report-row--section'><td align='left' colspan='10'>".strtoupper($row_sub['subject']).": ".strtoupper($_SessionHeading) ."</td></tr>";
+if(!empty($_RowApprovalMeta['score_edit_locked'])){
+echo "<tr class='scores-report-row scores-report-row--session'><td colspan='10' style='color:#b91c1c;'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</td></tr>";
+}elseif(!empty($_RowApprovalMeta['score_edit_override_enabled'])){
+echo "<tr class='scores-report-row scores-report-row--session'><td colspan='10' style='color:#1d4ed8;'>This approved result is temporarily open for score correction.</td></tr>";
+}
 
 $_SQL_CLASS=mysqli_query($con,"SELECT DISTINCT tr.userid, ce.class_name, ce.class_entryid
     FROM tblclassentry ce
@@ -806,8 +852,12 @@ if(mysqli_num_rows($_SQL_EXECUTE)==0){
 	$_getAssignment_Id=$row['assignmentid'];
 	echo "<tr class='scores-report-row scores-report-row--mark' id='mark-row-$row[markid]'>";
 	echo "<td colspan='4' align='right'>";
+	if(!empty($_RowApprovalMeta['score_edit_locked'])){
+	echo "<span class='scores-report-action' style='opacity:0.65;cursor:not-allowed;'>Locked</span>";
+	}else{
 	echo "<a class='scores-report-action scores-report-action--edit' title='Edit score: $row[mark]' href='scores-report.php?class_id=$_GET[class_id]&term_id=$_GET[term_id]&subject_id=$_GET[subject_id]&batchid=$_GET[batchid]&year_batch=".urlencode($_YearBatchFilter)."&edit_mark=$row[markid]#edit-mark-$row[markid]'><i class='fa fa-edit'></i></a> ";
 	echo "<a class='scores-report-action scores-report-action--delete' onclick=\"javascript:return confirm('Do you to delete mark?')\" title='Delete score: $row[mark]' href='scores-report.php?class_id=$_GET[class_id]&term_id=$_GET[term_id]&subject_id=$_GET[subject_id]&batchid=$_GET[batchid]&year_batch=".urlencode($_YearBatchFilter)."&delete_mark=$row[markid]'><i class='fa fa-trash-o'></i></a>";
+	}
 	echo "</td>";
 
 	echo "<td align='center' width='5%' colspan='1'>";
@@ -825,7 +875,7 @@ if(mysqli_num_rows($_SQL_EXECUTE)==0){
 
 	echo "</tr>";
 
-    if(isset($_GET['edit_mark']) && $_GET['edit_mark']==$row['markid']){
+    if(empty($_RowApprovalMeta['score_edit_locked']) && isset($_GET['edit_mark']) && $_GET['edit_mark']==$row['markid']){
     echo "<tr class='scores-report-row scores-report-row--edit' id='edit-mark-$row[markid]'>";
     echo "<td colspan='8'>";
     echo "<form method='post' action='scores-report.php' class='scores-report-edit-form'>";
@@ -837,7 +887,7 @@ if(mysqli_num_rows($_SQL_EXECUTE)==0){
     echo "<input type='hidden' name='return_year_batch' value='".htmlspecialchars($_YearBatchFilter,ENT_QUOTES)."' />";
     echo "<label>Edit Mark (Max $row[totalmark])</label>";
     echo "<input type='number' name='new_mark' min='0' max='$row[totalmark]' value='$row[mark]' step='0.01' required />";
-    echo "<button class='scores-report-button scores-report-button--save' name='update_mark' value='1'><i class='fa fa-save'></i> Save</button> ";
+    echo "<button class='scores-report-button scores-report-button--save' name='update_mark' value='1' onclick=\"return confirm('Please check this score carefully before saving. Once the result is approved, you will not be able to change the score unless the administrator reopens corrections. Do you want to continue?');\"><i class='fa fa-save'></i> Save</button> ";
     echo "<a class='scores-report-button scores-report-button--ghost' href='scores-report.php?class_id=$_GET[class_id]&term_id=$_GET[term_id]&subject_id=$_GET[subject_id]&batchid=$_GET[batchid]&year_batch=".urlencode($_YearBatchFilter)."#mark-row-$row[markid]'>Cancel</a>";
     echo "</form>";
     echo "</td>";

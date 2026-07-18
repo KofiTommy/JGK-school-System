@@ -1,5 +1,9 @@
 <?php session_start();?>
 <?php include("dbstring.php"); ?>
+<?php
+include_once("user-management-utils.php");
+ensure_user_management_columns($con);
+?>
 
 
 <?php
@@ -63,11 +67,14 @@ mysqli_close($con);
 
 <?php
 include('dbstring.php');
+include_once("user-management-utils.php");
+ensure_user_management_columns($con);
 //Declare the variables
-@$verificationcode =$_POST['verification_code'];
+@$verificationcode = trim((string)$_POST['verification_code']);
 
-@$UserName =$_POST['username'];
-@$NewPassword =md5($_POST['new-password']);
+@$UserName = um_normalize_username(isset($_POST['username']) ? $_POST['username'] : '');
+@$NewPasswordRaw = isset($_POST['new-password']) ? (string)$_POST['new-password'] : '';
+@$NewPassword =md5($NewPasswordRaw);
 //@$RepeatPassword =md5($_POST['repeat-password']);
 
 
@@ -77,24 +84,68 @@ include('dbstring.php');
 //insert category record
 if(isset($_POST["submit_verification_code"]))
 {
-//echo $verificationcode;
-    //Check connection
     if(mysqli_connect_errno())
     {
     echo "Failed to connect to MySQL:" .mysqli_connect_error();
     }
-        $sql2 ="UPDATE tblsystemuser SET username='$UserName',password='$NewPassword' WHERE verificationcode='$verificationcode'";
-
-        if(!mysqli_query($con,$sql2))
+    elseif($verificationcode === "" || $UserName === "" || strlen($NewPasswordRaw) < 6)
+    {
+        $errMessage = "<div align='center' class='errorMsg'  style='background-color:#fee;color:#900;padding:5px;border:1px solid #d88;'> Please provide a valid verification code, username, and password. </div><br/>";
+    }
+    else
+    {
+        $stmtUser = mysqli_prepare($con, "SELECT userid FROM tblsystemuser WHERE verificationcode=? LIMIT 1");
+        if(!$stmtUser)
         {
-        die('Error:' .mysqli_error($con));
+            die('Error:' .mysqli_error($con));
+        }
+
+        mysqli_stmt_bind_param($stmtUser, "s", $verificationcode);
+        mysqli_stmt_execute($stmtUser);
+        $userResult = mysqli_stmt_get_result($stmtUser);
+        $userRow = $userResult ? mysqli_fetch_array($userResult, MYSQLI_ASSOC) : null;
+        mysqli_stmt_close($stmtUser);
+
+        if(!$userRow)
+        {
+            $errMessage = "<div align='center' class='errorMsg'  style='background-color:#fee;color:#900;padding:5px;border:1px solid #d88;'> Invalid or expired verification code. </div><br/>";
+        }
+        elseif(um_is_username_taken($con, $UserName, (string)$userRow['userid']))
+        {
+            $errMessage = "<div align='center' class='errorMsg'  style='background-color:#fee;color:#900;padding:5px;border:1px solid #d88;'> That username is already in use by another account. </div><br/>";
         }
         else
         {
+            $targetUserId = (string)$userRow['userid'];
+            $stmtReset = mysqli_prepare($con, "UPDATE tblsystemuser
+                SET username=?, password=?, verificationcode='', password_reset_required=0, password_last_reset_at=NOW()
+                WHERE userid=? AND verificationcode=?
+                LIMIT 1");
+            if(!$stmtReset)
+            {
+                die('Error:' .mysqli_error($con));
+            }
 
-        $errMessage = "<div align='center' class='errorMsg'  style='background-color:#afa;color:black;padding:5px;border:1px solid green;'> Account Successfully Changed   </div><br/>";
-        mysqli_close($con);
-        }    
+            mysqli_stmt_bind_param($stmtReset, "ssss", $UserName, $NewPassword, $targetUserId, $verificationcode);
+            $resetOk = mysqli_stmt_execute($stmtReset);
+            $resetAffected = mysqli_stmt_affected_rows($stmtReset);
+            mysqli_stmt_close($stmtReset);
+
+            if($resetOk && $resetAffected > 0)
+            {
+                $errMessage = "<div align='center' class='errorMsg'  style='background-color:#afa;color:black;padding:5px;border:1px solid green;'> Account Successfully Changed   </div><br/>";
+                mysqli_close($con);
+            }
+            elseif($resetOk)
+            {
+                $errMessage = "<div align='center' class='errorMsg'  style='background-color:#fee;color:#900;padding:5px;border:1px solid #d88;'> Account update failed. Please request a new verification code and try again. </div><br/>";
+            }
+            else
+            {
+                die('Error:' .mysqli_error($con));
+            }
+        }
+    }
 }
 ?>
 

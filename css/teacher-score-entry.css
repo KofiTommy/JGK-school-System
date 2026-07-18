@@ -373,6 +373,16 @@ body.score-entry-page--exam {
     color: var(--page-accent-dark);
 }
 
+.score-entry-chip--warning {
+    background: var(--page-warning-soft);
+    color: var(--page-warning-text);
+}
+
+.score-entry-chip--success {
+    background: rgba(22, 101, 52, 0.12);
+    color: #166534;
+}
+
 .score-entry-status {
     display: inline-flex;
     align-items: center;
@@ -491,6 +501,28 @@ body.score-entry-page--exam {
 
 .score-entry-validation-note.is-warning {
     color: #c2410c;
+}
+
+.score-entry-warning-card {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(255, 247, 237, 0.96), rgba(255, 251, 235, 0.98));
+    border: 1px solid rgba(194, 65, 12, 0.14);
+    color: #9a3412;
+    box-shadow: 0 18px 32px rgba(194, 65, 12, 0.08);
+}
+
+.score-entry-warning-card strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #7c2d12;
+    font-size: 0.98rem;
+}
+
+.score-entry-warning-card p {
+    margin: 0;
+    line-height: 1.65;
 }
 
 .score-entry-action-row {

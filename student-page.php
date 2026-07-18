@@ -10,11 +10,13 @@ include_once("voting-utils.php");
 include_once("report-approval-utils.php");
 include_once("counselling-utils.php");
 include_once("student-chat-utils.php");
+include_once("matron-utils.php");
 ensure_class_teacher_table($con);
 ensure_house_tables($con);
 ensure_voting_tables($con);
 ensure_counselling_tables($con);
 student_chat_ensure_tables($con);
+ensure_matron_tables($con);
 counselling_process_due_reminders($con);
 
 if(!house_master_is_student()){
@@ -422,6 +424,7 @@ $messageUnreadCount = um_message_unread_count($con, $studentId, 'Student');
 $studentPrivateChatEnabled = student_chat_is_enabled($con);
 $studentPrivateChatPendingCount = $studentPrivateChatEnabled ? student_chat_pending_inbound_count($con, $studentId) : 0;
 $studentVotingSnapshot = voting_dashboard_snapshot($con, voting_default_branch_id($con), 'Student');
+$studentWeeklyMenu = matron_current_week_menu_context($con, date('Y-m-d'), 'student');
 
 $exeatTotal = 0;
 $exeatPending = 0;
@@ -896,6 +899,37 @@ $reportPreview = array_slice($reportOptions, 0, 6);
     </div>
 
     <div class="student-panel-stack">
+        <section class="student-panel student-panel--accent student-panel--menu-board">
+            <div class="student-panel__header">
+                <div><span class="student-panel__eyebrow">Dining Menu</span><h2>This week's student menu</h2></div>
+            </div>
+            <div class="student-menu-board__week"><?php echo sd_esc($studentWeeklyMenu["week_label"]); ?></div>
+            <?php if(count($studentWeeklyMenu["rows"]) > 0){ ?>
+            <div class="student-menu-board">
+                <?php foreach($studentWeeklyMenu["grouped"] as $menuDayName => $menuMeals){ ?>
+                <article class="student-menu-board__day">
+                    <h3><?php echo sd_esc($menuDayName); ?></h3>
+                    <div class="student-menu-board__meals">
+                        <?php foreach($menuMeals as $menuMealName => $menuMealRow){ ?>
+                        <div class="student-menu-board__meal">
+                            <span class="student-menu-board__meal-label"><?php echo sd_esc($menuMealName); ?></span>
+                            <strong><?php echo $menuMealRow ? sd_esc(matron_menu_display_text($menuMealRow)) : "Not set"; ?></strong>
+                            <?php if($menuMealRow && trim((string)$menuMealRow["notes"]) !== ""){ ?>
+                            <small><?php echo sd_esc($menuMealRow["notes"]); ?></small>
+                            <?php } ?>
+                        </div>
+                        <?php } ?>
+                    </div>
+                </article>
+                <?php } ?>
+            </div>
+            <?php } else { ?>
+            <div class="student-empty-state student-empty-state--compact">
+                <p>The student weekly menu has not been published yet.</p>
+            </div>
+            <?php } ?>
+        </section>
+
         <section class="student-panel student-panel--accent student-panel--engagement">
             <div class="student-panel__header">
                 <div><span class="student-panel__eyebrow">Engagement</span><h2>Stay active on your student portal</h2></div>

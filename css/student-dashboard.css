@@ -1966,3 +1966,66 @@ body.student-dashboard-page {
         transition: none !important;
     }
 }
+
+.student-panel--menu-board {
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.98), rgba(255, 246, 232, 0.96));
+}
+
+.student-menu-board__week {
+    margin-bottom: 14px;
+    color: #715d49;
+    font-weight: 700;
+}
+
+.student-menu-board {
+    display: grid;
+    gap: 12px;
+}
+
+.student-menu-board__day {
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgba(23, 50, 77, 0.08);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.student-menu-board__day h3 {
+    margin: 0 0 10px;
+    color: #17324d;
+    font-size: 1rem;
+}
+
+.student-menu-board__meals {
+    display: grid;
+    gap: 10px;
+}
+
+.student-menu-board__meal {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(242, 173, 82, 0.08);
+}
+
+.student-menu-board__meal strong,
+.student-menu-board__meal small {
+    display: block;
+}
+
+.student-menu-board__meal strong {
+    color: #17324d;
+}
+
+.student-menu-board__meal small {
+    margin-top: 4px;
+    color: #698094;
+}
+
+.student-menu-board__meal-label {
+    display: block;
+    margin-bottom: 6px;
+    color: #925f2c;
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

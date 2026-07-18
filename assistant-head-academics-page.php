@@ -8,6 +8,8 @@ include_once("student-attendance-utils.php");
 include_once("semester-registry-utils.php");
 include_once("report-approval-utils.php");
 include_once("course-registration-utils.php");
+include_once("dashboard-student-utils.php");
+include_once("storekeeper-utils.php");
 
 ensure_student_attendance_tables($con);
 semester_registry_ensure_academic_year_column($con);
@@ -146,6 +148,11 @@ if($studentStatsRes && ($studentStatsRow = mysqli_fetch_array($studentStatsRes, 
     $studentsNoStatus = (int)$studentStatsRow['no_status_students'];
 }
 
+$_AcademicStudentBatchSummary = dashboard_student_population_summary($con, array(
+    'branchid' => $currentBranchId,
+    'require_active_class' => true
+));
+
 $boys_day = $residenceCounts['Male']['Day'];
 $boys_boarding = $residenceCounts['Male']['Boarding'];
 $girls_day = $residenceCounts['Female']['Day'];
@@ -248,6 +255,7 @@ $quickLinks = array(
     array('module' => 'lesson_timetable', 'href' => 'lesson-timetable-report.php', 'icon' => 'fa-calendar', 'label' => 'Lesson Timetable'),
     array('module' => 'examination_timetable', 'href' => 'examinationtimetablereport.php', 'icon' => 'fa-book', 'label' => 'Exam Time Table'),
     array('module' => 'course_registration', 'href' => 'course-registration-admin.php', 'icon' => 'fa-list-alt', 'label' => 'Course Registration'),
+    array('module' => '', 'href' => 'teacher-store-requisition.php', 'icon' => 'fa-archive', 'label' => 'Store Request'),
     array('module' => 'notice_communication', 'href' => 'messages.php', 'icon' => 'fa-comments', 'label' => 'Messages'),
     array('module' => 'notice_communication', 'href' => 'notification.php', 'icon' => 'fa-bullhorn', 'label' => 'Send Notice')
 );
@@ -357,22 +365,27 @@ include("links.php");
                     <div class="card" role="article" aria-label="Boys Day Students">
                         <h4><i class="fa fa-male" style="color:#2563eb; margin-right:4px;"></i>Boys - Day</h4>
                         <p><?php echo number_format($boys_day); ?></p>
+                        <?php echo dashboard_student_batch_breakdown_html($_AcademicStudentBatchSummary, 'day_boys', 'Batches', 'No batch yet.'); ?>
                     </div>
                     <div class="card" role="article" aria-label="Boys Boarding Students">
                         <h4><i class="fa fa-male" style="color:#38bdf8; margin-right:4px;"></i>Boys - Boarding</h4>
                         <p><?php echo number_format($boys_boarding); ?></p>
+                        <?php echo dashboard_student_batch_breakdown_html($_AcademicStudentBatchSummary, 'boarding_boys', 'Batches', 'No batch yet.'); ?>
                     </div>
                     <div class="card" role="article" aria-label="Girls Day Students">
                         <h4><i class="fa fa-female" style="color:#db2777; margin-right:4px;"></i>Girls - Day</h4>
                         <p><?php echo number_format($girls_day); ?></p>
+                        <?php echo dashboard_student_batch_breakdown_html($_AcademicStudentBatchSummary, 'day_girls', 'Batches', 'No batch yet.'); ?>
                     </div>
                     <div class="card" role="article" aria-label="Girls Boarding Students">
                         <h4><i class="fa fa-female" style="color:#f472b6; margin-right:4px;"></i>Girls - Boarding</h4>
                         <p><?php echo number_format($girls_boarding); ?></p>
+                        <?php echo dashboard_student_batch_breakdown_html($_AcademicStudentBatchSummary, 'boarding_girls', 'Batches', 'No batch yet.'); ?>
                     </div>
                     <div class="card" role="article" aria-label="Students With No Residence Status">
                         <h4><i class="fa fa-question-circle" style="color:#b45309; margin-right:4px;"></i>No Residence Status</h4>
                         <p><?php echo number_format($studentsNoStatus); ?></p>
+                        <?php echo dashboard_student_batch_breakdown_html($_AcademicStudentBatchSummary, 'students_no_status', 'Batches', 'All set.'); ?>
                     </div>
                 </div>
             </div>

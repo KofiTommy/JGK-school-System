@@ -2,6 +2,9 @@
 if(file_exists(__DIR__.DIRECTORY_SEPARATOR."course-registration-utils.php")){
     include_once("course-registration-utils.php");
 }
+if(file_exists(__DIR__.DIRECTORY_SEPARATOR."report-approval-utils.php")){
+    include_once("report-approval-utils.php");
+}
 
 if(!function_exists('semester_registry_column_exists')){
 function semester_registry_column_exists($con, $tableName, $columnName){
@@ -229,6 +232,43 @@ function score_entry_alert($type, $message){
         $class = "score-entry-alert score-entry-alert--warning";
     }
     return "<div class=\"$class\">".score_entry_esc($message)."</div>";
+}
+}
+
+if(!function_exists('score_entry_assignment_approval_meta')){
+function score_entry_assignment_approval_meta($con, $assignmentRow){
+    if(!is_array($assignmentRow) || !function_exists('report_approval_scope_meta')){
+        return null;
+    }
+    $classId = isset($assignmentRow['class_entryid']) ? $assignmentRow['class_entryid'] : (isset($assignmentRow['classid']) ? $assignmentRow['classid'] : '');
+    $batchId = isset($assignmentRow['batchid']) ? $assignmentRow['batchid'] : '';
+    $assignmentYear = isset($assignmentRow['assignment_year']) ? $assignmentRow['assignment_year'] : '';
+    $termName = isset($assignmentRow['termname']) ? $assignmentRow['termname'] : '';
+    if(trim((string)$classId) === '' || trim((string)$batchId) === '' || trim((string)$assignmentYear) === '' || trim((string)$termName) === ''){
+        return null;
+    }
+    return report_approval_scope_meta($con, $batchId, $assignmentYear, $termName, $classId);
+}
+}
+
+if(!function_exists('score_entry_scope_lock_alert')){
+function score_entry_scope_lock_alert($meta, $type = 'error'){
+    if(!is_array($meta) || empty($meta['score_edit_locked'])){
+        return '';
+    }
+    $message = function_exists('report_approval_score_edit_locked_message')
+        ? report_approval_score_edit_locked_message()
+        : "This score sheet is locked because the class result has already been approved.";
+    return score_entry_alert($type, $message);
+}
+}
+
+if(!function_exists('score_entry_scope_override_alert')){
+function score_entry_scope_override_alert($meta){
+    if(!is_array($meta) || empty($meta['score_edit_override_enabled'])){
+        return '';
+    }
+    return score_entry_alert("info", "This result is already approved, but score correction is temporarily open for this class and semester.");
 }
 }
 

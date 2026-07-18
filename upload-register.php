@@ -113,9 +113,23 @@ include("menu.php");
 			<div class="upload-register-panel-heading">
 				<span class="upload-register-icon"><i class="fa fa-upload"></i></span>
 				<div>
-					<h2>Group Student Registration</h2>
-					<p>Select the register file and upload it safely.</p>
+					<h2>Group Teacher And Student Registration</h2>
+					<p>Download the correct register form, complete it in Excel, and upload it safely.</p>
 				</div>
+			</div>
+
+			<div class="upload-register-template-box">
+				<h3>Download Register Forms</h3>
+				<p>Use these Excel forms for bulk upload so the header columns stay in the right order for the importer.</p>
+				<div class="upload-register-template-actions">
+					<a class="upload-register-btn upload-register-btn-secondary" href="download-register-template.php?type=student">
+						<i class="fa fa-download"></i> Download Student Register Form
+					</a>
+					<a class="upload-register-btn upload-register-btn-secondary" href="download-register-template.php?type=teacher">
+						<i class="fa fa-download"></i> Download Teacher Register Form
+					</a>
+				</div>
+				<p class="upload-register-template-hint">Start entering records from row 2 and keep the header row unchanged. Use <strong>Student</strong> or <strong>Teacher</strong> in <strong>systemtype</strong>, <strong>Day</strong> or <strong>Boarding</strong> in <strong>residencetype</strong>, and <strong>Teaching Staff</strong> or <strong>Student</strong> in <strong>staffstatus</strong>.</p>
 			</div>
 
 		<form method="post" action="import-data.php" id="form1" enctype="multipart/form-data">

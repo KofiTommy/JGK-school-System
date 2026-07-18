@@ -8,30 +8,65 @@ include("dbstring.php");
 include("audit_notifications.php");
 include_once("user-management-utils.php");
 ensure_user_management_columns($con);
-@$_Oldpassword=md5($_POST['oldpassword']);
-@$_NewUsername=$_POST['username'];
-@$_Newpassword=md5($_POST['newpassword']);
 @$_ForceReset=(isset($_GET['force']) && $_GET['force']=="1");
+$_CurrentUserId = isset($_SESSION['USERID']) ? trim((string)$_SESSION['USERID']) : "";
+$_CurrentUserRow = $_CurrentUserId !== "" ? um_fetch_user_row($con, $_CurrentUserId) : null;
+$_CurrentUsername = $_CurrentUserRow ? trim((string)$_CurrentUserRow['username']) : "";
+
+if(!function_exists('cp_safe')){
+function cp_safe($value){
+    return htmlspecialchars((string)$value, ENT_QUOTES, "UTF-8");
+}
+}
 
 if(isset($_POST['update_account'])){
-$_SQL_EXECUTE=mysqli_query($con,"UPDATE tblsystemuser 
-	SET username='$_NewUsername',password='$_Newpassword',password_reset_required=0,password_last_reset_at=NOW() 
-	WHERE userid='$_SESSION[USERID]' AND password='$_Oldpassword'");
-if($_SQL_EXECUTE){
-    if (mysqli_affected_rows($con) > 0) {
-        logSystemChange(
-            $con,
-            "PASSWORD_CHANGE",
-            "Password was changed by ".$_SESSION['SYSTEMTYPE']." user."
-        );
+    $_OldPasswordRaw = isset($_POST['oldpassword']) ? (string)$_POST['oldpassword'] : "";
+    $_NewPasswordRaw = isset($_POST['newpassword']) ? (string)$_POST['newpassword'] : "";
+    $_NewUsername = isset($_POST['username']) ? um_normalize_username($_POST['username']) : "";
+    if($_NewUsername === ""){
+        $_NewUsername = $_CurrentUsername;
     }
-	$_SESSION['Message']="<div style='color:green;text-align:center;background-color:white'>Account Successfully Updated<br/><br/><a href='index.php' style='color:blue'>Login</a><br/><br/></div>";
 
-	}
-	else{
-		$_Error=mysqli_error($con);
-		$_SESSION['Message']="<div style='color:red'>Account failed to update,$_Error</div>";
-	}
+    if($_CurrentUserId === "" || !$_CurrentUserRow){
+        $_SESSION['Message']="<div style='color:red'>Your account could not be loaded. Please log in again.</div>";
+    }elseif($_NewUsername === ""){
+        $_SESSION['Message']="<div style='color:red'>Username is required.</div>";
+    }elseif(strlen($_NewPasswordRaw) < 6){
+        $_SESSION['Message']="<div style='color:red'>New password must be at least 6 characters.</div>";
+    }elseif(um_is_username_taken($con, $_NewUsername, $_CurrentUserId)){
+        $_SESSION['Message']="<div style='color:red'>That username is already in use by another account.</div>";
+    }else{
+        $_Oldpassword = md5($_OldPasswordRaw);
+        $_Newpassword = md5($_NewPasswordRaw);
+        $_SQL_EXECUTE = false;
+        $_AffectedRows = 0;
+
+        $stmtUpdate = mysqli_prepare($con, "UPDATE tblsystemuser
+            SET username=?, password=?, password_reset_required=0, password_last_reset_at=NOW()
+            WHERE userid=? AND password=?
+            LIMIT 1");
+        if($stmtUpdate){
+            mysqli_stmt_bind_param($stmtUpdate, "ssss", $_NewUsername, $_Newpassword, $_CurrentUserId, $_Oldpassword);
+            $_SQL_EXECUTE = mysqli_stmt_execute($stmtUpdate);
+            $_AffectedRows = mysqli_stmt_affected_rows($stmtUpdate);
+            mysqli_stmt_close($stmtUpdate);
+        }
+
+        if($_SQL_EXECUTE && $_AffectedRows > 0){
+            $_SESSION['USERNAME'] = $_NewUsername;
+            logSystemChange(
+                $con,
+                "PASSWORD_CHANGE",
+                "Password was changed by ".$_SESSION['SYSTEMTYPE']." user."
+            );
+            $_SESSION['Message']="<div style='color:green;text-align:center;background-color:white'>Account Successfully Updated<br/><br/><a href='index.php' style='color:blue'>Login</a><br/><br/></div>";
+        }elseif($_SQL_EXECUTE){
+            $_SESSION['Message']="<div style='color:red'>Account failed to update. Please confirm your old password and try again.</div>";
+        }else{
+            $_Error=mysqli_error($con);
+            $_SESSION['Message']="<div style='color:red'>Account failed to update,$_Error</div>";
+        }
+    }
 }
 ?>
 
@@ -84,7 +119,7 @@ if($_ForceReset){
 }
 ?>
 	
-			<form method="post" id="formID" name="formID" action="change-password.php">
+			<form method="post" id="formID" name="formID" action="<?php echo $_ForceReset ? 'change-password.php?force=1' : 'change-password.php'; ?>">
 
 			<label>User Id</label>
 			<input type="text" id="userid" name="userid" value="<?php echo $_SESSION['USERID'];?>" class="validate[required]" readonly/>
@@ -93,7 +128,7 @@ if($_ForceReset){
 			<input type="password" id="oldpassword" name="oldpassword" value="" class="validate[required]" placeholder="Type Old Password"/>
 
 			<label>New Username</label>
-			<input type="text" id="username" name="username" value="" placeholder="Type New Username" />
+			<input type="text" id="username" name="username" value="<?php echo cp_safe($_CurrentUsername); ?>" placeholder="Type New Username" autocomplete="username" />
 
 			<label>New Password</label>
 			<input type="password" id="newpassword" name="newpassword" value="" class="validate[required]" placeholder="Type New Password"/>

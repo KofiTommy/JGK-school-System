@@ -50,7 +50,6 @@ function gd_reset_operational_data($con) {
         'tblcurrency',
         'tblmodule',
         'tblaccounttype',
-        'tblapi',
         'tblsystemuser'
     );
 
@@ -111,7 +110,7 @@ if ($isAllowed && isset($_POST['confirm_reset'])) {
 }
 
 $previewTables = $isAllowed ? gd_get_base_tables($con) : array();
-$protectedPreview = array('tblcompany', 'tblbranch', 'tblcurrency', 'tblmodule', 'tblaccounttype', 'tblapi', 'tblsystemuser');
+$protectedPreview = array('tblcompany', 'tblbranch', 'tblcurrency', 'tblmodule', 'tblaccounttype', 'tblsystemuser');
 ?>
 <html>
 <head>
@@ -319,7 +318,7 @@ $protectedPreview = array('tblcompany', 'tblbranch', 'tblcurrency', 'tblmodule',
                 <li>Deletes operational records from all database tables it can safely process.</li>
                 <li>Deletes student and teacher accounts from `tblsystemuser`.</li>
                 <li>Preserves administrator accounts so you do not lock yourself out.</li>
-                <li>Preserves basic setup tables like company, branch, currency, modules, account types and API authentication.</li>
+                <li>Preserves basic setup tables like company, branch, currency, modules and account types.</li>
             </ul>
             <form method="post" action="global_deletes.php" class="gd-form" onsubmit="return confirm('This will clear school operational data. Have you taken a database backup?');">
                 <label for="confirmation_phrase">Type RESET SCHOOL DATA to continue</label>

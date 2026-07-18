@@ -7,6 +7,7 @@ include_once("dbstring.php");
 include_once("semester-registry-utils.php");
 include_once("report-approval-utils.php");
 include_once("school-data-utils.php");
+include_once("terminal-report-pdf-utils.php");
 semester_registry_ensure_academic_year_column($con);
 
 @$_position_obj=new Position;
@@ -24,6 +25,7 @@ semester_registry_ensure_academic_year_column($con);
 @$_TermId=$_POST['termid'];
 @$_ClassId=$_POST['classid'];
 @$_ReportApprovalAdminMessage="";
+@$_ReportPrintMessage="";
 
 if(isset($_POST['approve_class_report']) || isset($_POST['hold_class_report'])){
       include("dbstring.php");
@@ -44,363 +46,39 @@ if(isset($_POST['approve_class_report']) || isset($_POST['hold_class_report'])){
       }
 }
 
+if(isset($_POST['allow_score_corrections']) || isset($_POST['lock_score_corrections'])){
+      include("dbstring.php");
+      $_OverrideEnabled = isset($_POST['allow_score_corrections']);
+      if(report_approval_is_admin_user()){
+          if(report_approval_scope_requires_release($_AcademicYear, $_TermId)){
+              $_OverrideSaved = report_approval_set_score_edit_override($con, $_BatchId, $_AcademicYear, $_TermId, $_ClassId, $_OverrideEnabled, isset($_SESSION['USERID']) ? $_SESSION['USERID'] : '');
+              if($_OverrideSaved){
+                  $_ReportApprovalAdminMessage = $_OverrideEnabled
+                      ? "<div style='color:#0f5132;text-align:center;background-color:white;padding:10px;'>Score correction has been reopened for this class result.</div>"
+                      : "<div style='color:#7c2d12;text-align:center;background-color:white;padding:10px;'>Score correction has been locked again for this class result.</div>";
+              }else{
+                  $_ReportApprovalAdminMessage = "<div style='color:red;text-align:center;background-color:white;padding:10px;'>Score correction access could not be updated for this class report.</div>";
+              }
+          }else{
+              $_ReportApprovalAdminMessage = "<div style='color:#0b63ce;text-align:center;background-color:white;padding:10px;'>This report scope does not require an approval lock for score correction.</div>";
+          }
+      }
+}
+
 if(isset($_POST["print_terminal_report"]))
 {
-      include("dbstring.php");
-      include("class-teacher-utils.php");
-      ensure_student_terminal_term_column($con);
-      include_once("house-master-utils.php");
-      if(function_exists('ensure_house_tables')){
-          ensure_house_tables($con);
+      $_PrintResult = tr_terminal_report_print_single_pdf($con, $_UserID, $_BatchId, $_AcademicYear, $_TermId, $_ClassId);
+      if(empty($_PrintResult['success'])){
+          $_ReportPrintMessage = "<div class='tr-status-card tr-status-pending'><i class='fa fa-exclamation-circle'></i> ".htmlspecialchars((string)$_PrintResult['message'], ENT_QUOTES, 'UTF-8')."</div>";
       }
-      include("company.php");
-      include("remark.php");
-      include("gradingsystem.php");
-      ini_set('log_errors', '1');
-      ini_set('error_log', __DIR__.'/print-error.log');
-      error_reporting(E_ALL);
+}
 
-     //include("positions.php");
-
-      // @$_remark_obj=new Remark;
-
-@$_grade_obj=new GradingSystem;
-     
-@$_SchoolCloses="";
-@$_NextTermBegins="";
-$_AcademicYearFilter = trim((string)$_AcademicYear);
-@$_AcademicYearLabel=$_AcademicYearFilter;
-$_TermFilter = (isset($_TermId) && trim((string)$_TermId)!=="") ? (int)$_TermId : 0;
-@$_SemesterLabel=($_TermFilter>0 ? (string)$_TermFilter : '');
-$_SchoolInfoRow = school_data_fetch_scope($con, $_BatchId, $_AcademicYearFilter, $_TermFilter);
-if(is_array($_SchoolInfoRow))
+if(isset($_POST["print_class_report_pack"]))
 {
-$_SchoolCloses=school_data_display_date(isset($_SchoolInfoRow['schoolcloses']) ? $_SchoolInfoRow['schoolcloses'] : '');
-$_NextTermBegins=school_data_display_date(isset($_SchoolInfoRow['schoolresumes']) ? $_SchoolInfoRow['schoolresumes'] : '');
-$_AcademicYearLabel=trim((string)(isset($_SchoolInfoRow['academicyear']) ? $_SchoolInfoRow['academicyear'] : ''));
-if($_AcademicYearLabel===""){
-    $_AcademicYearLabel=(trim((string)(isset($_SchoolInfoRow['datetimeentry']) ? $_SchoolInfoRow['datetimeentry'] : ''))!=="" ? date("Y",strtotime((string)$_SchoolInfoRow['datetimeentry'])) : "");
-}
-if($_SemesterLabel==="" && isset($_SchoolInfoRow['termname'])){
-    $_SemesterCandidate = trim((string)$_SchoolInfoRow['termname']);
-    if($_SemesterCandidate !== "" && $_SemesterCandidate !== "0"){
-        $_SemesterLabel = $_SemesterCandidate;
-    }
-}
-}
-
-@$_Roll=0;
-@$_Attendance=0;
-@$_TotalAttendance=0;
-@$_Promotedto="";
-@$_Conduct="";
-@$_Interest="";
-@$_Class_Teacher_Remark="";
-@$_Head_Teacher_Remark="";
-@$_StudentHouseName="Not Assigned";
-
-if(function_exists('get_student_active_house')){
-$_StudentHouse=get_student_active_house($con,$_UserID);
-if(is_array($_StudentHouse) && !empty($_StudentHouse['housename'])){
-	$_StudentHouseName=trim((string)$_StudentHouse['housename']);
-}
-}
-
-$_TermFilter = (isset($_TermId) && $_TermId!=="") ? (int)$_TermId : 0;
-if($_TermFilter > 0){
-$_SQL_Terminal=mysqli_query($con,"SELECT * FROM tblstudentterminalreport WHERE userid='$_UserID' AND batchid='$_BatchId' AND (termname='$_TermFilter' OR termname='0') ORDER BY termname DESC, datetimeentry DESC LIMIT 1");
-}else{
-$_SQL_Terminal=mysqli_query($con,"SELECT * FROM tblstudentterminalreport WHERE userid='$_UserID' AND batchid='$_BatchId' ORDER BY datetimeentry DESC LIMIT 1");
-}
-if($row_ter=mysqli_fetch_array($_SQL_Terminal,MYSQLI_ASSOC)){
-	$_Roll=$row_ter['roll'];
-	$_Attendance=$row_ter['attendance'];
-	$_TotalAttendance=$row_ter['totalattendance'];
-	$_Promotedto=$row_ter['promotedto'];
-	$_Conduct=$row_ter['conduct'];
-	$_Interest=$row_ter['interest'];
-	$_Class_Teacher_Remark=$row_ter['class_teacher_remark'];
-	$_Head_Teacher_Remark=$row_ter['head_teacher_remark'];
-    if($_SemesterLabel==="" && isset($row_ter['termname'])){
-        $_SemesterCandidate = trim((string)$row_ter['termname']);
-        if($_SemesterCandidate !== "" && $_SemesterCandidate !== "0"){
-            $_SemesterLabel = $_SemesterCandidate;
-        }
-    }
-}
-      //Get all the ordered items
-
-  //ob_start();
-//Declare the variables
-//$tomorrow = mktime(0,0,0,date("m"),date("d"),date("Y"));
-//$today = date("Y-m-d",$tomorrow);
- //@$_GrandTotal=0;
-
-$_SQL_EXECUTE_SP="SELECT *,su.userid FROM tblmark mk 
-INNER JOIN tblsystemuser su ON mk.userid=su.userid
-INNER JOIN tblsubjectassignment sa ON mk.assignmentid=sa.assignmentid
-INNER JOIN tblsubjectclassification sc ON sa.classificationid=sc.classificationid
-INNER JOIN tblclassentry ce ON sc.classid=ce.class_entryid
-INNER JOIN tblsubject sub ON sc.subjectid=sub.subjectid 
-INNER JOIN tblbatch bh ON sa.batchid=bh.batchid
-WHERE su.userid='$_UserID' AND sa.batchid='$_BatchId' ".($_TermId!=="" ? " AND sa.termname='".mysqli_real_escape_string($con,$_TermId)."'" : "")." ".($_ClassId!=="" ? " AND sa.classid='".mysqli_real_escape_string($con,$_ClassId)."'" : "")." GROUP BY mk.assignmentid";
-
-if(!file_exists(__DIR__.'/fpdf181/fpdf.php')){
-    http_response_code(500);
-    exit("Print setup error: PDF library file not found.");
-}
-require(__DIR__.'/fpdf181/fpdf.php');
-//ob_start();
-
-$pdf = new FPDF();
-$pdf->AddPage();
-
-$width_cell=array(45,30,25,30,25,35);
-$pdf->SetFont('Arial','B',18);
-//Background color of header//
-//Heading of the pdf
-// Logo
-
-
-     $logoPath = "";
-     if(!empty($_Logo)){
-        $candidatePaths = array(
-          "logo/".$_Logo,
-          "images/logo/".$_Logo
-        );
-        foreach($candidatePaths as $candidate){
-          if(file_exists($candidate)){
-            $logoPath = $candidate;
-            break;
-          }
-        }
-     }
-     if($logoPath=="" && file_exists("logo/logo.png")){
-        $logoPath = "logo/logo.png";
-     }
-     if($logoPath=="" && file_exists("logo/logo.jpeg")){
-        $logoPath = "logo/logo.jpeg";
-     }
-     if($logoPath=="" && file_exists("images/logo/logo.png")){
-        $logoPath = "images/logo/logo.png";
-     }
-     if($logoPath=="" && file_exists("images/logo/logo.jpeg")){
-        $logoPath = "images/logo/logo.jpeg";
-     }
-     if($logoPath!=""){
-        $pdf->Image($logoPath,$width_cell[0]+$width_cell[1]+$width_cell[2],3,22);
-     }
-     $pdf->Ln(20);
-
-$p=7;
-$pdf->SetFillColor(255,255,255);
-$pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,strtoupper($_CompanyName)." - GES",0,0,'C',true);
-$pdf->Ln($p);
-$pdf->SetFont('Arial','B',10);
-
-//$pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4],10,"GHANA EDUCATION SERVICE",0,0,'C',true);
-//$pdf->Ln($p);
-
-$pdf->SetFont('Arial','B',10);
-$pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,$_Address.", ".$_Location,0,0,'C',true);
-$pdf->Ln($p);
-
-//$pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4],10,'LOCATION: OYOKO ROUNABOUT, KOFORIDUA',0,0,'C',true);
-//$pdf->Ln($p);
-
-$pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,'Tel:'. $_Telephone1. " ". $_Telephone2,0,0,'C',true);
-$pdf->Ln($p);
-//$pdf->SetFont('Arial','B',20);
-
-  $text_height = 5;
-  $text_length = 70;
-  $n=7;
-  $pdf->SetFont('Arial','B',12);
-
-  //Get the summation of all the marks (batch-wide)
-  @$_OverallScore=0;
-  $_AcademicYearAssignmentSql = ($_AcademicYear!=="" ? " AND ".semester_registry_assignment_year_sql("sa")."='".mysqli_real_escape_string($con,$_AcademicYear)."'" : "");
-  $_SQL_OM=mysqli_query($con,"SELECT SUM(mk.mark) AS OverallScore FROM tblmark mk INNER JOIN tblsubjectassignment sa ON mk.assignmentid=sa.assignmentid
- WHERE sa.batchid='$_BatchId' AND mk.userid='$_UserID' ".($_TermId!=="" ? " AND sa.termname='".mysqli_real_escape_string($con,$_TermId)."'" : "")." ".($_ClassId!=="" ? " AND sa.classid='".mysqli_real_escape_string($con,$_ClassId)."'" : "")." $_AcademicYearAssignmentSql");
- if($row_om=mysqli_fetch_array($_SQL_OM,MYSQLI_ASSOC)){
-$_OverallScore=$row_om['OverallScore'];
-}
-
-  $_class_position_obj->setClassPosition($_BatchId,$_OverallScore,$_TermId,"",$_AcademicYear,$_UserID);
-  $_Get_Class_Position = $_class_position_obj->getClassPosition();
-  $_class_position_obj->setClassPosition($_BatchId,$_OverallScore,$_TermId,$_ClassId,$_AcademicYear,$_UserID);
-  $_ClassPositionLabel = $_class_position_obj->getClassPosition();
-  $_ClassCount = $_class_position_obj->getClassCount();
-
-      $pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,"Group Year Position: ". $_Get_Class_Position,0,0,'R',true);
-      $pdf->SetFont('Arial','B',10);
-      $pdf->Ln($n);
-      $pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,"Class Position: ". $_ClassPositionLabel." / ".$_ClassCount,0,0,'R',true);
-      $pdf->SetFont('Arial','B',10);
-      $pdf->Ln($n);
-
-      // Re-query because context row above consumed the first fetch
-      $_Result=mysqli_query($con,$_SQL_EXECUTE_SP);
-
-      if($row_ps=mysqli_fetch_array($_Result,MYSQLI_ASSOC))
-      {
-        if($_SemesterLabel==="" && isset($row_ps['termname'])){
-            $_SemesterCandidate = trim((string)$row_ps['termname']);
-            if($_SemesterCandidate !== "" && $_SemesterCandidate !== "0"){
-                $_SemesterLabel = $_SemesterCandidate;
-            }
-        }
-      	@$_StudentName=$row_ps['firstname']." ".$row_ps['othernames']." ".$row_ps['surname']." (".$row_ps['userid'].")";
-      $pdf->Cell($text_length,$text_height,'Name: '.$_StudentName,0,0,'L',true);
-      $pdf->Ln($n);
-       $pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2],10,'Class/Form: '.$row_ps['class_name'],0,0,'L',true);
-       $pdf->Cell($width_cell[3]+$width_cell[4]+$width_cell[5],10,'House: '.$_StudentHouseName,0,0,'L',true);
-       $pdf->Ln($n);
-
-       $pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2],10,'No. On Roll: '.$_Roll,0,0,'L',true);
-       $pdf->Cell($width_cell[3]+$width_cell[4]+$width_cell[5],10,'Batch: '.$row_ps['batch'],0,0,'L',true);
-       $pdf->Ln($n);
-
-       $pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2],10,'School Closes: '.$_SchoolCloses,0,0,'L',true);
-       $pdf->Cell($width_cell[3]+$width_cell[4]+$width_cell[5],10,'Academic Year: '.($_AcademicYearLabel!=="" ? $_AcademicYearLabel : $row_ps['batch']).' | Semester: '.($_SemesterLabel!=="" ? $_SemesterLabel : 'N/A'),0,0,'L',true);
-       $pdf->Ln($n);
-
-       $pdf->Cell($width_cell[0]+$width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,'Next Semester Begins: '.$_NextTermBegins,0,0,'L',true);
-       $pdf->Ln($n);
+      $_PrintPackResult = tr_terminal_report_print_scope_pack_pdf($con, $_BatchId, $_AcademicYear, $_TermId, $_ClassId);
+      if(empty($_PrintPackResult['success'])){
+          $_ReportPrintMessage = "<div class='tr-status-card tr-status-pending'><i class='fa fa-exclamation-circle'></i> ".htmlspecialchars((string)$_PrintPackResult['message'], ENT_QUOTES, 'UTF-8')."</div>";
       }
-  
-
-$pdf->SetFillColor(255,255,255);
-
-$pdf->SetFont('Arial','B',9);
-//Header starts //
-
-//First header column //
-$pdf->Cell($width_cell[0],10,'SUBJECT',1,0,'C',true);
-
-$pdf->Cell($width_cell[1],10,'CLASS SCORE',1,0,'C',true);
-$pdf->Cell($width_cell[2],10,'EXAM SCORE',1,0,'C',true);
-
-$pdf->Cell($width_cell[3],10,'TOTAL SCORE',1,0,'C',true);
-
-$pdf->Cell($width_cell[4],10,'POS IN SUB',1,0,'C',true);
-
-//$pdf->Cell($width_cell[5],10,'REMARKS',1,0,'C',true);
-$pdf->Cell($width_cell[5],10,'GRADE',1,0,'C',true);
-
-///header ends///
-$pdf->SetFont('Arial','',9);
-//Background color of header //
-$pdf->SetFillColor(255,255,255);
-//to give alternate background fill color to rows//
-$fill =false;
-$pdf->Ln(10);
-
-@$_AdditionalPrice=0;
-
-@$serial=0;
-//each record is one row //
-$_RESULT_ROWS = mysqli_query($con, $_SQL_EXECUTE_SP);
-while($row=mysqli_fetch_array($_RESULT_ROWS,MYSQLI_ASSOC))
-{
-
- $pdf->Cell($width_cell[0],10,$row['subject'],1,0,'L',$fill);
-
-@$_ExamScore=0;
- @$_ClassScore=0;
-
-$_SQL_TOT2=mysqli_query($con,"SELECT * FROM tblmark mk 
- 	WHERE mk.assignmentid='$row[assignmentid]' AND mk.testtype='Class Score' AND mk.userid='$_UserID'");
- if($row_cl=mysqli_fetch_array($_SQL_TOT2,MYSQLI_ASSOC)){
-$_ClassScore=$row_cl['mark'];
- $pdf->Cell($width_cell[1],10,$_ClassScore,1,0,'C',$fill);
- }
-
- $_SQL_TOT=mysqli_query($con,"SELECT * FROM tblmark mk 
- 	WHERE mk.assignmentid='$row[assignmentid]' AND mk.testtype='Exam Score' AND mk.userid='$_UserID'");
- if($row_ex=mysqli_fetch_array($_SQL_TOT,MYSQLI_ASSOC)){
-$_ExamScore=$row_ex['mark'];
- $pdf->Cell($width_cell[2],10,$_ExamScore,1,0,'C',$fill); 
- }
-
-
-@$_TotalScore=$_ExamScore+$_ClassScore;
-
- $pdf->Cell($width_cell[3],10,$_TotalScore,1,0,'C',$fill);
- 
- //Get the positions
- @$_Final_Position=0;
-
-$_position_obj->setPosition($row['assignmentid'],$_TotalScore);
-$_Final_Position= $_position_obj->getPosition();
-
- $pdf->Cell($width_cell[4],10,$_Final_Position,1,0,'C',$fill);
-
-//$_remark_obj->setMark($_TotalScore);
-//$_final_remark=$_remark_obj->getMark($_TotalScore);
-
-$_grade_obj->setMark($_TotalScore);
-$_final_grade=$_grade_obj->getMark($_TotalScore);
-
-// $pdf->Cell($width_cell[5],10,$_final_remark,1,0,'C',$fill);
-$pdf->Cell($width_cell[5],10,$_final_grade,1,0,'C',$fill);
-
- $fill = !$fill;
- $pdf->Ln(10);
-}
- $pdf->Ln(1);
-//Footer of the table
-$pdf->Cell(0,10,'Attendance:........................'.$_Attendance. '...........................Out of............................ '.$_TotalAttendance. '.............................   Promoted to:..................'.$_Promotedto,0,0,'L',true);
-$pdf->Ln(7);
-$pdf->Cell(0,10,'Conduct:  '.$_Conduct,0,0,'L',true);
-$pdf->Ln(7);
-$pdf->Cell(0,10,'Interest(Special Aptitude):  '.$_Interest,0,0,'L',true);
-$pdf->Ln(7);
-$pdf->Cell(0,10,"Class Teacher's Remarks:  ".$_Class_Teacher_Remark,0,0,'L',true);
-$pdf->Ln(7);
-$pdf->Cell(0,10,"Head Teacher's Remarks:  ".$_Head_Teacher_Remark,0,0,'L',true);
-$pdf->Ln(7);
-$pdf->Cell(0,10,'Signature:................................................',0,0,'R',true);
-
-
-$tomorrow = mktime(0,0,0,date("m"),date("d"),date("Y"));
-$tdate= date("d/m/Y", $tomorrow);
-$pdf->SetFillColor(255,255,255);
-//$pdf->PutLink("http://www.braintechconsult.com","BTC");
-
- $pdf->Ln(7); 
- $pdf->SetFont('Arial','U',8);
- $pdf->Cell(0,10,'GRADING(S):',0,0,'L',true);
-  $pdf->SetFont('Arial','',8);
- $pdf->Ln(6); 
- $pdf->Cell($width_cell[0],10,'1. A1 (80%-100%)',0,0,'L',true);
- $pdf->Cell($width_cell[1],10,'3. B3 (65%-69%) ',0,0,'L',true);
- $pdf->Cell($width_cell[2]+$width_cell[3],10,'5. C5 (55%-59%)',0,0,'C',true);
- $pdf->Cell($width_cell[4]+$width_cell[5],10,'7. D7 (45%-49%)',0,0,'C',true);
- $pdf->Ln(6);
- 
- $pdf->Cell($width_cell[0],10,'2. B2 (70%-79%)',0,0,'L',true);
- $pdf->Cell($width_cell[1],10,'4. C4 (60%-64%) ',0,0,'L',true);
- $pdf->Cell($width_cell[2]+$width_cell[3],10,'6 C6 (50%-54%) ',0,0,'C',true);
- $pdf->Cell($width_cell[4]+$width_cell[5],10,'8 E8 (40%-44%)',0,0,'C',true); 
- $pdf->Ln(6); 
- $pdf->Cell($width_cell[1]+$width_cell[2]+$width_cell[3]+$width_cell[4]+$width_cell[5],10,'9. F9 (0%-39%)',0,0,'L',true); 
- $pdf->Ln(6); 
-
-$pdf->SetFont('Arial','B',8);
-
- //$pdf->Ln(10); 
- //$pdf->Cell(0,10,'Developed by: Brainstorm Technologies Consult',0);
- //$pdf->Ln(6); 
- //$pdf->Cell(0,10,'Accra,Takoradi,Koforidua - 0342-292-121',0);
-/// end of records ///
-$__pdfName = 'terminal-report.pdf';
-if (ob_get_length()) { ob_end_clean(); }
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline; filename="'.$__pdfName.'"');
-$pdf->Output('I', $__pdfName);
-exit();
- //ob_end_flush(); 
 }
 ?>
 
@@ -417,6 +95,10 @@ include("dbstring.php");
 
 if(isset($_POST['save_all_mark']))
 {
+    $_AssignmentApprovalMeta = report_approval_assignment_scope_meta($con, $_AssignmentId);
+    if($_AssignmentApprovalMeta && !empty($_AssignmentApprovalMeta['score_edit_locked'])){
+        $_SESSION['Message'] = "<div style='color:red;padding:10px;background-color:white;'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
+    }else{
 	@$_CheckMark=0;
 	foreach ($_Mark as $_Selected_Mark) 
 	{
@@ -497,6 +179,7 @@ $_Selected_Mark=$_Mark[$k];
 	}	
 	
 }
+}
 ?>
 
 <?php
@@ -521,14 +204,21 @@ include("dbstring.php");
 
 if(isset($_GET["delete_mark"]))
 {
-    $_SQL_EXECUTE=mysqli_query($con,"DELETE FROM tblmark WHERE markid='$_GET[delete_mark]'");
-	if($_SQL_EXECUTE){
-	$_SESSION['Message']="<div style='color:maroon;text-align:center;background-color:white'>Mark Successfully Deleted</div>";
-	}
-	else{
-		$_Error=mysqli_error($con);
-		$_SESSION['Message']="<div style='color:red;text-align:center'>Mark failed to delete,Error:$_Error</div>";
-	}
+    $_DeleteMarkId = trim((string)$_GET["delete_mark"]);
+    $_DeleteMarkMeta = report_approval_mark_scope_meta($con, $_DeleteMarkId);
+    if($_DeleteMarkMeta && !empty($_DeleteMarkMeta['score_edit_locked'])){
+        $_SESSION['Message']="<div style='color:red;text-align:center;background-color:white'>".htmlspecialchars(report_approval_score_edit_locked_message(), ENT_QUOTES, 'UTF-8')."</div>";
+    }else{
+        $_DeleteMarkIdSafe = mysqli_real_escape_string($con, $_DeleteMarkId);
+        $_SQL_EXECUTE=mysqli_query($con,"DELETE FROM tblmark WHERE markid='$_DeleteMarkIdSafe'");
+	    if($_SQL_EXECUTE){
+	    $_SESSION['Message']="<div style='color:maroon;text-align:center;background-color:white'>Mark Successfully Deleted</div>";
+	    }
+	    else{
+		    $_Error=mysqli_error($con);
+		    $_SESSION['Message']="<div style='color:red;text-align:center'>Mark failed to delete,Error:$_Error</div>";
+	    }
+    }
 }
 ?>
 
@@ -682,20 +372,38 @@ while($row_cls=mysqli_fetch_array($_SQL_CLASS_OPT,MYSQLI_ASSOC)){
 echo "</select>";
 
 $_SelectedScopeApprovalMeta = report_approval_scope_meta($con, $_SelectedBatchId, $_SelectedAcademicYear, $_SelectedTermId, $_SelectedClassId);
+$_SelectedScopeStudentCount = 0;
+if($_SelectedBatchId!=='' && $_SelectedAcademicYear!=='' && $_SelectedTermId!=='' && $_SelectedClassId!==''){
+    $_SelectedScopeStudents = tr_terminal_report_fetch_scope_students($con, $_SelectedBatchId, $_SelectedAcademicYear, $_SelectedTermId, $_SelectedClassId);
+    $_SelectedScopeStudentCount = count($_SelectedScopeStudents);
+}
 if($_ReportApprovalAdminMessage!==""){
 echo $_ReportApprovalAdminMessage;
 }
+if($_ReportPrintMessage!==""){
+echo $_ReportPrintMessage;
+}
 if($_SelectedClassId!=='' && $_SelectedTermId!=='' && $_SelectedAcademicYear!=='' && report_approval_is_admin_user()){
     if($_SelectedScopeApprovalMeta['required']){
-        $_ApprovalBg = $_SelectedScopeApprovalMeta['allowed'] ? "#ecfdf3" : "#fff7ed";
-        $_ApprovalBorder = $_SelectedScopeApprovalMeta['allowed'] ? "rgba(22,101,52,0.14)" : "rgba(194,65,12,0.14)";
-        $_ApprovalColor = $_SelectedScopeApprovalMeta['allowed'] ? "#166534" : "#c2410c";
         $_ApprovalTone = $_SelectedScopeApprovalMeta['allowed'] ? "tr-status-approved" : "tr-status-pending";
         echo "<div class='tr-status-card ".$_ApprovalTone."'><i class='fa fa-shield'></i> Student Portal Status: ".$_SelectedScopeApprovalMeta['status_label']."</div>";
         echo "<div class='tr-actions tr-approval-actions'>";
         echo "<button class='button-pay tr-btn tr-btn-primary' type='submit' name='approve_class_report'><i class='fa fa-check'></i> Approve Student View</button>";
         echo "<button class='button-show tr-btn tr-btn-warning' type='submit' name='hold_class_report'><i class='fa fa-pause'></i> Hold Student View</button>";
         echo "</div>";
+        if($_SelectedScopeApprovalMeta['approved']){
+            $_ScoreEditTone = !empty($_SelectedScopeApprovalMeta['score_edit_locked']) ? "tr-status-pending" : "tr-status-approved";
+            echo "<div class='tr-status-card ".$_ScoreEditTone."'><i class='fa fa-pencil-square-o'></i> Score Entry: ".$_SelectedScopeApprovalMeta['score_edit_status_label']."</div>";
+            echo "<div class='tr-actions tr-approval-actions'>";
+            if(!empty($_SelectedScopeApprovalMeta['score_edit_locked'])){
+                echo "<button class='button-show tr-btn tr-btn-primary' type='submit' name='allow_score_corrections'><i class='fa fa-unlock-alt'></i> Reopen Score Corrections</button>";
+            }else{
+                echo "<button class='button-show tr-btn tr-btn-warning' type='submit' name='lock_score_corrections'><i class='fa fa-lock'></i> Lock Score Corrections</button>";
+            }
+            echo "</div>";
+        }else{
+            echo "<div class='tr-status-card tr-status-info'><i class='fa fa-pencil-square-o'></i> Score entry remains open until this class result is approved.</div>";
+        }
     }else{
         echo "<div class='tr-status-card tr-status-info'><i class='fa fa-info-circle'></i> Student approval is not required for this semester scope.</div>";
     }
@@ -716,6 +424,23 @@ echo "</fieldset>";
 -->
 
 </form>
+<?php if($_SelectedBatchId!=='' && $_SelectedAcademicYear!=='' && $_SelectedTermId!=='' && $_SelectedClassId!==''){ ?>
+<form method="post" action="terminal-report.php" class="tr-bulk-form">
+    <input type="hidden" name="batchid" value="<?php echo htmlspecialchars((string)$_SelectedBatchId, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="academicyear" value="<?php echo htmlspecialchars((string)$_SelectedAcademicYear, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="termid" value="<?php echo htmlspecialchars((string)$_SelectedTermId, ENT_QUOTES, 'UTF-8'); ?>">
+    <input type="hidden" name="classid" value="<?php echo htmlspecialchars((string)$_SelectedClassId, ENT_QUOTES, 'UTF-8'); ?>">
+    <div class="tr-status-card tr-status-info" style="margin-top:14px;">
+        <i class="fa fa-files-o"></i>
+        <?php echo $_SelectedScopeStudentCount > 0 ? htmlspecialchars((string)$_SelectedScopeStudentCount, ENT_QUOTES, 'UTF-8') . ' student report(s) are ready in this class scope.' : 'No students were found in this class scope yet.'; ?>
+    </div>
+    <div class="tr-actions" style="margin-top:12px;">
+        <button class="button-pay tr-btn tr-btn-print" type="submit" name="print_class_report_pack" <?php echo $_SelectedScopeStudentCount > 0 ? '' : 'disabled'; ?>>
+            <i class="fa fa-print"></i> Print Class Report Pack
+        </button>
+    </div>
+</form>
+<?php } ?>
 </aside>
 <main class="tr-panel tr-results-panel">
 	<form id="formID2" name="formID2" method="post" action="terminal-report.php">

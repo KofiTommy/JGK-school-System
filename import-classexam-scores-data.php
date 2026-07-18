@@ -89,6 +89,7 @@ $_MarkId=$code;
 require_once 'simplexlsx.class.php';
 @$counter=0;
 //@$message ="";
+$_ScoreEditLockMessage = "";
 
 @$_TotalMark=$_POST["totalscore"];
 @$_AssignmentId=trim($_POST["assignment-id"]);
@@ -100,6 +101,10 @@ FROM tblsubjectassignment sa
 WHERE sa.assignmentid='$_AssignmentIdSafe'
 LIMIT 1");
 if($_AssignmentScopeSql && ($_AssignmentScopeRow = mysqli_fetch_array($_AssignmentScopeSql, MYSQLI_ASSOC))){
+$_AssignmentApprovalMeta = score_entry_assignment_approval_meta($con, $_AssignmentScopeRow);
+if($_AssignmentApprovalMeta && !empty($_AssignmentApprovalMeta['score_edit_locked'])){
+$_ScoreEditLockMessage = report_approval_score_edit_locked_message();
+}else{
 $_AssignmentStudentContext = score_entry_assignment_student_context(
     $con,
     $_AssignmentScopeRow['assignmentid'],
@@ -113,8 +118,14 @@ foreach($_AssignmentStudentContext['userids'] as $_AllowedStudentId){
 }
 }
 }
+}
 
 if(isset($_POST['submit_group_data']))
+{
+if(trim((string)$_ScoreEditLockMessage)!==""){
+$_SESSION['Message'] = $_SESSION['Message']."<div style='color:red;padding:10px;background-color:white;'>".htmlspecialchars($_ScoreEditLockMessage, ENT_QUOTES, 'UTF-8')."</div>";
+}
+else
 {
 @$file = $_FILES['file1']['tmp_name'];
 $xlsx = new SimpleXLSX($file);
@@ -214,6 +225,7 @@ else/*No mark is greater than the total mark*/
 	else{
 	$_SESSION['Message'] =$_SESSION['Message']."<div style='background-color:white;color:red;' align='center'>Class & Exam Scores Data Failed To Upload</div><br>";
 	}
+}
 }
 ?>
 <?php

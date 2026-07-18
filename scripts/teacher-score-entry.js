@@ -134,6 +134,15 @@ function scoreEntryToggleVisible(sheet, checked){
   scoreEntryUpdateSheet(sheet);
 }
 
+function scoreEntrySubmitMessage(sheet){
+  if(!sheet){ return ""; }
+  var customMessage = sheet.getAttribute("data-confirm-message") || "";
+  if(customMessage){
+    return customMessage;
+  }
+  return "Please check these scores carefully before saving. Once the result is approved, you will not be able to change the scores unless the administrator reopens corrections. Do you want to save now?";
+}
+
 function scoreEntryInitSheet(sheet){
   if(!sheet){ return; }
 
@@ -193,6 +202,14 @@ function scoreEntryInitSheet(sheet){
       scoreEntryUpdateSheet(sheet);
     });
   }
+
+  sheet.addEventListener("submit", function(event){
+    var message = scoreEntrySubmitMessage(sheet);
+    if(message && !window.confirm(message)){
+      event.preventDefault();
+      return;
+    }
+  });
 
   scoreEntryUpdateSheet(sheet);
 }

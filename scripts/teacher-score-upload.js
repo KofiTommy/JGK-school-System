@@ -13,4 +13,14 @@ document.addEventListener("DOMContentLoaded", function(){
       }
     });
   }
+
+  var uploadForms = document.querySelectorAll(".score-upload-form");
+  for(var j = 0; j < uploadForms.length; j++){
+    uploadForms[j].addEventListener("submit", function(event){
+      var message = this.getAttribute("data-confirm-message") || "Please check this score sheet carefully before uploading. Once the result is approved, you will not be able to change the scores unless the administrator reopens corrections. Do you want to continue?";
+      if(message && !window.confirm(message)){
+        event.preventDefault();
+      }
+    });
+  }
 });
