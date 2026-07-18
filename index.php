@@ -35,7 +35,7 @@ $obj_browser->setBrowser(1);
 
 <?php
 include("dbstring.php");
-include_once("api-auth-utils.php");
+include_once(__DIR__.DIRECTORY_SEPARATOR."api-auth-utils.php");
 include_once("online-admission-utils.php");
 include_once("user-management-utils.php");
 ensure_online_admission_tables($con);
