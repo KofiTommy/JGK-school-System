@@ -417,27 +417,6 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
                 </article>
             </div>
 
-            <div class="landing-helper-card">
-                <span class="landing-helper-card__label">Fancy help desk</span>
-                <div class="landing-helper-tags">
-                    <span>Login Support</span>
-                    <span>Admission Questions</span>
-                    <span>Fees And Payments</span>
-                    <span>Technical Issues</span>
-                </div>
-                <p>Need someone from the school to follow up with you? Open the help desk, drop your message, and the team can respond by phone, email, or WhatsApp.</p>
-                <div class="landing-help-line">
-                    <span><i class="fa fa-phone"></i> <?php echo htmlspecialchars($_LandingHelpLine, ENT_QUOTES, "UTF-8"); ?></span>
-                    <?php if($_LandingWhatsappUrl !== ""){ ?>
-                    <span><i class="fa fa-whatsapp"></i> WhatsApp follow-up available</span>
-                    <?php } ?>
-                </div>
-                <div class="landing-admission-actions">
-                    <a href="#landing-help-desk" class="landing-admission-link landing-admission-link--ghost" data-open-landing-help>
-                        <i class="fa fa-life-ring"></i> Open Help Desk
-                    </a>
-                </div>
-            </div>
         </section>
 
         <aside class="landing-auth" id="portal-login">
@@ -452,11 +431,6 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
 
                 <div class="landing-auth__message">
                     <?php echo @$_SESSION['Message']; ?>
-                </div>
-
-                <div class="landing-auth__intro">
-                    <strong>Portal access</strong>
-                    <span>Use your assigned username and password to sign in. If you are stuck, the help desk can collect your issue and route it to the school team.</span>
                 </div>
 
                 <form id="formID" name="formID" method="post" action="index.php" class="landing-form">
@@ -484,14 +458,6 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
                 <div class="landing-support">
                     <span><i class="fa fa-phone"></i> Help line: <?php echo htmlspecialchars($_LandingHelpLine, ENT_QUOTES, "UTF-8"); ?></span>
                     <span><i class="fa fa-lock"></i> Session protected</span>
-                </div>
-
-                <div class="landing-auth__helper-card">
-                    <strong>Need login, admission, or payment help?</strong>
-                    <span>Open the fancy help desk and leave a message with your phone or email for follow-up.</span>
-                    <a href="#landing-help-desk" class="landing-admission-link landing-admission-link--ghost" data-open-landing-help>
-                        <i class="fa fa-life-ring"></i> Ask For Help
-                    </a>
                 </div>
 
                 <?php if($_LandingWhatsappUrl !== ""){ ?>
@@ -607,7 +573,7 @@ if(isset($_Logo) && trim((string)$_Logo) !== ""){
     </div>
 
     <footer class="landing-footer">
-        <p>&copy 2026. XSCHOOL V2.20.2.2</p>
+        <p>&copy 2026. LiveCampus V2.20.2.2</p>
         <p>
             <?php if($_LandingWhatsappUrl !== ""){ ?><a href="<?php echo htmlspecialchars($_LandingWhatsappUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-footer__link" target="_blank" rel="noopener noreferrer">WhatsApp</a> | <?php } ?>
             <a href="<?php echo htmlspecialchars($_LandingTiktokUrl, ENT_QUOTES, "UTF-8"); ?>" class="landing-footer__link" target="_blank" rel="noopener noreferrer">TikTok: <?php echo htmlspecialchars($_LandingTiktokLabel, ENT_QUOTES, "UTF-8"); ?></a>
